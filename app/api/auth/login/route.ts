@@ -6,7 +6,6 @@ export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();
 
-    // التحقق من وجود جميع البيانات المطلوبة
     if (!email || !password) {
       return NextResponse.json(
         { error: 'Email and password are required' },
@@ -14,7 +13,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // البحث عن المستخدم في قاعدة البيانات
     const user = await prisma.user.findUnique({
       where: { email },
       select: {
@@ -33,7 +31,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // التحقق من كلمة المرور
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
@@ -43,7 +40,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // إرجاع بيانات المستخدم (بدون كلمة المرور)
     const { password: _, ...userWithoutPassword } = user;
 
     return NextResponse.json(

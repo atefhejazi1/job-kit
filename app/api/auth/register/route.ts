@@ -6,7 +6,6 @@ export async function POST(request: Request) {
   try {
     const { name, email, password } = await request.json();
 
-    // التحقق من وجود جميع البيانات المطلوبة
     if (!name || !email || !password) {
       return NextResponse.json(
         { error: 'All fields are required' },
@@ -14,7 +13,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // التحقق من صحة البريد الإلكتروني
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -23,7 +21,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // التحقق من طول كلمة المرور
     if (password.length < 6) {
       return NextResponse.json(
         { error: 'Password must be at least 6 characters' },
@@ -31,7 +28,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // التحقق من عدم وجود المستخدم مسبقاً
     const existingUser = await prisma.user.findUnique({
       where: { email }
     });
@@ -43,10 +39,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // تشفير كلمة المرور
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // إنشاء المستخدم الجديد
     const user = await prisma.user.create({
       data: {
         name,
