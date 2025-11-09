@@ -25,8 +25,47 @@ const initialValues = {
 export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleSubmit = async (values: typeof initialValues) => {
-    console.log('Login data:', values);
+  const handleSubmit = async (values: typeof initialValues, { setSubmitting, setFieldError }: any) => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // عرض الخطأ
+        if (data.error.includes('email') || data.error.includes('password')) {
+          setFieldError('email', data.error);
+        } else {
+          alert(data.error);
+        }
+        return;
+      }
+
+      // نجح تسجيل الدخول
+      console.log('Login successful:', data.user);
+      alert(`Welcome back, ${data.user.name}!`);
+      
+      // حفظ بيانات المستخدم في localStorage أو Context
+      localStorage.setItem('user', JSON.stringify(data.user));
+      
+      // التوجه للداشبورد
+      window.location.href = '/dashboard';
+      
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

@@ -30,8 +30,45 @@ const initialValues = {
 export default function RegisterPage() {
 	const [showPassword, setShowPassword] = React.useState(false);
 
-	const handleSubmit = async (values: typeof initialValues) => {
-		console.log("Register data:", values);
+	const handleSubmit = async (values: typeof initialValues, { setSubmitting, setFieldError }: any) => {
+		try {
+			const response = await fetch('/api/auth/register', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					name: values.name,
+					email: values.email,
+					password: values.password,
+				}),
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				// عرض الخطأ المناسب
+				if (data.error.includes('email')) {
+					setFieldError('email', data.error);
+				} else if (data.error.includes('password')) {
+					setFieldError('password', data.error);
+				} else {
+					alert(data.error);
+				}
+				return;
+			}
+
+			// نجح التسجيل
+			alert('Account created successfully! Please login.');
+			// يمكنك إضافة redirect هنا
+			window.location.href = '/auth/login';
+			
+		} catch (error) {
+			console.error('Registration error:', error);
+			alert('Something went wrong. Please try again.');
+		} finally {
+			setSubmitting(false);
+		}
 	};
 
 	return (
