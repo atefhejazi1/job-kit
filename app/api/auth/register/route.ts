@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { RegisterRequest, AuthResponse, ErrorResponse, UserWithPassword } from '@/types/auth.types';
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<NextResponse<AuthResponse | ErrorResponse>> {
   try {
-    const { name, email, password } = await request.json();
+    const { name, email, password }: RegisterRequest = await request.json();
 
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -46,19 +47,15 @@ export async function POST(request: Request) {
         name,
         email,
         password: hashedPassword,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
       }
     });
+
+    const { password: _, ...userWithoutPassword } = user as UserWithPassword;
 
     return NextResponse.json(
       { 
         message: 'User created successfully',
-        user 
+        user: userWithoutPassword
       },
       { status: 201 }
     );

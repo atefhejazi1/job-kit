@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { LoginRequest, AuthResponse, ErrorResponse, UserWithPassword } from '@/types/auth.types';
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<NextResponse<AuthResponse | ErrorResponse>> {
   try {
-    const { email, password } = await request.json();
+    const { email, password }: LoginRequest = await request.json();
 
     if (!email || !password) {
       return NextResponse.json(
@@ -14,15 +15,8 @@ export async function POST(request: Request) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        password: true,
-        createdAt: true,
-      }
-    });
+      where: { email }
+    }) as UserWithPassword | null;
 
     if (!user) {
       return NextResponse.json(
