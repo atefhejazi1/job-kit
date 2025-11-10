@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 import Button from "../ui/Button";
+import Link from "next/link";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,8 +18,8 @@ const Header = () => {
         </div>
 
         <div className="hidden sm:flex items-center gap-3">
-          <Button variant="secondary">Sign In</Button>
-          <Button variant="primary">Sign Up</Button>
+          <Button variant="secondary"> <Link href="/auth/login">Sign In</Link></Button>
+          <Button variant="primary"><Link href="/auth/register">Sign Up</Link></Button>
         </div>
 
         <div className="sm:hidden">
