@@ -6,11 +6,11 @@ const Button = ({ children, variant, className }: TButton) => {
   let variantClasses = "";
 
   if (variant === "primary") {
-    variantClasses = "bg-primary text-white hover:bg-[#E04E00]";
+    variantClasses = "bg-primary text-white hover:bg-[#E04E00] cursor-pointer";
   } else if (variant === "secondary") {
-    variantClasses = "border border-primary text-primary hover:bg-gray-50";
+    variantClasses = "border border-primary text-primary hover:bg-gray-50 cursor-pointer";
   } else if (variant === "danger") {
-    variantClasses = "bg-error text-white hover:bg-[#b80000]";
+    variantClasses = "bg-error text-white hover:bg-[#b80000] cursor-pointer";
   }
 
   return (
