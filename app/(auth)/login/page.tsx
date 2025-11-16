@@ -41,7 +41,6 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        // عرض الخطأ
         if (data.error.includes('email') || data.error.includes('password')) {
           setFieldError('email', data.error);
         } else {
@@ -50,15 +49,16 @@ export default function LoginPage() {
         return;
       }
 
-      // نجح تسجيل الدخول
       console.log('Login successful:', data.user);
       alert(`Welcome back, ${data.user.name}!`);
       
-      // حفظ بيانات المستخدم في localStorage أو Context
       localStorage.setItem('user', JSON.stringify(data.user));
       
-      // التوجه للداشبورد
-      window.location.href = '/dashboard';
+      if (data.user.userType === 'COMPANY') {
+        window.location.href = '/dashboard/company';
+      } else {
+        window.location.href = '/dashboard/user';
+      }
       
     } catch (error) {
       console.error('Login error:', error);

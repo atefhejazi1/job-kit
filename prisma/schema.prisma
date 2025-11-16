@@ -14,9 +14,16 @@ model User {
   email     String   @unique
   name      String
   password  String
+  userType  UserType @default(USER) @map("user_type")
   avatarUrl String?  @map("avatar_url")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
+}
+
+// Enum for user types
+enum UserType {
+  USER
+  COMPANY
 }

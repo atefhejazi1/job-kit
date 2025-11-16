@@ -5,11 +5,18 @@ import { RegisterRequest, AuthResponse, ErrorResponse, UserWithPassword } from '
 
 export async function POST(request: Request): Promise<NextResponse<AuthResponse | ErrorResponse>> {
   try {
-    const { name, email, password }: RegisterRequest = await request.json();
+    const { name, email, password, userType }: RegisterRequest = await request.json();
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !userType) {
       return NextResponse.json(
         { error: 'All fields are required' },
+        { status: 400 }
+      );
+    }
+
+    if (!['USER', 'COMPANY'].includes(userType)) {
+      return NextResponse.json(
+        { error: 'Invalid account type' },
         { status: 400 }
       );
     }
@@ -47,6 +54,7 @@ export async function POST(request: Request): Promise<NextResponse<AuthResponse 
         name,
         email,
         password: hashedPassword,
+        userType,
       }
     });
 

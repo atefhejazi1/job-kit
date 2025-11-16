@@ -3,6 +3,7 @@ export interface User {
   id: string;
   name: string | null;
   email: string;
+  userType: 'USER' | 'COMPANY';
   avatarUrl?: string | null;
   createdAt: Date;
   updatedAt?: Date;
@@ -21,6 +22,7 @@ export interface RegisterRequest {
   name: string;
   email: string;
   password: string;
+  userType: 'USER' | 'COMPANY';
 }
 
 export interface AuthResponse {

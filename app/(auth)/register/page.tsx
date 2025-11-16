@@ -10,6 +10,7 @@ import Shape from "@/components/ui/shapes/Shape";
 const registerSchema = Yup.object().shape({
 	name: Yup.string().required("Full name is required"),
 	email: Yup.string().email("Invalid email address").required("Email is required"),
+	userType: Yup.string().oneOf(["USER", "COMPANY"], "Please select account type").required("Account type is required"),
 	password: Yup.string()
 		.min(6, "Password must be at least 6 characters")
 		.required("Password is required"),
@@ -22,6 +23,7 @@ const registerSchema = Yup.object().shape({
 const initialValues = {
 	name: "",
 	email: "",
+	userType: "USER",
 	password: "",
 	confirmPassword: "",
 	acceptTerms: false,
@@ -32,22 +34,20 @@ export default function RegisterPage() {
 
 	const handleSubmit = async (values: typeof initialValues, { setSubmitting, setFieldError }: any) => {
 		try {
-			const response = await fetch('/api/auth/register', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					name: values.name,
-					email: values.email,
-					password: values.password,
-				}),
-			});
-
-			const data = await response.json();
+		const response = await fetch('/api/auth/register', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				name: values.name,
+				email: values.email,
+				userType: values.userType,
+				password: values.password,
+			}),
+		});			const data = await response.json();
 
 			if (!response.ok) {
-				// عرض الخطأ المناسب
 				if (data.error.includes('email')) {
 					setFieldError('email', data.error);
 				} else if (data.error.includes('password')) {
@@ -58,10 +58,12 @@ export default function RegisterPage() {
 				return;
 			}
 
-			// نجح التسجيل
-			alert('Account created successfully! Please login.');
-			// يمكنك إضافة redirect هنا
-			window.location.href = '/auth/login';
+			alert('Account created successfully!');
+			if (values.userType === 'COMPANY') {
+				window.location.href = '/dashboard/company';
+			} else {
+				window.location.href = '/dashboard/user';
+			}
 			
 		} catch (error) {
 			console.error('Registration error:', error);
@@ -148,6 +150,79 @@ export default function RegisterPage() {
 										/>
 									</div>
 									<ErrorMessage name="email" component="p" className="text-sm text-error flex items-center gap-1" />
+								</div>
+
+								<div className="space-y-2">
+									<label className="block text-sm font-medium text-gray-700">
+										Account Type
+									</label>
+									<Field name="userType">
+										{({ field }: any) => (
+											<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+												<label className="relative cursor-pointer">
+													<input
+														{...field}
+														type="radio"
+														value="USER"
+														checked={field.value === 'USER'}
+														className="sr-only"
+													/>
+													<div className={`p-4 border-2 rounded-lg transition-all ${
+														field.value === 'USER'
+															? 'border-primary bg-primary/5'
+															: 'border-gray-300 hover:border-gray-400'
+													}`}>
+														<div className="flex items-center space-x-3">
+															<div className={`w-4 h-4 rounded-full border-2 transition-colors ${
+																field.value === 'USER'
+																	? 'border-primary bg-primary'
+																	: 'border-gray-300'
+															}`}>
+																{field.value === 'USER' && (
+																	<div className="w-2 h-2 bg-white rounded-full m-0.5"></div>
+																)}
+															</div>
+															<div>
+																<div className="font-medium text-gray-900">Job Seeker</div>
+																<div className="text-sm text-gray-600">Looking for opportunities</div>
+															</div>
+														</div>
+													</div>
+												</label>
+												<label className="relative cursor-pointer">
+													<input
+														{...field}
+														type="radio"
+														value="COMPANY"
+														checked={field.value === 'COMPANY'}
+														className="sr-only"
+													/>
+													<div className={`p-4 border-2 rounded-lg transition-all ${
+														field.value === 'COMPANY'
+															? 'border-primary bg-primary/5'
+															: 'border-gray-300 hover:border-gray-400'
+													}`}>
+														<div className="flex items-center space-x-3">
+															<div className={`w-4 h-4 rounded-full border-2 transition-colors ${
+																field.value === 'COMPANY'
+																	? 'border-primary bg-primary'
+																	: 'border-gray-300'
+															}`}>
+																{field.value === 'COMPANY' && (
+																	<div className="w-2 h-2 bg-white rounded-full m-0.5"></div>
+																)}
+															</div>
+															<div>
+																<div className="font-medium text-gray-900">Company</div>
+																<div className="text-sm text-gray-600">Hiring professionals</div>
+															</div>
+														</div>
+													</div>
+												</label>
+											</div>
+										)}
+									</Field>
+									<ErrorMessage name="userType" component="p" className="text-sm text-error flex items-center gap-1" />
 								</div>
 
 								<div className="space-y-2">
