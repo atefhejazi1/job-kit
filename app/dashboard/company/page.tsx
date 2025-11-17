@@ -1,9 +1,14 @@
+import UserInfo from '@/components/dashboard/UserInfo';
+
 export default function CompanyDashboard() {
   return (
     <div className="space-y-6">
+      {/* User Info Section */}
+      <UserInfo />
+      
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-primary to-orange-600 rounded-lg p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Welcome back, Development Company!</h1>
+        <h1 className="text-2xl font-bold mb-2">Welcome to your Company Dashboard!</h1>
         <p className="text-orange-100">Here's what's happening with your job postings today.</p>
       </div>
 

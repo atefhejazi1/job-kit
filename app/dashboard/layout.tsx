@@ -3,6 +3,8 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import Avatar from '@/components/ui/Avatar';
 import { 
   Briefcase, 
   Plus, 
@@ -26,37 +28,45 @@ export default function DashboardLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const { user, logout, isLoading } = useAuth();
 
-  // Determine user type based on current path
-  const userType = useMemo(() => {
-    if (pathname.includes('/dashboard/company')) return 'company';
-    if (pathname.includes('/dashboard/user')) return 'user';
-    return 'dashboard'; // default for main dashboard
-  }, [pathname]);
+  // Get navigation items based on user type
+  const navigation = useMemo(() => {
+    const baseNav = [
+      { name: 'Dashboard', href: '/dashboard', icon: Home }
+    ];
 
-  // Fixed navigation for all users - both user and company sections
-  const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: Home },
-    { 
-      name: 'Company', 
-      items: [
-        { name: 'Company Dashboard', href: '/dashboard/company', icon: Building },
-        { name: 'Add Job', href: '/dashboard/company/add-job', icon: Plus },
-        { name: 'All Jobs', href: '/dashboard/company/all-jobs', icon: FileText },
-        { name: 'Company Settings', href: '/dashboard/company/settings', icon: Settings },
-      ]
-    },
-    { 
-      name: 'User', 
-      items: [
-        { name: 'User Dashboard', href: '/dashboard/user', icon: UserCheck },
-        { name: 'Resume Builder', href: '/dashboard/user/resume-builder', icon: FileText },
-        { name: 'Job Applications', href: '/dashboard/user/applications', icon: Briefcase },
-        { name: 'Profile', href: '/dashboard/user/profile', icon: User },
-        { name: 'User Settings', href: '/dashboard/user/settings', icon: Settings },
-      ]
+    if (!user) return baseNav;
+
+    if (user.userType === 'COMPANY') {
+      return [
+        ...baseNav,
+        { 
+          name: 'Company', 
+          items: [
+            { name: 'Company Dashboard', href: '/dashboard/company', icon: Building },
+            { name: 'Add Job', href: '/dashboard/company/add-job', icon: Plus },
+            { name: 'All Jobs', href: '/dashboard/company/all-jobs', icon: FileText },
+            { name: 'Company Settings', href: '/dashboard/company/settings', icon: Settings },
+          ]
+        }
+      ];
+    } else {
+      return [
+        ...baseNav,
+        { 
+          name: 'User', 
+          items: [
+            { name: 'User Dashboard', href: '/dashboard/user', icon: UserCheck },
+            { name: 'Resume Builder', href: '/dashboard/user/resume-builder', icon: FileText },
+            { name: 'Job Applications', href: '/dashboard/user/applications', icon: Briefcase },
+            { name: 'Profile', href: '/dashboard/user/profile', icon: User },
+            { name: 'User Settings', href: '/dashboard/user/settings', icon: Settings },
+          ]
+        }
+      ];
     }
-  ];
+  }, [user]);
 
   const isActive = (href: string) => {
     if (href === '/dashboard') {
@@ -98,7 +108,7 @@ export default function DashboardLayout({
         <nav className="mt-8 px-4 flex-1 overflow-y-auto">
           <ul className="space-y-6">
             {navigation.map((section) => {
-              if (section.items) {
+              if ('items' in section) {
                 // Group section (Company/User)
                 return (
                   <li key={section.name}>
@@ -164,23 +174,55 @@ export default function DashboardLayout({
 
         {/* User section */}
         <div className="mt-auto p-4 border-t border-gray-200 shrink-0">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center">
-              <User className="h-5 w-5 text-white" />
+          {isLoading ? (
+            <div className="animate-pulse">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="h-10 w-10 bg-gray-300 rounded-full"></div>
+                <div>
+                  <div className="h-4 bg-gray-300 rounded w-20 mb-1"></div>
+                  <div className="h-3 bg-gray-300 rounded w-32"></div>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">
-                JobKit User
-              </p>
-              <p className="text-xs text-gray-500">
-                user@example.com
-              </p>
+          ) : user ? (
+            <>
+              <div className="flex items-center space-x-3 mb-4">
+                <Avatar name={user.name} size="lg" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {user.name || 'User'}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {user.email}
+                  </p>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mt-1 ${
+                    user.userType === 'COMPANY' 
+                      ? 'bg-blue-100 text-blue-800' 
+                      : 'bg-green-100 text-green-800'
+                  }`}>
+                    {user.userType === 'COMPANY' ? 'Company' : 'Job Seeker'}
+                  </span>
+                </div>
+              </div>
+              <button 
+                onClick={logout}
+                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <LogOut className="h-4 w-4 mr-2 text-gray-500" />
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <div className="text-center">
+              <p className="text-sm text-gray-500 mb-2">Not logged in</p>
+              <Link 
+                href="/auth/login"
+                className="text-primary hover:underline text-sm"
+              >
+                Sign In
+              </Link>
             </div>
-          </div>
-          <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-            <LogOut className="h-4 w-4 mr-2 text-gray-500" />
-            Sign Out
-          </button>
+          )}
         </div>
       </div>
 
@@ -225,9 +267,13 @@ export default function DashboardLayout({
               </button>
 
               {/* Profile */}
-              <div className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
-                <User className="h-4 w-4 text-white" />
-              </div>
+              {user ? (
+                <Avatar name={user.name} size="md" className="cursor-pointer" />
+              ) : (
+                <div className="h-8 w-8 bg-gray-400 rounded-full flex items-center justify-center">
+                  <User className="h-4 w-4 text-white" />
+                </div>
+              )}
             </div>
           </div>
         </header>
