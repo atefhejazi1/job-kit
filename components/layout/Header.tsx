@@ -18,8 +18,8 @@ const Header = () => {
         </div>
 
         <div className="hidden sm:flex items-center gap-3">
-          <Button variant="secondary"> <Link href="/auth/login">Sign In</Link></Button>
-          <Button variant="primary"><Link href="/auth/register">Sign Up</Link></Button>
+          <Button variant="secondary"> <Link href="/login">Sign In</Link></Button>
+          <Button variant="primary"><Link href="/register">Sign Up</Link></Button>
 
         </div>
 
