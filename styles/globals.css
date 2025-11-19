@@ -6,3 +6,22 @@
   --color-secondary: #1D1D1D;
   --color-error: #d90000;
 }
+
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #resume-preview,
+  #resume-preview * {
+    visibility: visible;
+  }
+
+  #resume-preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

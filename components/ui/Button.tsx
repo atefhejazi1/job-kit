@@ -1,6 +1,6 @@
 import { TButton } from "@/types/button.types";
 
-const Button = ({ children, variant, className }: TButton) => {
+const Button = ({ children, variant, className, onClick }: TButton) => {
   const baseClasses = "px-6 py-2 rounded-md transition font-medium";
 
   let variantClasses = "";
@@ -14,7 +14,7 @@ const Button = ({ children, variant, className }: TButton) => {
   }
 
   return (
-    <button className={`${baseClasses} ${variantClasses} ${className}`}>
+    <button className={`${baseClasses} ${variantClasses} ${className}`} onClick={onClick}>
       {children}
     </button>
   );
