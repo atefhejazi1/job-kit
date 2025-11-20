@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import ResumeForm from "./components/resumeForm/ResumeForm";
-import ResumePreview from "./components/ResumePreview";
+import ResumeForm from "../../../../components/dashboard/resumeForm/ResumeForm";
+import ResumePreview from "../../../../components/dashboard/ResumePreview";
 import { ResumeData } from "@/types/resume.data.types";
 
 export default function ResumeBuilderPage() {
