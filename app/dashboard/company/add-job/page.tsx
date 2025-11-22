@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import { WorkType } from "@/types/job.types";
 import { useAuth } from "@/contexts/AuthContext";
 import { createApiHeaders } from "@/lib/api-utils";
+import toast from "react-hot-toast";
 
 interface JobFormData {
   title: string;
@@ -167,11 +168,13 @@ const AddJobPage = () => {
         return;
       }
 
-      alert("Job posted successfully!");
+      toast.success("Job posted successfully!");
       router.push("/dashboard/company/all-jobs");
     } catch (error) {
       console.error("Error creating job:", error);
-      alert(error instanceof Error ? error.message : "Failed to create job");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create job"
+      );
     } finally {
       setIsLoading(false);
       setSubmitting(false);

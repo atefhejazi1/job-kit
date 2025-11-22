@@ -10,6 +10,7 @@ import {
   createApiHeaders,
   createApiHeadersWithoutContentType,
 } from "@/lib/api-utils";
+import toast from "react-hot-toast";
 
 interface JobWithCompany extends Job {
   company: {
@@ -80,16 +81,16 @@ const AllJobsPage = () => {
       });
 
       if (response.ok) {
-        alert("Job deleted successfully!");
+        toast.success("Job deleted successfully!");
         fetchJobs(); // Refresh the list
         setDeleteModal({ show: false, jobId: "", jobTitle: "" });
       } else {
         const data = await response.json();
-        alert(data.error || "Failed to delete job");
+        toast.error(data.error || "Failed to delete job");
       }
     } catch (error) {
       console.error("Error deleting job:", error);
-      alert("Failed to delete job");
+      toast.error("Failed to delete job");
     }
   };
 
@@ -110,16 +111,16 @@ const AllJobsPage = () => {
           )
         );
 
-        alert(
+        toast.success(
           `Job ${!currentStatus ? "activated" : "deactivated"} successfully!`
         );
       } else {
         const data = await response.json();
-        alert(data.error || "Failed to update job status");
+        toast.error(data.error || "Failed to update job status");
       }
     } catch (error) {
       console.error("Error updating job status:", error);
-      alert("Failed to update job status");
+      toast.error("Failed to update job status");
     }
   };
 

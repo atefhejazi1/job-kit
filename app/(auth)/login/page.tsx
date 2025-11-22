@@ -1,25 +1,26 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import Link from 'next/link';
-import { FiEye, FiEyeOff, FiMail, FiLock } from 'react-icons/fi';
-import Shape from '@/components/ui/shapes/Shape';
-import { useAuth } from '@/contexts/AuthContext';
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import Link from "next/link";
+import { FiEye, FiEyeOff, FiMail, FiLock } from "react-icons/fi";
+import Shape from "@/components/ui/shapes/Shape";
+import { useAuth } from "@/contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
+    .email("Invalid email address")
+    .required("Email is required"),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
 });
 
 const initialValues = {
-  email: '',
-  password: '',
+  email: "",
+  password: "",
   rememberMe: false,
 };
 
@@ -27,12 +28,15 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
   const { login } = useAuth();
 
-  const handleSubmit = async (values: typeof initialValues, { setSubmitting, setFieldError }: any) => {
+  const handleSubmit = async (
+    values: typeof initialValues,
+    { setSubmitting, setFieldError }: any
+  ) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: values.email,
@@ -43,28 +47,27 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.error.includes('email') || data.error.includes('password')) {
-          setFieldError('email', data.error);
+        if (data.error.includes("email") || data.error.includes("password")) {
+          setFieldError("email", data.error);
         } else {
-          alert(data.error);
+          toast.error(data.error);
         }
         return;
       }
 
-      console.log('Login successful:', data.user);
-      alert(`Welcome back, ${data.user.name}!`);
-      
+      console.log("Login successful:", data.user);
+      toast.success(`Welcome back, ${data.user.name}!`);
+
       login(data.user);
-      
-      if (data.user.userType === 'COMPANY') {
-        window.location.href = '/dashboard/company';
+
+      if (data.user.userType === "COMPANY") {
+        window.location.href = "/dashboard/company";
       } else {
-        window.location.href = '/dashboard/user';
+        window.location.href = "/dashboard/user";
       }
-      
     } catch (error) {
-      console.error('Login error:', error);
-      alert('Something went wrong. Please try again.');
+      console.error("Login error:", error);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -87,7 +90,7 @@ export default function LoginPage() {
         className="absolute bottom-32 left-32 animate-bounce opacity-20"
         size={70}
       />
-      
+
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-6">
@@ -99,9 +102,7 @@ export default function LoginPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
             Welcome Back
           </h2>
-          <p className="text-gray-600">
-            Sign in to access your account
-          </p>
+          <p className="text-gray-600">Sign in to access your account</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
@@ -113,7 +114,10 @@ export default function LoginPage() {
             {({ isSubmitting, errors, touched }) => (
               <Form className="space-y-6">
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Email Address
                   </label>
                   <div className="relative">
@@ -127,8 +131,8 @@ export default function LoginPage() {
                       placeholder="Enter your email"
                       className={`w-full pl-10 pr-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
                         errors.email && touched.email
-                          ? 'border-error bg-red-50'
-                          : 'border-gray-300 bg-white hover:border-gray-400'
+                          ? "border-error bg-red-50"
+                          : "border-gray-300 bg-white hover:border-gray-400"
                       }`}
                     />
                   </div>
@@ -140,7 +144,10 @@ export default function LoginPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Password
                   </label>
                   <div className="relative">
@@ -150,12 +157,12 @@ export default function LoginPage() {
                     <Field
                       id="password"
                       name="password"
-                      type={showPassword ? 'text' : 'password'}
+                      type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
                       className={`w-full pl-10 pr-12 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
                         errors.password && touched.password
-                          ? 'border-error bg-red-50'
-                          : 'border-gray-300 bg-white hover:border-gray-400'
+                          ? "border-error bg-red-50"
+                          : "border-gray-300 bg-white hover:border-gray-400"
                       }`}
                     />
                     <button
@@ -185,7 +192,10 @@ export default function LoginPage() {
                       type="checkbox"
                       className="h-4 w-4 text-primary focus:ring-primary/20 border-gray-300 rounded"
                     />
-                    <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-700">
+                    <label
+                      htmlFor="rememberMe"
+                      className="ml-2 text-sm text-gray-700"
+                    >
                       Remember me
                     </label>
                   </div>
@@ -202,8 +212,8 @@ export default function LoginPage() {
                   disabled={isSubmitting}
                   className={`w-full px-6 py-3 rounded-md transition font-medium ${
                     isSubmitting
-                      ? 'bg-gray-400 cursor-not-allowed text-white'
-                      : 'bg-primary text-white hover:bg-[#E04E00]'
+                      ? "bg-gray-400 cursor-not-allowed text-white"
+                      : "bg-primary text-white hover:bg-[#E04E00]"
                   }`}
                 >
                   {isSubmitting ? (
@@ -212,7 +222,7 @@ export default function LoginPage() {
                       Signing in...
                     </div>
                   ) : (
-                    'Sign In'
+                    "Sign In"
                   )}
                 </button>
               </Form>
@@ -225,7 +235,9 @@ export default function LoginPage() {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-3 bg-white text-gray-500">Or continue with</span>
+                <span className="px-3 bg-white text-gray-500">
+                  Or continue with
+                </span>
               </div>
             </div>
 
@@ -259,8 +271,12 @@ export default function LoginPage() {
                 type="button"
                 className="w-full inline-flex justify-center py-2.5 px-4 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 hover:border-primary/30 transition-all"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
                 <span className="ml-2">Facebook</span>
               </button>
@@ -269,7 +285,7 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Don't have an account?{" "}
               <Link
                 href="/auth/register"
                 className="font-medium text-primary hover:text-[#E04E00] transition-colors"
@@ -282,17 +298,23 @@ export default function LoginPage() {
 
         <div className="mt-8 text-center">
           <p className="text-xs text-gray-500">
-            By signing in, you agree to our{' '}
-            <Link href="/terms" className="text-primary hover:underline transition-colors">
+            By signing in, you agree to our{" "}
+            <Link
+              href="/terms"
+              className="text-primary hover:underline transition-colors"
+            >
               Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link href="/privacy" className="text-primary hover:underline transition-colors">
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/privacy"
+              className="text-primary hover:underline transition-colors"
+            >
               Privacy Policy
             </Link>
           </p>
         </div>
-        
+
         <Shape
           type="rectangle"
           className="absolute bottom-20 right-10 animate-bounce opacity-10"

@@ -141,7 +141,6 @@ export async function GET(request: Request): Promise<NextResponse<{ jobs: any[],
 
     // Build where clause - only show jobs for this company
     const where: any = {
-      isActive: true,
       companyId: companyId,
     };
 

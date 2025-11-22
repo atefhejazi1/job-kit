@@ -7,6 +7,7 @@ import Link from "next/link";
 import { FiEye, FiEyeOff, FiMail, FiLock, FiUser } from "react-icons/fi";
 import Shape from "@/components/ui/shapes/Shape";
 import { useAuth } from "@/contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const registerSchema = Yup.object().shape({
   email: Yup.string()
@@ -151,12 +152,12 @@ export default function RegisterPage() {
         } else if (data.error.includes("password")) {
           setFieldError("password", data.error);
         } else {
-          alert(data.error);
+          toast.error(data.error);
         }
         return;
       }
 
-      alert("Account created successfully!");
+      toast.success("Account created successfully!");
 
       login(data.user);
 
@@ -167,7 +168,7 @@ export default function RegisterPage() {
       }
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }

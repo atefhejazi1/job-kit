@@ -12,6 +12,7 @@ import {
   createApiHeaders,
   createApiHeadersWithoutContentType,
 } from "@/lib/api-utils";
+import toast from "react-hot-toast";
 
 // Validation Schema
 const companyValidationSchema = Yup.object().shape({
@@ -118,14 +119,14 @@ const CompanySettingsPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        alert("Company settings updated successfully!");
+        toast.success("Company settings updated successfully!");
       } else {
         const errorData = await response.json();
-        alert(errorData.error || "Failed to update company settings");
+        toast.error(errorData.error || "Failed to update company settings");
       }
     } catch (error) {
       console.error("Error updating company settings:", error);
-      alert("Failed to update company settings");
+      toast.error("Failed to update company settings");
     } finally {
       setSubmitting(false);
     }

@@ -11,6 +11,7 @@ import {
   createApiHeaders,
   createApiHeadersWithoutContentType,
 } from "@/lib/api-utils";
+import toast from "react-hot-toast";
 
 interface JobFormData {
   title: string;
@@ -182,15 +183,15 @@ const EditJobPage = () => {
       });
 
       if (response.ok) {
-        alert("Job updated successfully!");
+        toast.success("Job updated successfully!");
         router.push("/dashboard/company/all-jobs");
       } else {
         const data = await response.json();
-        alert(data.error || "Failed to update job");
+        toast.error(data.error || "Failed to update job");
       }
     } catch (error) {
       console.error("Error updating job:", error);
-      alert("Failed to update job");
+      toast.error("Failed to update job");
     } finally {
       setSubmitting(false);
     }

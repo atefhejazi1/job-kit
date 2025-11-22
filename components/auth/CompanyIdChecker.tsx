@@ -3,6 +3,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function CompanyIdChecker({
   children,
@@ -15,7 +16,7 @@ export default function CompanyIdChecker({
   useEffect(() => {
     // Check if company user has companyId
     if (user?.userType === "COMPANY" && !user.companyId) {
-      alert(
+      toast.error(
         "Your session is outdated. Please log in again to access company features."
       );
       logout();
