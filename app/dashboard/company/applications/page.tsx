@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { createApiHeadersWithoutContentType } from "@/lib/api-utils";
 import toast from "react-hot-toast";
@@ -26,6 +26,7 @@ interface JobApplication {
 
 export default function AllApplicationsPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,8 @@ export default function AllApplicationsPage() {
   const [totalApplications, setTotalApplications] = useState(0);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const jobId = searchParams.get("jobId");
 
   // Fetch all applications for the company
   const fetchApplications = async () => {
@@ -54,6 +57,10 @@ export default function AllApplicationsPage() {
 
       if (searchTerm) {
         params.set("search", searchTerm);
+      }
+
+      if (jobId) {
+        params.set("jobId", jobId);
       }
 
       const response = await fetch(`/api/applications?${params}`, {

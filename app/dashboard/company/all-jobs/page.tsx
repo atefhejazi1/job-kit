@@ -288,7 +288,7 @@ const AllJobsPage = () => {
                       <button
                         onClick={() =>
                           router.push(
-                            `/dashboard/company/jobs/${job.id}/applications`
+                            `/dashboard/company/applications?jobId=${job.id}`
                           )
                         }
                         className="text-left hover:text-primary transition-colors"
@@ -342,7 +342,7 @@ const AllJobsPage = () => {
                         <button
                           onClick={() =>
                             router.push(
-                              `/dashboard/company/jobs/${job.id}/applications`
+                              `/dashboard/company/applications?jobId=${job.id}`
                             )
                           }
                           className="px-2 py-1 bg-purple-500 text-white rounded text-xs font-medium hover:bg-purple-600 hover:scale-105 transition-all duration-200 flex items-center space-x-1 cursor-pointer"
@@ -453,7 +453,7 @@ const AllJobsPage = () => {
                         <button
                           onClick={() =>
                             router.push(
-                              `/dashboard/company/jobs/${job.id}/applications`
+                              `/dashboard/company/applications?jobId=${job.id}`
                             )
                           }
                           className="text-left hover:text-primary transition-colors mb-1"
@@ -510,7 +510,7 @@ const AllJobsPage = () => {
                       <button
                         onClick={() =>
                           router.push(
-                            `/dashboard/company/jobs/${job.id}/applications`
+                            `/dashboard/company/applications?jobId=${job.id}`
                           )
                         }
                         className="flex-1 px-3 py-2 bg-purple-500 text-white rounded-md text-sm font-medium hover:bg-purple-600 hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-1 cursor-pointer"
