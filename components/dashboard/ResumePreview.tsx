@@ -113,15 +113,7 @@ export default function ResumePreview() {
         )}
       </div>
       {/* Print/Download */}
-      <div className="mt-6">
-        <Button
-          variant="primary"
-          onClick={() => window.print()}
-          className="px-4 py-2"
-        >
-          Download PDF
-        </Button>
-      </div>
+      
     </div>
   );
 }

@@ -3,6 +3,7 @@
 
 import ResumeForm from "@/components/dashboard/resumeForm/ResumeForm";
 import ResumePreview from "@/components/dashboard/ResumePreview";
+import Button from "@/components/ui/Button";
 import { useResume } from "@/contexts/ResumeContext";
 
 export default function ResumeBuilderPage() {
@@ -18,7 +19,7 @@ export default function ResumeBuilderPage() {
                 <ResumePreview />
 
                 {/* Save Button */}
-                <div className="mt-4">
+                <div className="mt-4 flex gap-2">
                     <button
                         onClick={saveResume}
                         disabled={loading}
@@ -26,6 +27,13 @@ export default function ResumeBuilderPage() {
                     >
                         {loading ? "Saving..." : "Save Resume"}
                     </button>
+                        <Button
+                            variant="primary"
+                            onClick={() => window.print()}
+                            className="px-4 py-2"
+                        >
+                            Download PDF
+                        </Button>
                 </div>
 
             </div>
