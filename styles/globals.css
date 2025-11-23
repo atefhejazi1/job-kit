@@ -7,21 +7,33 @@
   --color-error: #d90000;
 }
 
-
 @media print {
   body * {
-    visibility: hidden;
+    visibility: hidden !important;
+
   }
 
   #resume-preview,
   #resume-preview * {
-    visibility: visible;
+    visibility: visible !important;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: white !important;
+    margin: 24px !important;
   }
 
   #resume-preview {
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
   }
 }
