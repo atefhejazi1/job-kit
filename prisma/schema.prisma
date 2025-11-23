@@ -63,9 +63,32 @@ model Job {
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
-  company Company @relation("CompanyJobs", fields: [companyId], references: [id], onDelete: Cascade)
+  company      Company          @relation("CompanyJobs", fields: [companyId], references: [id], onDelete: Cascade)
+  applications JobApplication[] @relation("JobApplications")
 
   @@map("jobs")
+}
+
+model JobApplication {
+  id             String            @id @default(cuid())
+  jobId          String            @map("job_id")
+  applicantName  String            @map("applicant_name")
+  email          String
+  phone          String?
+  resumeUrl      String?           @map("resume_url")
+  coverLetter    String?           @map("cover_letter")
+  status         ApplicationStatus @default(PENDING)
+  experience     String?
+  expectedSalary Int?              @map("expected_salary")
+  availableFrom  DateTime?         @map("available_from")
+  notes          String? 
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  job Job @relation("JobApplications", fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, email])
+  @@map("job_applications")
 }
 
 model JobSeeker {
@@ -105,4 +128,14 @@ enum WorkType {
   FREELANCE
   INTERNSHIP
   REMOTE
+}
+
+enum ApplicationStatus {
+  PENDING // Application submitted, waiting for review
+  REVIEWED // Application reviewed by HR
+  SHORTLISTED // Candidate shortlisted for interview
+  INTERVIEWING // Interview scheduled/in progress
+  ACCEPTED // Job offer made and accepted
+  REJECTED // Application rejected
+  WITHDRAWN // Applicant withdrew application
 }

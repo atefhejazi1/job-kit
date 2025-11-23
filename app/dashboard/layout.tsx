@@ -72,6 +72,11 @@ export default function DashboardLayout({
               icon: FileText,
             },
             {
+              name: "All Applications",
+              href: "/dashboard/company/applications",
+              icon: UserCheck,
+            },
+            {
               name: "Company Settings",
               href: "/dashboard/company/settings",
               icon: Settings,

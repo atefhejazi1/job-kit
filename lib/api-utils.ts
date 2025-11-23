@@ -7,10 +7,11 @@ export function createApiHeaders(user: User | null): HeadersInit {
 
   // Add company ID header for company users
   if (user?.userType === 'COMPANY') {
-    if (!user.companyId) {
-      console.error('Company user missing companyId. Please log in again.');
+    const companyId = user.companyId || user.id;
+    if (!companyId) {
+      console.error('Company user missing company ID. Please log in again.');
     } else {
-      headers['x-company-id'] = user.companyId;
+      headers['x-company-id'] = companyId;
     }
   }
 
@@ -22,10 +23,11 @@ export function createApiHeadersWithoutContentType(user: User | null): HeadersIn
 
   // Add company ID header for company users
   if (user?.userType === 'COMPANY') {
-    if (!user.companyId) {
-      console.error('Company user missing companyId. Please log in again.');
+    const companyId = user.companyId || user.id;
+    if (!companyId) {
+      console.error('Company user missing company ID. Please log in again.');
     } else {
-      headers['x-company-id'] = user.companyId;
+      headers['x-company-id'] = companyId;
     }
   }
 

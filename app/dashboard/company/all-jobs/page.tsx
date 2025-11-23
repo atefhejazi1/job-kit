@@ -272,7 +272,7 @@ const AllJobsPage = () => {
                   <div className="col-span-2">Salary</div>
                   <div className="col-span-1">Status</div>
                   <div className="col-span-1">Posted</div>
-                  <div className="col-span-1">Actions</div>
+                  <div className="col-span-2">Actions</div>
                 </div>
               </div>
 
@@ -285,9 +285,18 @@ const AllJobsPage = () => {
                   {/* Desktop View */}
                   <div className="hidden md:grid md:grid-cols-12 gap-4 p-4 hover:bg-gray-50 transition-colors">
                     <div className="col-span-3">
-                      <h3 className="font-semibold text-gray-900 mb-1">
-                        {job.title}
-                      </h3>
+                      <button
+                        onClick={() =>
+                          router.push(
+                            `/dashboard/company/jobs/${job.id}/applications`
+                          )
+                        }
+                        className="text-left hover:text-primary transition-colors"
+                      >
+                        <h3 className="font-semibold text-gray-900 mb-1 hover:text-primary">
+                          {job.title}
+                        </h3>
+                      </button>
                       <p className="text-sm text-gray-600">{job.location}</p>
                       {job.deadline && (
                         <p className="text-xs text-red-600 mt-1">
@@ -330,6 +339,29 @@ const AllJobsPage = () => {
 
                     <div className="col-span-2">
                       <div className="flex space-x-1">
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/dashboard/company/jobs/${job.id}/applications`
+                            )
+                          }
+                          className="px-2 py-1 bg-purple-500 text-white rounded text-xs font-medium hover:bg-purple-600 hover:scale-105 transition-all duration-200 flex items-center space-x-1 cursor-pointer"
+                          title="View Applications"
+                        >
+                          <svg
+                            className="w-3 h-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                            />
+                          </svg>
+                        </button>
                         <button
                           onClick={() =>
                             router.push(`/dashboard/company/edit-job/${job.id}`)
@@ -418,9 +450,18 @@ const AllJobsPage = () => {
                   <div className="md:hidden p-4">
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 mb-1">
-                          {job.title}
-                        </h3>
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/dashboard/company/jobs/${job.id}/applications`
+                            )
+                          }
+                          className="text-left hover:text-primary transition-colors mb-1"
+                        >
+                          <h3 className="font-semibold text-gray-900 hover:text-primary">
+                            {job.title}
+                          </h3>
+                        </button>
                         <p className="text-sm text-gray-600 mb-2">
                           {job.location}
                         </p>
@@ -466,6 +507,29 @@ const AllJobsPage = () => {
                     )}
 
                     <div className="flex space-x-2">
+                      <button
+                        onClick={() =>
+                          router.push(
+                            `/dashboard/company/jobs/${job.id}/applications`
+                          )
+                        }
+                        className="flex-1 px-3 py-2 bg-purple-500 text-white rounded-md text-sm font-medium hover:bg-purple-600 hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-1 cursor-pointer"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                          />
+                        </svg>
+                        <span>Applications</span>
+                      </button>
                       <button
                         onClick={() =>
                           router.push(`/dashboard/company/edit-job/${job.id}`)
