@@ -51,10 +51,11 @@ export async function POST(request: Request): Promise<NextResponse<AuthResponse 
       hasCompany: !!company 
     });
 
+
     return NextResponse.json(
-      { 
+      {
         message: 'Login successful',
-        user: userResponse
+        user: userWithoutPassword,
       },
       { status: 200 }
     );

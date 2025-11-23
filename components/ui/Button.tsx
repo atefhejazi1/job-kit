@@ -1,15 +1,7 @@
 import { TButton } from "@/types/button.types";
 
-const Button = ({
-  children,
-  variant,
-  className,
-  type = "button",
-  disabled,
-  onClick,
-}: TButton) => {
-  const baseClasses =
-    "px-6 py-2 rounded-md transition-all duration-200 font-medium hover:scale-105";
+const Button = ({ children, variant, className, onClick }: TButton) => {
+  const baseClasses = "px-6 py-2 rounded-md transition font-medium";
 
   let variantClasses = "";
 
@@ -28,14 +20,7 @@ const Button = ({
   }
 
   return (
-    <button
-      type={type}
-      disabled={disabled}
-      onClick={onClick}
-      className={`${baseClasses} ${variantClasses} ${className} ${
-        disabled ? "opacity-50 cursor-not-allowed hover:scale-100" : ""
-      }`}
-    >
+    <button className={`${baseClasses} ${variantClasses} ${className}`} onClick={onClick}>
       {children}
     </button>
   );

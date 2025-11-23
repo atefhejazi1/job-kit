@@ -6,3 +6,34 @@
   --color-secondary: #1D1D1D;
   --color-error: #d90000;
 }
+
+@media print {
+  body * {
+    visibility: hidden !important;
+
+  }
+
+  #resume-preview,
+  #resume-preview * {
+    visibility: visible !important;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: white !important;
+    margin: 24px !important;
+  }
+
+  #resume-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}

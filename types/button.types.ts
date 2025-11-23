@@ -1,10 +1,9 @@
-import { ReactNode } from "react";
+import { MouseEvent, ReactNode } from "react";
 
 export type TButton = {
   children: ReactNode;
   variant?: "primary" | "secondary" | "outline" | "danger";
   className?: string;
-  type?: "button" | "submit" | "reset";
-  disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+
 };

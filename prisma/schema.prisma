@@ -1,3 +1,5 @@
+// prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,6 +21,8 @@ model User {
   userType  UserType   @default(USER) @map("user_type")
   company   Company?   @relation("UserCompany")
   jobSeeker JobSeeker? @relation("UserJobSeeker")
+
+  resumes Resume[]
 
   @@map("users")
 }
@@ -105,4 +109,28 @@ enum WorkType {
   FREELANCE
   INTERNSHIP
   REMOTE
+  model Resume {
+  id     String @id @default(cuid())
+  // IMPORTANT: You must ensure 'userId' is passed in the POST request body
+  // or retrieve the user ID from the session/authentication context in the API handler.
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  name    String
+  email   String
+  phone   String
+  summary String
+
+  skills    String[] // PostgreSQL array type for simple strings
+  languages String[] // PostgreSQL array type for simple strings
+
+  // Json type for arrays of complex objects (EducationItem, ExperienceItem, ProjectItem)
+  education  Json
+  experience Json
+  projects   Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("resumes")
 }
