@@ -35,7 +35,6 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
         try {
             // Convert complex objects (arrays of objects) to JSON strings
             // to match the `Json` field type in Prisma schema.
-            // console.log(resumeData);
             const userData = localStorage.getItem("user");
             let userId: string | undefined = undefined; // تعريف صحيح
 
@@ -46,6 +45,12 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
                 console.log("No user found in localStorage");
             }
 
+            if (!userId) {
+                alert("User not logged in. Cannot save resume.");
+                setLoading(false);
+                return;
+            }
+
 
 
             const dataToSend = {
@@ -54,9 +59,6 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
                 experience: resumeData.experience,
                 projects: resumeData.projects,
                 userId: userId
-
-                // You might need to add userId here if you're using authentication
-                // userId: "some-user-id" // Replace with actual logic to get userId
             };
             console.log(dataToSend);
             // console.log( JSON.stringify(dataToSend));

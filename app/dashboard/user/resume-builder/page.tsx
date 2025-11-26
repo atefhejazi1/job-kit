@@ -27,13 +27,13 @@ export default function ResumeBuilderPage() {
                     >
                         {loading ? "Saving..." : "Save Resume"}
                     </button>
-                        <Button
-                            variant="primary"
-                            onClick={() => window.print()}
-                            className="px-4 py-2"
-                        >
-                            Download PDF
-                        </Button>
+                    <Button
+                        variant="primary"
+                        onClick={() => window.print()}
+                        className="px-4 py-2"
+                    >
+                        Download PDF
+                    </Button>
                 </div>
 
             </div>
