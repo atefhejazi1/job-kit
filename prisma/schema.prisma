@@ -132,22 +132,18 @@ enum WorkType {
   FREELANCE
   INTERNSHIP
   REMOTE
-  model Resume {
+}
+
+model Resume {
   id     String @id @default(cuid())
-  // IMPORTANT: You must ensure 'userId' is passed in the POST request body
-  // or retrieve the user ID from the session/authentication context in the API handler.
   userId String
   user   User   @relation(fields: [userId], references: [id])
-
   name    String
   email   String
   phone   String
   summary String
-
-  skills    String[] // PostgreSQL array type for simple strings
-  languages String[] // PostgreSQL array type for simple strings
-
-  // Json type for arrays of complex objects (EducationItem, ExperienceItem, ProjectItem)
+  skills    String[]
+  languages String[]
   education  Json
   experience Json
   projects   Json

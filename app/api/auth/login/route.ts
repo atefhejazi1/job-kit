@@ -55,7 +55,7 @@ export async function POST(request: Request): Promise<NextResponse<AuthResponse 
     return NextResponse.json(
       {
         message: 'Login successful',
-        user: userWithoutPassword,
+        user: userResponse,
       },
       { status: 200 }
     );
