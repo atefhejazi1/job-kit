@@ -181,16 +181,18 @@ export default function DashboardLayout({
                                 href={item.href}
                                 className={`
                                 flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200
-                                ${active
+                                ${
+                                  active
                                     ? "bg-primary text-white shadow-md"
                                     : "text-gray-700 hover:bg-gray-100 hover:text-primary"
-                                  }
+                                }
                               `}
                                 onClick={() => setSidebarOpen(false)}
                               >
                                 <Icon
-                                  className={`h-4 w-4 mr-3 ${active ? "text-white" : "text-gray-500"
-                                    }`}
+                                  className={`h-4 w-4 mr-3 ${
+                                    active ? "text-white" : "text-gray-500"
+                                  }`}
                                 />
                                 {item.name}
                               </Link>
@@ -211,16 +213,18 @@ export default function DashboardLayout({
                         href={section.href}
                         className={`
                         flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
-                        ${active
+                        ${
+                          active
                             ? "bg-primary text-white shadow-md"
                             : "text-gray-700 hover:bg-gray-100 hover:text-primary"
-                          }
+                        }
                       `}
                         onClick={() => setSidebarOpen(false)}
                       >
                         <Icon
-                          className={`h-5 w-5 mr-3 ${active ? "text-white" : "text-gray-500"
-                            }`}
+                          className={`h-5 w-5 mr-3 ${
+                            active ? "text-white" : "text-gray-500"
+                          }`}
                         />
                         {section.name}
                       </Link>
@@ -255,10 +259,11 @@ export default function DashboardLayout({
                       {user.email}
                     </p>
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mt-1 ${user.userType === "COMPANY"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-green-100 text-green-800"
-                        }`}
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mt-1 ${
+                        user.userType === "COMPANY"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-green-100 text-green-800"
+                      }`}
                     >
                       {user.userType === "COMPANY" ? "Company" : "Job Seeker"}
                     </span>
@@ -349,7 +354,12 @@ export default function DashboardLayout({
                           </p>
                           <p className="text-xs text-gray-500">{user.email}</p>
                         </div>
-
+                        <Link href="/dashboard/profile">
+                          <button onClick={() => setProfileDropdown(!profileDropdown)} className="w-full block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
+                            <User className="h-4 w-4" />
+                            <span>Profile</span>
+                          </button>
+                        </Link>
                         <button
                           onClick={logout}
                           className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2"
@@ -372,9 +382,7 @@ export default function DashboardLayout({
           {/* Page content */}
           <main className="p-4 sm:p-6">
             <div className="max-w-7xl mx-auto">
-                <CompanyIdChecker>
-                  {children}
-                </CompanyIdChecker>
+              <CompanyIdChecker>{children}</CompanyIdChecker>
             </div>
           </main>
         </div>
