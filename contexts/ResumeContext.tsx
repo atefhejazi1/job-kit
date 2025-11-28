@@ -1,7 +1,7 @@
 // src/contexts/ResumeContext.tsx
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import { ResumeData } from "@/types/resume.data.types";
 
 interface ResumeContextProps {
@@ -9,6 +9,7 @@ interface ResumeContextProps {
     setResumeData: (data: ResumeData) => void;
     saveResume: () => Promise<void>;
     loading: boolean;
+    loadResume: () => Promise<void>;
 }
 
 const ResumeContext = createContext<ResumeContextProps | undefined>(undefined);
@@ -29,62 +30,89 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 
     const [loading, setLoading] = useState(false);
 
-    // Function to save resume data to the database via API route
-    const saveResume = async () => {
+     // Function to load resume data from API
+    const loadResume = useCallback(async () => {
         setLoading(true);
         try {
-            // Convert complex objects (arrays of objects) to JSON strings
-            // to match the `Json` field type in Prisma schema.
             const userData = localStorage.getItem("user");
-            let userId: string | undefined = undefined; // تعريف صحيح
-
-            if (userData) {
-                const userObj = JSON.parse(userData); // تحويل النص لـ object
-                userId = userObj.id;
-            } else {
+            if (!userData) {
                 console.log("No user found in localStorage");
-            }
-
-            if (!userId) {
-                alert("User not logged in. Cannot save resume.");
                 setLoading(false);
                 return;
             }
 
+            const userObj = JSON.parse(userData); // تحويل النص لـ object
+            const userId = userObj.id;
 
-
-            const dataToSend = {
-                ...resumeData,
-                education: resumeData.education,
-                experience: resumeData.experience,
-                projects: resumeData.projects,
-                userId: userId
-            };
-            console.log(dataToSend);
-            // console.log( JSON.stringify(dataToSend));
-
-            const res = await fetch("/api/resume", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(dataToSend), // Send the prepared data
-            });
-
+            const res = await fetch(`/api/resume?userId=${userId}`);
             if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.message || "Failed to save resume");
+                if (res.status === 404) {
+                    console.log("No CV found");
+                    setLoading(false);
+                    return;
+                }
+                throw new Error("Failed to load resume");
             }
 
-            const data = await res.json();
-            console.log("Saved Resume:", data);
-        } catch (err) {
-            console.error("Error saving resume:", err);
+const data = await res.json();
+
+setResumeData({
+  ...data,
+  skills: data.skills || [],
+  languages: data.languages || [],
+  education: data.education || [],
+  experience: data.experience || [],
+  projects: data.projects || [],
+});
+  } catch (err) {
+            console.error(" Error loading resume:", err);
         } finally {
             setLoading(false);
         }
-    };
+    }, []); // ← EMPTY dependency array
+    // Function to save resume data to the database via API route
+    const saveResume = useCallback(async () => {
+  setLoading(true);
+  try {
+    const userData = localStorage.getItem("user");
+    if (!userData) {
+      alert("User not logged in. Cannot save resume.");
+      setLoading(false);
+      return;
+    }
 
+    const userObj = JSON.parse(userData);
+    const userId = userObj.id;
+
+    // استخدم PUT بدلاً من POST
+    const res = await fetch("/api/resume", {
+      method: "PUT", //  تغيير من POST إلى PUT
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...resumeData,
+        userId: userId
+      }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Failed to save resume");
+    }
+
+    const savedData = await res.json();
+    console.log(" Resume saved successfully:", savedData);
+    
+    // تحديث الحالة المحلية بالبيانات المخزنة
+    setResumeData(savedData);
+  } catch (err) {
+    console.error(" Error saving resume:", err);
+    alert("Failed to save resume. Check console for details.");
+  } finally {
+    setLoading(false);
+  }
+    }, [resumeData]); //  dependency على resumeData
     return (
-        <ResumeContext.Provider value={{ resumeData, setResumeData, saveResume, loading }}>
+        <ResumeContext.Provider value={{ resumeData, setResumeData, saveResume, loading, loadResume }}>
             {children}
         </ResumeContext.Provider>
     );
