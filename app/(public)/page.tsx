@@ -8,6 +8,7 @@ import Snapchat from "@/components/shared/Snapchat";
 import Testimonials from "@/components/shared/Testimonials";
 import WhyChooseUs from "@/components/shared/WhyChooseUs";
 import AuthRedirect from "@/components/auth/AuthRedirect";
+import Jops from "@/components/Jops";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <ResumeSteps />
       <Snapchat />
       <Services />
+      <Jops />
       <About />
       <WhyChooseUs />
       <Testimonials />
