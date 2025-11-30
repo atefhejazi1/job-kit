@@ -142,8 +142,8 @@ model Resume {
   email   String
   phone   String
   summary String
-  skills    String[]
-  languages String[]
+  skills    Json
+  languages Json
   education  Json
   experience Json
   projects   Json

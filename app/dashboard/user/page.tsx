@@ -2,9 +2,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Briefcase, Edit, Eye, RefreshCw, Plus,ArrowRight, User } from "lucide-react";
+import { FileText, Briefcase, Edit, RefreshCw, Plus,ArrowRight, User } from "lucide-react";
 import { useResume } from "@/contexts/ResumeContext";
-import { DeleteCVButton } from "./DeleteCVButton";
+
 
 export default function UserDashboard() {
   const { resumeData, loadResume, loading } = useResume();
@@ -107,23 +107,22 @@ export default function UserDashboard() {
               >
                 <RefreshCw className={`w-4 h-4 text-gray-600 ${refreshing ? 'animate-spin' : ''}`} />
               </button>
-              {hasCV && (
-                <>
-                  <a
-                    href="/dashboard/user/resume-preview"
-                    className="flex items-center gap-2 hover:bg-gray-100 px-3 py-2 rounded-lg font-medium text-gray-700 text-sm transition-colors"
-                  >
-                    <Eye className="w-4 h-4" /> Preview
-                  </a>
-                  <a
-                    href="/dashboard/user/resume-builder"
-                    className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 px-3 py-2 rounded-lg font-medium text-white text-sm transition-colors"
-                  >
-                    <Edit className="w-4 h-4" /> Edit
-                  </a>
-                  <DeleteCVButton />
-                </>
-              )}
+            {hasCV && (
+        <div className="group relative">
+          <a
+            href="/dashboard/user/resume-editor"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium text-white text-sm transition-colors"
+          >
+            <Edit className="w-4 h-4" />
+            <span>Manage Resume</span>
+          </a>
+          
+          {/* Tooltip */}
+  <div className="hidden group-hover:block top-full -right-4 z-10 absolute bg-linear-to-r from-blue-50 to-blue-100 shadow-sm mt-3 px-2 py-2 border-blue-600 border-l-4 rounded-r-lg text-blue-900 text-xs whitespace-nowrap">
+  Preview • Edit • Delete • Export PDF
+</div>
+        </div>
+      )}
             </div>
           </div>
 
@@ -171,7 +170,7 @@ export default function UserDashboard() {
               <p className="mx-auto mb-6 max-w-md text-gray-500">Create your professional resume now to start applying for jobs</p>
               <a
                 href="/dashboard/user/resume-builder"
-                className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 px-6 py-3 rounded-lg font-medium text-white transition"
+                className="inline-flex items-center gap-2 bg-blue-600 px-6 py-3 rounded-lg font-medium text-white transition"
               >
                 <Plus className="w-5 h-5" /> Create Resume
               </a>

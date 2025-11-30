@@ -5,6 +5,8 @@ import {
   EducationItem,
   ExperienceItem,
   ProjectItem,
+  SkillItem,
+  LanguageItem,
 } from "@/types/resume.data.types";
 import { useResume } from "@/contexts/ResumeContext";
 import Button from "@/components/ui/Button";
@@ -14,6 +16,7 @@ import ProjectSection from "./ProjectSection";
 import EducationList from "./EducationList";
 import ExperienceList from "./ExperienceList";
 import ProjectList from "./ProjectList";
+import { generateId } from "@/contexts/ResumeContext";
 
 export default function ResumeForm() {
   const { resumeData, setResumeData } = useResume();
@@ -29,18 +32,32 @@ export default function ResumeForm() {
 
   const addSkill = () => {
     if (!skillInput.trim()) return;
+    
+    const newSkill: SkillItem = {
+      type: 'skill',
+      id: generateId(),
+      name: skillInput.trim()
+    };
+    
     setResumeData({
       ...resumeData,
-      skills: [...resumeData.skills, skillInput],
+      skills: [...resumeData.skills, newSkill],
     });
     setSkillInput("");
   };
 
   const addLanguage = () => {
     if (!languageInput.trim()) return;
+    
+    const newLanguage: LanguageItem = {
+      type: 'language',
+      id: generateId(),
+      name: languageInput.trim()
+    };
+    
     setResumeData({
       ...resumeData,
-      languages: [...resumeData.languages, languageInput],
+      languages: [...resumeData.languages, newLanguage],
     });
     setLanguageInput("");
   };
@@ -74,7 +91,6 @@ export default function ResumeForm() {
 
   return (
     <div className="space-y-6">
-      {/* Personal Info */}
       <div>
         <h2 className="mb-3 font-semibold text-xl">Personal Info</h2>
         <input
@@ -107,7 +123,6 @@ export default function ResumeForm() {
         />
       </div>
 
-      {/* Skills */}
       <div>
         <h2 className="mb-3 font-semibold text-xl">Skills</h2>
         <div className="flex gap-2">
@@ -122,13 +137,13 @@ export default function ResumeForm() {
           </Button>
         </div>
         <ul className="space-y-2 mt-2">
-          {resumeData.skills.map((skill, i) => (
-            <li key={i} className="flex items-center gap-2">
-              <span>• {skill}</span>
+          {resumeData.skills.map((skill) => (
+            <li key={skill.id} className="flex items-center gap-2">
+              <span>• {skill.name}</span>
               <button
                 onClick={() => {
                   const updated = resumeData.skills.filter(
-                    (_, idx) => idx !== i
+                    (s) => s.id !== skill.id
                   );
                   setResumeData({ ...resumeData, skills: updated });
                 }}
@@ -141,7 +156,6 @@ export default function ResumeForm() {
         </ul>
       </div>
 
-      {/* Languages */}
       <div>
         <h2 className="mb-3 font-semibold text-xl">Languages</h2>
         <div className="flex gap-2">
@@ -160,13 +174,13 @@ export default function ResumeForm() {
           </Button>
         </div>
         <ul className="space-y-2 mt-2">
-          {resumeData.languages.map((lang, i) => (
-            <li key={i} className="flex items-center gap-2">
-              <span>• {lang}</span>
+          {resumeData.languages.map((lang) => (
+            <li key={lang.id} className="flex items-center gap-2">
+              <span>• {lang.name}</span>
               <button
                 onClick={() => {
                   const updated = resumeData.languages.filter(
-                    (_, idx) => idx !== i
+                    (l) => l.id !== lang.id
                   );
                   setResumeData({ ...resumeData, languages: updated });
                 }}
@@ -179,8 +193,6 @@ export default function ResumeForm() {
         </ul>
       </div>
 
-      {/* Sections */}
-      {/* Education:  Add  then List */}
       <div>
         <EducationSection onAdd={addEducation} />
         <div className="mt-6"></div>
@@ -190,7 +202,6 @@ export default function ResumeForm() {
         />
       </div>
 
-      {/* Experience: Add then List */}
       <div>
         <ExperienceSection onAdd={addExperience} />
         <div className="mt-6"></div>
@@ -200,7 +211,6 @@ export default function ResumeForm() {
         />
       </div>
 
-      {/* Projects: Add then List */}
       <div>
         <ProjectSection onAdd={addProject} />
         <div className="mt-6"></div>
