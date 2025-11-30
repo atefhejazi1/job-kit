@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import UserInfo from "@/components/dashboard/UserInfo";
 import { useAuth } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { createApiHeadersWithoutContentType } from "@/lib/api-utils";
 import toast from "react-hot-toast";
 import {
@@ -55,7 +56,7 @@ interface ChartData {
   applications: number;
 }
 
-export default function CompanyDashboard() {
+function CompanyDashboard() {
   const router = useRouter();
   const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
@@ -466,5 +467,13 @@ export default function CompanyDashboard() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CompanyDashboardPage() {
+  return (
+    <ProtectedRoute requiredUserType="COMPANY">
+      <CompanyDashboard />
+    </ProtectedRoute>
   );
 }

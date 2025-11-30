@@ -1,12 +1,13 @@
-"use client";
+\"use client\";
 
-import { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import Button from "@/components/ui/Button";
-import { WorkType } from "@/types/job.types";
-import { useAuth } from "@/contexts/AuthContext";
+import { useState, useEffect } from \"react\";
+import { useRouter, useParams } from \"next/navigation\";
+import { Formik, Form, Field, FieldArray, ErrorMessage } from \"formik\";
+import * as Yup from \"yup\";
+import Button from \"@/components/ui/Button\";
+import ProtectedRoute from \"@/components/auth/ProtectedRoute\";
+import { WorkType } from \"@/types/job.types\";
+import { useAuth } from \"@/contexts/AuthContext\";
 import {
   createApiHeaders,
   createApiHeadersWithoutContentType,

@@ -21,6 +21,7 @@ import {
   Home,
   UserCheck,
   Building,
+  Users,
 } from "lucide-react";
 import { ResumeProvider } from "@/contexts/ResumeContext";
 
@@ -76,6 +77,11 @@ export default function DashboardLayout({
               name: "All Applications",
               href: "/dashboard/company/applications",
               icon: UserCheck,
+            },
+            {
+              name: "Team Management",
+              href: "/dashboard/company/team",
+              icon: Users,
             },
             {
               name: "Company Settings",
@@ -355,7 +361,10 @@ export default function DashboardLayout({
                           <p className="text-xs text-gray-500">{user.email}</p>
                         </div>
                         <Link href="/dashboard/profile">
-                          <button onClick={() => setProfileDropdown(!profileDropdown)} className="w-full block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
+                          <button
+                            onClick={() => setProfileDropdown(!profileDropdown)}
+                            className="w-full block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 flex items-center space-x-2"
+                          >
                             <User className="h-4 w-4" />
                             <span>Profile</span>
                           </button>

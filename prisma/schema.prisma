@@ -1,5 +1,3 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -44,6 +42,7 @@ model Company {
   updatedAt       DateTime @updatedAt @map("updated_at")
   user            User     @relation("UserCompany", fields: [userId], references: [id], onDelete: Cascade)
   jobs            Job[]    @relation("CompanyJobs")
+  teamMembers     TeamMember[] @relation("CompanyTeamMembers")
 
   @@map("companies")
 }
@@ -162,4 +161,43 @@ enum ApplicationStatus {
   ACCEPTED // Job offer made and accepted
   REJECTED // Application rejected
   WITHDRAWN // Applicant withdrew application
+}
+
+enum TeamMemberRole {
+  ADMIN
+  HR
+  RECRUITER
+  VIEWER
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+model TeamMember {
+  id              String    @id @default(cuid())
+  companyId       String    @map("company_id")
+  email           String
+  name            String?
+  role            TeamMemberRole @default(VIEWER) @map("role")
+  status          InvitationStatus @default(PENDING) @map("status")
+  invitedAt       DateTime  @default(now()) @map("invited_at")
+  acceptedAt      DateTime? @map("accepted_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  company         Company   @relation("CompanyTeamMembers", fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Permissions
+  canCreateJobs    Boolean @default(false) @map("can_create_jobs")
+  canEditJobs      Boolean @default(false) @map("can_edit_jobs")
+  canDeleteJobs    Boolean @default(false) @map("can_delete_jobs")
+  canReviewApps    Boolean @default(false) @map("can_review_applications")
+  canEditCompany   Boolean @default(false) @map("can_edit_company")
+  canManageTeam    Boolean @default(false) @map("can_manage_team")
+
+  @@unique([companyId, email])
+  @@map("team_members")
 }

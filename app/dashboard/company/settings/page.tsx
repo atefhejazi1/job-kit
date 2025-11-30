@@ -6,6 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Button from "@/components/ui/Button";
 import LogoUploader from "@/components/ui/LogoUploader";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { CompanyFormData, CompanySize } from "@/types/company.types";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -41,7 +42,7 @@ const companyValidationSchema = Yup.object().shape({
     .nullable(),
 });
 
-const CompanySettingsPage = () => {
+function CompanySettingsPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -436,6 +437,12 @@ const CompanySettingsPage = () => {
       </div>
     </div>
   );
-};
+}
 
-export default CompanySettingsPage;
+export default function CompanySettingsPageWrapper() {
+  return (
+    <ProtectedRoute requiredUserType="COMPANY">
+      <CompanySettingsPage />
+    </ProtectedRoute>
+  );
+}

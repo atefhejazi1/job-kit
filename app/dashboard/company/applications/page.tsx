@@ -1,9 +1,10 @@
-"use client";
+\"use client\";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
-import { createApiHeadersWithoutContentType } from "@/lib/api-utils";
+import { useState, useEffect } from \"react\";
+import { useRouter, useSearchParams } from \"next/navigation\";
+import { useAuth } from \"@/contexts/AuthContext\";
+import ProtectedRoute from \"@/components/auth/ProtectedRoute\";
+import { createApiHeadersWithoutContentType } from \"@/lib/api-utils\";
 import toast from "react-hot-toast";
 
 interface JobApplication {
@@ -24,7 +25,7 @@ interface JobApplication {
   };
 }
 
-export default function AllApplicationsPage() {
+function AllApplicationsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
@@ -432,5 +433,13 @@ export default function AllApplicationsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ApplicationsPageWrapper() {
+  return (
+    <ProtectedRoute requiredUserType="COMPANY">
+      <ApplicationsPage />
+    </ProtectedRoute>
   );
 }

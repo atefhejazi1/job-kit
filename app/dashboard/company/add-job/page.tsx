@@ -1,13 +1,14 @@
-"use client";
+\"use client\";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
-import * as Yup from "yup";
-import Button from "@/components/ui/Button";
-import { WorkType } from "@/types/job.types";
-import { useAuth } from "@/contexts/AuthContext";
-import { createApiHeaders } from "@/lib/api-utils";
+import { useState } from \"react\";
+import { useRouter } from \"next/navigation\";
+import { Formik, Form, Field, ErrorMessage, FieldArray } from \"formik\";
+import * as Yup from \"yup\";
+import Button from \"@/components/ui/Button\";
+import ProtectedRoute from \"@/components/auth/ProtectedRoute\";
+import { WorkType } from \"@/types/job.types\";
+import { useAuth } from \"@/contexts/AuthContext\";
+import { createApiHeaders } from \"@/lib/api-utils\";
 import toast from "react-hot-toast";
 
 interface JobFormData {
@@ -567,4 +568,14 @@ const AddJobPage = () => {
   );
 };
 
-export default AddJobPage;
+function AddJobPageComponent() {
+  return <AddJobPage />;
+}
+
+export default function AddJobPageWrapper() {
+  return (
+    <ProtectedRoute requiredUserType="COMPANY">
+      <AddJobPageComponent />
+    </ProtectedRoute>
+  );
+}

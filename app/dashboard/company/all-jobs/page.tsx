@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { Job, WorkType } from "@/types/job.types";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -713,4 +714,14 @@ const AllJobsPage = () => {
   );
 };
 
-export default AllJobsPage;
+function AllJobsPageComponent() {
+  return <AllJobsPage />;
+}
+
+export default function AllJobsPageWrapper() {
+  return (
+    <ProtectedRoute requiredUserType="COMPANY">
+      <AllJobsPageComponent />
+    </ProtectedRoute>
+  );
+}
