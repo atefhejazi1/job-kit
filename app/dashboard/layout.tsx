@@ -22,6 +22,7 @@ import {
   UserCheck,
   Building,
 } from "lucide-react";
+import { ResumeProvider } from "@/contexts/ResumeContext";
 
 export default function DashboardLayout({
   children,
@@ -98,6 +99,11 @@ export default function DashboardLayout({
             {
               name: "Resume Builder",
               href: "/dashboard/user/resume-builder",
+              icon: FileText,
+            },
+            {
+              name: "Generate Cover Letter ",
+              href: "/dashboard/user/cover-letter",
               icon: FileText,
             },
             {
@@ -380,12 +386,13 @@ export default function DashboardLayout({
 
           {/* Page content */}
           <main className="p-4 sm:p-6">
-            <div className="mx-auto max-w-7xl">
-                <CompanyIdChecker>
-                  {children}
-                </CompanyIdChecker>
+
             <div className="max-w-7xl mx-auto">
-              <CompanyIdChecker>{children}</CompanyIdChecker>
+              <CompanyIdChecker>
+                <ResumeProvider>
+                  {children}
+                </ResumeProvider>
+              </CompanyIdChecker>
             </div>
           </main>
         </div>
