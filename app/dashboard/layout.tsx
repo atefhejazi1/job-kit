@@ -102,6 +102,11 @@ export default function DashboardLayout({
               icon: FileText,
             },
             {
+              name: "Generate Cover Letter ",
+              href: "/dashboard/user/cover-letter",
+              icon: FileText,
+            },
+            {
               name: "Job Applications",
               href: "/dashboard/user/applications",
               icon: Briefcase,
@@ -372,9 +377,11 @@ export default function DashboardLayout({
           {/* Page content */}
           <main className="p-4 sm:p-6">
             <div className="max-w-7xl mx-auto">
-                <CompanyIdChecker>
+              <CompanyIdChecker>
+                <ResumeProvider>
                   {children}
-                </CompanyIdChecker>
+                </ResumeProvider>
+              </CompanyIdChecker>
             </div>
           </main>
         </div>

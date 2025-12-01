@@ -8,8 +8,6 @@ export default function ResumeBuilderLayout({
     children: React.ReactNode;
 }) {
     return (
-        <ResumeProvider>
-            {children}
-        </ResumeProvider>
+        children
     );
 }
