@@ -11,14 +11,47 @@ import {
   User,
 } from "lucide-react";
 import { useResume } from "@/contexts/ResumeContext";
+import { ApplicationCard } from '@/components/ApplicationCard';
+import Link from 'next/link';
+
+interface JobApplication {
+  id: string;
+  status: 'PENDING' | 'REVIEWED' | 'SHORTLISTED' | 'INTERVIEWING' | 'ACCEPTED' | 'REJECTED' | 'WITHDRAWN';
+  createdAt: string;
+  job: {
+    title: string;
+    location: string;
+    company: {
+      companyName: string;
+      location: string;
+      logo?: string;
+    };
+  };
+}
 
 export default function UserDashboard() {
   const { resumeData, loadResume, loading } = useResume();
-  const [applications] = useState(3);
+  const [applications, setApplications] = useState<JobApplication[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadResume();
+    
+    // Fetch 3 recent applications
+    const userData = localStorage.getItem('user');
+    const user = userData ? JSON.parse(userData) : null;
+    
+    if (user?.email) {
+      fetch('/api/job-applications', {
+        headers: {
+          'x-user-email': user.email
+        }
+      })
+        .then(r => r.json())
+        .then((data: JobApplication[]) => {
+          setApplications(Array.isArray(data) ? data.slice(0, 5) : []);
+        });
+    }
   }, [loadResume]);
 
   const handleRefresh = async () => {
@@ -71,7 +104,7 @@ export default function UserDashboard() {
                 {hasCV ? "Active" : "Not Created"}
               </span>
             </div>
-            <h3 className="mb-1 font-semibold text-gray-900">Your Resume</h3>
+            <h3 className="mb-1 font-semibold text-gray-900">My Resume</h3>
             <p className="text-gray-500 text-sm">
               {hasCV ? "Last updated: Today" : "Create your first resume"}
             </p>
@@ -84,10 +117,10 @@ export default function UserDashboard() {
                 <Briefcase className="w-5 h-5 text-orange-600" />
               </div>
               <span className="font-bold text-gray-900 text-2xl">
-                {applications}
+                {applications.length}
               </span>
             </div>
-            <h3 className="mb-1 font-semibold text-gray-900">Applications</h3>
+            <h3 className="mb-1 font-semibold text-gray-900">My Applications</h3>
             <p className="text-gray-500 text-sm">{"Jobs you've applied to"}</p>
           </div>
 
@@ -97,14 +130,14 @@ export default function UserDashboard() {
               <div className="bg-green-100 group-hover:bg-green-200 p-2 rounded-lg transition-colors">
                 <User className="w-5 h-5 text-green-600" />
               </div>
-              <a
+              <Link
                 href="/dashboard/user/profile"
                 className="inline-flex items-center gap-1 text-gray-600 hover:text-gray-900 text-sm"
               >
                 Edit <ArrowRight className="w-3 h-3" />
-              </a>
+              </Link>
             </div>
-            <h3 className="mb-1 font-semibold text-gray-900">Your Profile</h3>
+            <h3 className="mb-1 font-semibold text-gray-900">My Profile</h3>
             <p className="text-gray-500 text-sm truncate">
               {resumeData.email || "No email set"}
             </p>
@@ -117,7 +150,7 @@ export default function UserDashboard() {
             <div className="flex items-center gap-3">
               <FileText className="w-5 h-5 text-gray-700" />
               <h2 className="font-semibold text-gray-900 text-lg">
-                Your Resume
+              My Resume
               </h2>
             </div>
             <div className="flex items-center gap-2">
@@ -134,13 +167,13 @@ export default function UserDashboard() {
               </button>
               {hasCV && (
                 <div className="group relative">
-                  <a
+                  <Link
                     href="/dashboard/user/resume-editor"
                     className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium text-white text-sm transition-colors"
                   >
                     <Edit className="w-4 h-4" />
                     <span>Manage Resume</span>
-                  </a>
+                  </Link>
 
                   {/* Tooltip */}
                   <div className="hidden group-hover:block top-full -right-4 z-10 absolute bg-linear-to-r from-blue-50 to-blue-100 shadow-sm mt-3 px-2 py-2 border-blue-600 border-l-4 rounded-r-lg text-blue-900 text-xs whitespace-nowrap">
@@ -211,7 +244,7 @@ export default function UserDashboard() {
                 ].map((stat, i) => (
                   <div
                     key={i}
-                    className="hover:shadow-md p-4 border border-gray-200 rounded-lg text-center transition"
+                    className="hover:shadow-md p-4 border border-gray-200 rounded-lg text-center transition"      
                   >
                     <p className="mb-1 font-bold text-gray-900 text-3xl">
                       {stat.value}
@@ -230,12 +263,12 @@ export default function UserDashboard() {
               <p className="mx-auto mb-6 max-w-md text-gray-500">
                 Create your professional resume now to start applying for jobs
               </p>
-              <a
+              <Link
                 href="/dashboard/user/resume-builder"
                 className="inline-flex items-center gap-2 bg-blue-600 px-6 py-3 rounded-lg font-medium text-white transition"
               >
                 <Plus className="w-5 h-5" /> Create Resume
-              </a>
+              </Link>
             </div>
           )}
         </div>
@@ -246,40 +279,40 @@ export default function UserDashboard() {
             <div className="flex items-center gap-3">
               <Briefcase className="w-5 h-5 text-orange-600" />
               <h2 className="font-semibold text-gray-900 text-lg">
-                Job Applications
+                My Job Applications
               </h2>
             </div>
-            <a
-              href="/dashboard/user/job-applications"
-              className="inline-flex items-center gap-1 font-medium text-gray-600 hover:text-gray-900 text-sm"
+            <Link
+              href="/dashboard/user/applications"
+              className="inline-flex items-center gap-1 font-medium text-gray-600 hover:text-gray-900 text-sm"   
             >
               View All <ArrowRight className="w-3 h-3" />
-            </a>
+            </Link>
           </div>
           <div className="p-6">
-            <div className="space-y-3">
-              {[1, 2, 3].map((_, i) => (
-                <div
-                  key={i}
-                  className="flex justify-between items-center hover:bg-gray-50 p-4 border border-gray-200 rounded-lg transition"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="bg-orange-100 p-3 rounded-lg">
-                      <Briefcase className="w-5 h-5 text-orange-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">Sample Job {i + 1}</h3>
-                      <p className="text-gray-500 text-sm">
-                        Applied {i + 1} days ago
-                      </p>
-                    </div>
-                  </div>
-                  <span className="bg-yellow-100 px-3 py-1 rounded-full font-medium text-yellow-700 text-sm">
-                    Under Review
-                  </span>
-                </div>
-              ))}
-            </div>
+            {applications.length > 0 ? (
+              <div className="space-y-4">
+                {applications.slice(0, 3).map((app) => (
+                  <ApplicationCard
+                    key={app.id}
+                    title={app.job.title}
+                    company={app.job.company.companyName}
+                    location={app.job.company.location}
+                    status={app.status}
+                    appliedAt={app.createdAt}
+                    logo={app.job.company?.logo}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="py-8 text-center">
+                <FileText className="mx-auto mb-3 w-10 h-10 text-gray-400" />
+                <p className="text-gray-500">No applications yet</p>
+                <Link href="/jobs" className="inline-flex items-center gap-2 bg-blue-600 mt-4 px-4 py-2 rounded-lg font-medium text-white text-sm">
+                  Browse Jobs
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
