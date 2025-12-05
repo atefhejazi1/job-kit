@@ -24,6 +24,15 @@ model User {
 
   resumes Resume[]
 
+  // Job application relation
+  applications JobApplication[] @relation("UserApplications")
+
+  // Message relations
+  companyThreads   MessageThread[] @relation("CompanyThreads")
+  applicantThreads MessageThread[] @relation("ApplicantThreads")
+  sentMessages     Message[]       @relation("SentMessages")
+  receivedMessages Message[]       @relation("ReceivedMessages")
+
   @@map("users")
 }
 
@@ -67,31 +76,26 @@ model Job {
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
-  company      Company          @relation("CompanyJobs", fields: [companyId], references: [id], onDelete: Cascade)
-  applications JobApplication[] @relation("JobApplications")
+  company        Company          @relation("CompanyJobs", fields: [companyId], references: [id], onDelete: Cascade)
+  applications   JobApplication[] @relation("JobApplications")
+  messageThreads MessageThread[]
 
   @@map("jobs")
 }
 
 model JobApplication {
-  id             String            @id @default(cuid())
-  jobId          String            @map("job_id")
-  applicantName  String            @map("applicant_name")
-  email          String
-  phone          String?
-  resumeUrl      String?           @map("resume_url")
-  coverLetter    String?           @map("cover_letter")
-  status         ApplicationStatus @default(PENDING)
-  experience     String?
-  expectedSalary Int?              @map("expected_salary")
-  availableFrom  DateTime?         @map("available_from")
-  notes          String? 
-  createdAt      DateTime          @default(now()) @map("created_at")
-  updatedAt      DateTime          @updatedAt @map("updated_at")
+  id          String            @id @default(cuid())
+  jobId       String            @map("job_id")
+  userId      String            @map("user_id")
+  coverLetter String?           @map("cover_letter")
+  status      ApplicationStatus @default(PENDING)
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
 
-  job Job @relation("JobApplications", fields: [jobId], references: [id], onDelete: Cascade)
+  job  Job  @relation("JobApplications", fields: [jobId], references: [id], onDelete: Cascade)
+  user User @relation("UserApplications", fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([jobId, email])
+  @@unique([jobId, userId])
   @@map("job_applications")
 }
 
@@ -135,15 +139,15 @@ enum WorkType {
 }
 
 model Resume {
-  id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-  name    String
-  email   String
-  phone   String
-  summary String
-  skills    Json
-  languages Json
+  id         String @id @default(cuid())
+  userId     String
+  user       User   @relation(fields: [userId], references: [id])
+  name       String
+  email      String
+  phone      String
+  summary    String
+  skills     Json
+  languages  Json
   education  Json
   experience Json
   projects   Json
@@ -162,4 +166,41 @@ enum ApplicationStatus {
   ACCEPTED // Job offer made and accepted
   REJECTED // Application rejected
   WITHDRAWN // Applicant withdrew application
+}
+
+model MessageThread {
+  id            String    @id @default(cuid())
+  companyId     String
+  applicantId   String
+  jobId         String?
+  lastMessage   String?
+  lastMessageAt DateTime?
+  isRead        Boolean   @default(false)
+  messages      Message[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  company   User @relation("CompanyThreads", fields: [companyId], references: [id], onDelete: Cascade)
+  applicant User @relation("ApplicantThreads", fields: [applicantId], references: [id], onDelete: Cascade)
+  job       Job? @relation(fields: [jobId], references: [id], onDelete: SetNull)
+
+  @@unique([companyId, applicantId, jobId])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  threadId    String
+  senderId    String
+  receiverId  String
+  content     String
+  attachments String[] @default([]) // Array of file URLs
+  messageType String   @default("text") // "text", "image", "document", "mixed"
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  // Relations
+  thread   MessageThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  sender   User          @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User          @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
 }

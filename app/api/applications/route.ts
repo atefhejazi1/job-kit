@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// GET - Get all applications for a company
+// Get all applications for a company
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -42,8 +42,8 @@ export async function GET(request: NextRequest) {
     // Search functionality
     if (search) {
       whereConditions.OR = [
-        { applicantName: { contains: search, mode: "insensitive" } },
-        { email: { contains: search, mode: "insensitive" } },
+        { user: { name: { contains: search, mode: "insensitive" } } },
+        { user: { email: { contains: search, mode: "insensitive" } } },
         { job: { title: { contains: search, mode: "insensitive" } } },
       ];
     }
@@ -61,9 +61,24 @@ export async function GET(request: NextRequest) {
               workType: true,
               salaryMin: true,
               salaryMax: true,
-              currency: true,
             },
           },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              jobSeeker: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                  phone: true,
+                  city: true,
+                  skills: true
+                }
+              }
+            }
+          }
         },
         orderBy: { createdAt: "desc" },
         skip,
@@ -97,7 +112,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create a new job application (for job seekers)
+// Create a new job application (for job seekers)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

@@ -5,22 +5,33 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { createApiHeadersWithoutContentType } from "@/lib/api-utils";
 import toast from "react-hot-toast";
+import { MessageCircle } from "lucide-react";
 
 interface JobApplication {
   id: string;
-  applicantName: string;
-  email: string;
-  phone?: string;
+  userId: string;
   status: string;
-  experience?: string;
-  expectedSalary?: number;
+  coverLetter?: string;
   createdAt: string;
   job: {
     id: string;
     title: string;
     location: string;
     workType: string;
-    currency: string;
+    salaryMin?: number;
+    salaryMax?: number;
+  };
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    jobSeeker?: {
+      firstName: string;
+      lastName: string;
+      phone?: string;
+      city?: string;
+      skills: string[];
+    };
   };
 }
 
@@ -35,6 +46,9 @@ export default function AllApplicationsPage() {
   const [totalApplications, setTotalApplications] = useState(0);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
   const [searchTerm, setSearchTerm] = useState("");
+  const [creatingConversation, setCreatingConversation] = useState<
+    string | null
+  >(null);
 
   const jobId = searchParams.get("jobId");
 
@@ -118,6 +132,39 @@ export default function AllApplicationsPage() {
     } catch (error) {
       console.error("Error updating application:", error);
       toast.error("Failed to update application status");
+    }
+  };
+
+  // Create conversation with applicant
+  const createConversation = async (applicationId: string) => {
+    setCreatingConversation(applicationId);
+
+    try {
+      const headers = {
+        ...createApiHeadersWithoutContentType(user),
+        "Content-Type": "application/json",
+      };
+
+      const response = await fetch("/api/applications/message", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ applicationId }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(result.message);
+        // Redirect to messages page
+        router.push("/dashboard/company/messages");
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error || "Failed to create conversation");
+      }
+    } catch (error) {
+      console.error("Error creating conversation:", error);
+      toast.error("Error creating conversation");
+    } finally {
+      setCreatingConversation(null);
     }
   };
 
@@ -310,10 +357,10 @@ export default function AllApplicationsPage() {
                         }
                         className="font-semibold text-gray-900 hover:text-primary transition-colors"
                       >
-                        {application.applicantName}
+                        {application.user.name}
                       </button>
                       <p className="text-sm text-gray-600 mb-1">
-                        {application.email}
+                        {application.user.email}
                       </p>
                       <button
                         onClick={() =>
@@ -333,9 +380,9 @@ export default function AllApplicationsPage() {
 
                   <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                     <div>
-                      <span className="text-gray-600">Experience:</span>
+                      <span className="text-gray-600">Phone:</span>
                       <span className="ml-1 text-gray-900">
-                        {application.experience || "Not specified"}
+                        {application.user.jobSeeker?.phone || "Not provided"}
                       </span>
                     </div>
                     <div>
@@ -345,6 +392,28 @@ export default function AllApplicationsPage() {
                       </span>
                     </div>
                   </div>
+
+                  {/* Skills */}
+                  {application.user.jobSeeker?.skills &&
+                    application.user.jobSeeker.skills.length > 0 && (
+                      <div className="mb-3">
+                        <span className="text-sm text-gray-600 mb-2 block">
+                          Skills:
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {application.user.jobSeeker.skills.map(
+                            (skill, index) => (
+                              <span
+                                key={index}
+                                className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                              >
+                                {skill}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                   <div className="flex space-x-2">
                     <button
@@ -357,12 +426,22 @@ export default function AllApplicationsPage() {
                     >
                       View Details
                     </button>
+                    <button
+                      onClick={() => createConversation(application.id)}
+                      disabled={creatingConversation === application.id}
+                      className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-md text-sm font-medium hover:bg-green-600 disabled:bg-gray-400 transition-colors"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      {creatingConversation === application.id
+                        ? "..."
+                        : "Message"}
+                    </button>
                     {application.status === "PENDING" && (
                       <button
                         onClick={() =>
                           updateApplicationStatus(application.id, "REVIEWED")
                         }
-                        className="px-3 py-2 bg-green-500 text-white rounded-md text-sm font-medium hover:bg-green-600 transition-colors"
+                        className="px-3 py-2 bg-orange-500 text-white rounded-md text-sm font-medium hover:bg-orange-600 transition-colors"
                       >
                         Review
                       </button>

@@ -21,6 +21,7 @@ import {
   Home,
   UserCheck,
   Building,
+  MessageCircle,
 } from "lucide-react";
 import { ResumeProvider } from "@/contexts/ResumeContext";
 
@@ -78,6 +79,11 @@ export default function DashboardLayout({
               icon: UserCheck,
             },
             {
+              name: "Messages",
+              href: "/dashboard/company/messages",
+              icon: MessageCircle,
+            },
+            {
               name: "Company Settings",
               href: "/dashboard/company/settings",
               icon: Settings,
@@ -110,6 +116,11 @@ export default function DashboardLayout({
               name: "Job Applications",
               href: "/dashboard/user/applications",
               icon: Briefcase,
+            },
+            {
+              name: "Messages",
+              href: "/dashboard/user/messages",
+              icon: MessageCircle,
             },
             {
               name: "User Settings",
@@ -359,7 +370,10 @@ export default function DashboardLayout({
                           <p className="text-gray-500 text-xs">{user.email}</p>
                         </div>
                         <Link href="/dashboard/profile">
-                          <button onClick={() => setProfileDropdown(!profileDropdown)} className="w-full block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
+                          <button
+                            onClick={() => setProfileDropdown(!profileDropdown)}
+                            className="w-full block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 flex items-center space-x-2"
+                          >
                             <User className="h-4 w-4" />
                             <span>Profile</span>
                           </button>
@@ -385,12 +399,9 @@ export default function DashboardLayout({
 
           {/* Page content */}
           <main className="p-4 sm:p-6">
-
             <div className="max-w-7xl mx-auto">
               <CompanyIdChecker>
-                <ResumeProvider>
-                  {children}
-                </ResumeProvider>
+                <ResumeProvider>{children}</ResumeProvider>
               </CompanyIdChecker>
             </div>
           </main>
