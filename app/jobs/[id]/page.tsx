@@ -357,16 +357,17 @@ export default function JobDetailsPage({ id }: JobDetailsPageProps) {
 
             {/* CTA Buttons */}
             <div className="flex gap-4">
-              <button
-                onClick={() => setApplied(true)}
-                className={`flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all ${
+              <Link
+                href={`/apply/${params.id}`}
+                className={`flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all inline-flex items-center justify-center ${
                   applied
                     ? "bg-green-600 hover:bg-green-700 text-white"
                     : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl"
                 }`}
+                onClick={() => setApplied(false)}
               >
                 {applied ? "✓ Application Submitted" : "Apply Now"}
-              </button>
+              </Link>
               <Link
                 href="/"
                 className="py-4 px-6 rounded-xl font-bold text-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-all"
