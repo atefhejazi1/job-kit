@@ -12,10 +12,9 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 const applyTheme = (theme: Theme) => {
+    console.log("apply theme  ", theme);
     if (typeof document !== "undefined") {
-        // **التعديل الهام:** تطبيق الفئة 'dark' على وسم <html>
         document.documentElement.classList.toggle("dark", theme === "dark");
-        // التأكد من إزالة الفئة من body إذا كانت مطبقة بالخطأ
         document.body.classList.remove("dark");
     }
 };
@@ -40,6 +39,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
             ? "dark"
             : "light";
         const initialTheme = storedTheme || systemTheme;
+        console.log("initialTheme ----- ", initialTheme);
 
         setTheme(initialTheme);
         applyTheme(initialTheme);
@@ -47,8 +47,11 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
 
     const toggleTheme = () => {
+        setTheme("light")
         setTheme((prev) => {
             const newTheme = prev === "light" ? "dark" : "light";
+            console.log("new theme ", newTheme);
+
             applyTheme(newTheme);
             setCookie("theme", newTheme);
             return newTheme;
