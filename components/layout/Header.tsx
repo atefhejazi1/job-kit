@@ -195,13 +195,13 @@ const Header = () => {
                       <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
                         {user?.userType === "COMPANY"
                           ? user?.companyName?.charAt(0)?.toUpperCase() || "C"
-                          : user?.fullName?.charAt(0)?.toUpperCase() || "U"}
+                          : user?.name?.charAt(0)?.toUpperCase() || "U"}
                       </div>
                       <div className="flex flex-col">
                         <span className="text-sm font-semibold text-gray-800">
                           {user?.userType === "COMPANY"
                             ? user?.companyName
-                            : user?.fullName}
+                            : user?.name}
                         </span>
                         <span className="text-xs text-text-primary font-medium">
                           {user?.userType === "COMPANY"

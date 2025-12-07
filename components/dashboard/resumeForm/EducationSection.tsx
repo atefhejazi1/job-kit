@@ -10,6 +10,7 @@ interface Props {
 
 export default function EducationSection({ onAdd }: Props) {
   const [edu, setEdu] = useState<EducationItem>({
+    type: "education",
     school: "",
     degree: "",
     startDate: "",

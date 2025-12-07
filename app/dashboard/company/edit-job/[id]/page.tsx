@@ -92,7 +92,7 @@ const EditJobPage = () => {
   const router = useRouter();
   const { user } = useAuth();
   const params = useParams();
-  const jobId = params.id as string;
+  const jobId = params?.id as string;
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = useState<JobFormData>({
     title: "",

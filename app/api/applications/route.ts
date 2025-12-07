@@ -115,23 +115,27 @@ export async function GET(request: NextRequest) {
 // Create a new job application (for job seekers)
 export async function POST(request: NextRequest) {
   try {
+    // Get user ID from headers (set by middleware or legacy auth)
+    const userId = request.headers.get('x-user-id');
+    
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const {
       jobId,
-      applicantName,
-      email,
-      phone,
-      resumeUrl,
       coverLetter,
-      experience,
-      expectedSalary,
-      availableFrom,
+      resumeUrl,
     } = body;
 
     // Validate required fields
-    if (!jobId || !applicantName || !email) {
+    if (!jobId) {
       return NextResponse.json(
-        { error: "Job ID, applicant name, and email are required" },
+        { error: "Job ID is required" },
         { status: 400 }
       );
     }
@@ -151,9 +155,9 @@ export async function POST(request: NextRequest) {
     // Check if application already exists
     const existingApplication = await prisma.jobApplication.findUnique({
       where: {
-        jobId_email: {
+        jobId_userId: {
           jobId,
-          email,
+          userId,
         },
       },
     });
@@ -169,14 +173,8 @@ export async function POST(request: NextRequest) {
     const application = await prisma.jobApplication.create({
       data: {
         jobId,
-        applicantName,
-        email,
-        phone,
-        resumeUrl,
+        userId,
         coverLetter,
-        experience,
-        expectedSalary,
-        availableFrom: availableFrom ? new Date(availableFrom) : null,
         status: "PENDING",
       },
       include: {
@@ -187,6 +185,13 @@ export async function POST(request: NextRequest) {
             location: true,
           },
         },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          }
+        }
       },
     });
 

@@ -42,6 +42,9 @@ interface Interview {
     jobSeeker?: {
       phone?: string;
       linkedin?: string;
+      currentPosition?: string;
+      experienceLevel?: string;
+      summary?: string;
     };
   };
   application: {
@@ -56,7 +59,7 @@ export default function InterviewDetailsPage() {
   const router = useRouter();
   const params = useParams();
   const { user } = useAuth();
-  const interviewId = params.id as string;
+  const interviewId = params?.id as string;
 
   const [interview, setInterview] = useState<Interview | null>(null);
   const [loading, setLoading] = useState(true);
@@ -397,9 +400,9 @@ export default function InterviewDetailsPage() {
                 📞 {interview.candidate.jobSeeker.phone}
               </p>
             )}
-            {interview.candidate.jobSeeker?.linkedInProfile && (
+            {interview.candidate.jobSeeker?.linkedin && (
               <a
-                href={interview.candidate.jobSeeker.linkedInProfile}
+                href={interview.candidate.jobSeeker.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-700 text-sm"

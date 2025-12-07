@@ -69,6 +69,7 @@ const WhyChooseUs = () => {
               width={64}
               height={64}
               className="w-12 h-12 sm:w-16 sm:h-16 object-contain flex-shrink-0"
+              unoptimized
             />
             <div>
               <h2 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">

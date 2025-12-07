@@ -10,6 +10,7 @@ interface Props {
 
 export default function ProjectSection({ onAdd }: Props) {
   const [proj, setProj] = useState<ProjectItem>({
+    type: "project",
     title: "",
     link: "",
     description: "",
@@ -38,12 +39,11 @@ export default function ProjectSection({ onAdd }: Props) {
         className="mt-2 px-4 py-2"
         onClick={() => {
           onAdd(proj);
-          setProj({ title: "", link: "", description: "" }); // إعادة تعيين الحقول بعد الإضافة
+          setProj({ type: "project", title: "", link: "", description: "" });
         }}
       >
         Add Project
       </Button>
-
     </div>
   );
 }

@@ -78,7 +78,7 @@ export async function DELETE(req: Request) {
       // Delete job applications submitted by this user
       await prisma.jobApplication.deleteMany({
         where: {
-          email: user.email
+          userId: user.id
         }
       });
 

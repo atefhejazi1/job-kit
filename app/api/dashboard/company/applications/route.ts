@@ -25,13 +25,16 @@ export async function GET(request: NextRequest) {
         job: {
           select: { title: true },
         },
+        user: {
+          select: { name: true, email: true },
+        },
       },
     });
 
     // Format the response
     const formattedApplications = applications.map((app) => ({
       id: app.id,
-      applicantName: app.applicantName,
+      applicantName: app.user?.name || 'Unknown Applicant',
       position: app.job.title,
       appliedDate: new Date(app.createdAt).toLocaleDateString("en-US", {
         year: "numeric",

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
-import { createApiHeaders } from '@/lib/api-utils';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -97,8 +96,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: 'Files uploaded successfully',
       files: uploadedFiles
-    }, { 
-      headers: createApiHeaders() 
     });
 
   } catch (error) {

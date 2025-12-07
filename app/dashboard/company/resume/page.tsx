@@ -77,7 +77,7 @@ export default function ViewResumePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
-  const userId = searchParams.get("userId");
+  const userId = searchParams?.get("userId");
 
   const [resume, setResume] = useState<ResumeData | null>(null);
   const [candidate, setCandidate] = useState<CandidateInfo | null>(null);

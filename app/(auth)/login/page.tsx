@@ -69,7 +69,8 @@ export default function LoginPage() {
         `Welcome back, ${data.user.fullName || data.user.companyName}!`
       );
 
-      login(data.user);
+      // Login with tokens (cookies are set automatically by server)
+      login(data.user, data.accessToken, data.refreshToken);
 
       // Redirect to returnUrl if exists, otherwise to dashboard
       if (returnUrl) {
@@ -214,7 +215,7 @@ export default function LoginPage() {
                     </label>
                   </div>
                   <Link
-                    href="/auth/forgot-password"
+                    href="/forgot-password"
                     className="text-sm text-primary hover:text-[#E04E00] font-medium transition-colors"
                   >
                     Forgot password?

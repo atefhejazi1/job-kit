@@ -5,7 +5,6 @@ import { createApiHeaders } from "@/lib/api-utils";
 // Get message stats for dashboard
 export async function GET(request: NextRequest) {
   try {
-    const headers = createApiHeaders();
     const userId = request.headers.get("x-user-id");
     const companyId = request.headers.get("x-company-id");
 
@@ -54,7 +53,7 @@ export async function GET(request: NextRequest) {
       todayMessages
     };
 
-    return NextResponse.json(stats, { headers });
+    return NextResponse.json(stats);
   } catch (error) {
     console.error("Error fetching message stats:", error);
     return NextResponse.json(
