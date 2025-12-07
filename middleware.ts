@@ -35,7 +35,7 @@ const publicPrefixes = [
 const userOnlyRoutes = [
   '/dashboard/user',
   '/apply',
-  '/api/applications',
+  '/api/job-applications',
   '/api/saved-jobs',
   '/api/saved-companies',
 ];
