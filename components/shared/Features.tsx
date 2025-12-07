@@ -48,28 +48,31 @@ const Features = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-orange-50/30">
+    <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-orange-50/30 dark:from-gray-800 dark:via-gray-900 dark:to-gray-900/30 transition-colors duration-500">
+      {" "}
       <div className="max-w-7xl mx-auto px-4">
+        {" "}
         <div className="text-center mb-16">
+          {" "}
           <div className="inline-flex items-center gap-3 mb-6">
-            <div className="w-8 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
-              Why Choose Our Platform?
-            </h2>
-            <div className="w-8 h-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-full"></div>
-          </div>
-          <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
+            {" "}
+            <div className="w-8 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>{" "}
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white">
+              Why Choose Our Platform?{" "}
+            </h2>{" "}
+            <div className="w-8 h-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-full"></div>{" "}
+          </div>{" "}
+          <p className="text-gray-600 dark:text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
             Everything you need to create a standout resume and land your dream
             job. Our platform combines cutting-edge technology with proven
-            career expertise.
-          </p>
+            career expertise.{" "}
+          </p>{" "}
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-orange-200 transform hover:scale-105"
+              className="group bg-white dark:bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-gray-700 hover:border-orange-200 transform hover:scale-105"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <div
@@ -78,11 +81,11 @@ const Features = () => {
                 {feature.icon}
               </div>
 
-              <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-orange-600 transition-colors">
                 {feature.title}
               </h3>
 
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                 {feature.description}
               </p>
 
@@ -90,7 +93,6 @@ const Features = () => {
             </div>
           ))}
         </div>
-
         {/* CTA Section */}
         <div className="text-center mt-16">
           <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 md:p-12 text-white shadow-2xl">
