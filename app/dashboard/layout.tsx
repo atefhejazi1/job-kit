@@ -23,6 +23,7 @@ import {
   UserCheck,
   Building,
   MessageCircle,
+  Calendar,
 } from "lucide-react";
 import { ResumeProvider } from "@/contexts/ResumeContext";
 
@@ -84,6 +85,11 @@ export default function DashboardLayout({
               icon: UserCheck,
             },
             {
+              name: "Interviews",
+              href: "/dashboard/company/interviews",
+              icon: Calendar,
+            },
+            {
               name: "Messages",
               href: "/dashboard/company/messages",
               icon: MessageCircle,
@@ -121,6 +127,11 @@ export default function DashboardLayout({
               name: "Job Applications",
               href: "/dashboard/user/applications",
               icon: Briefcase,
+            },
+            {
+              name: "Interviews",
+              href: "/dashboard/user/interviews",
+              icon: Calendar,
             },
             {
               name: "Messages",

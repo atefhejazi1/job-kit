@@ -31,6 +31,10 @@ model User {
   sentMessages     Message[]       @relation("SentMessages")
   receivedMessages Message[]       @relation("ReceivedMessages")
 
+  // Interview relations
+  candidateInterviews Interview[] @relation("CandidateInterviews")
+  companyInterviews   Interview[] @relation("CompanyInterviews")
+
   @@map("users")
 }
 
@@ -77,6 +81,7 @@ model Job {
   company        Company          @relation("CompanyJobs", fields: [companyId], references: [id], onDelete: Cascade)
   applications   JobApplication[] @relation("JobApplications")
   messageThreads MessageThread[]
+  interviews     Interview[]
 
   @@map("jobs")
 }
@@ -87,11 +92,13 @@ model JobApplication {
   userId      String            @map("user_id")
   coverLetter String?           @map("cover_letter")
   status      ApplicationStatus @default(PENDING)
+  notes       String?
   createdAt   DateTime          @default(now()) @map("created_at")
   updatedAt   DateTime          @updatedAt @map("updated_at")
 
-  job  Job  @relation("JobApplications", fields: [jobId], references: [id], onDelete: Cascade)
-  user User @relation("UserApplications", fields: [userId], references: [id], onDelete: Cascade)
+  job        Job         @relation("JobApplications", fields: [jobId], references: [id], onDelete: Cascade)
+  user       User        @relation("UserApplications", fields: [userId], references: [id], onDelete: Cascade)
+  interviews Interview[]
 
   @@unique([jobId, userId])
   @@map("job_applications")
@@ -201,4 +208,52 @@ model Message {
   thread   MessageThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
   sender   User          @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
   receiver User          @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+enum InterviewType {
+  VIDEO_CALL
+  PHONE_CALL
+  IN_PERSON
+  ASSESSMENT
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  RESCHEDULED
+}
+
+model Interview {
+  id              String          @id @default(cuid())
+  applicationId   String          @map("application_id")
+  jobId           String          @map("job_id")
+  candidateId     String          @map("candidate_id")
+  companyId       String          @map("company_id")
+  title           String
+  description     String?
+  interviewType   InterviewType   @map("interview_type")
+  scheduledAt     DateTime        @map("scheduled_at")
+  duration        Int             @default(60) // Duration in minutes
+  status          InterviewStatus @default(SCHEDULED)
+  meetingLink     String?         @map("meeting_link")
+  meetingPassword String?         @map("meeting_password")
+  location        String?
+  companyNotes    String?         @map("company_notes")
+  candidateNotes  String?         @map("candidate_notes")
+  feedback        String?
+  rating          Int?
+  reminderSent    Boolean         @default(false) @map("reminder_sent")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  application JobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  job         Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  candidate   User           @relation("CandidateInterviews", fields: [candidateId], references: [id], onDelete: Cascade)
+  company     User           @relation("CompanyInterviews", fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("interviews")
 }

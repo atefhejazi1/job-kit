@@ -28,11 +28,34 @@ export async function GET(request: NextRequest, { params }: Params) {
           select: {
             id: true,
             title: true,
+            description: true,
             location: true,
             workType: true,
             salaryMin: true,
             salaryMax: true,
             currency: true,
+            company: {
+              select: {
+                id: true,
+                companyName: true,
+                logo: true,
+              },
+            },
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+            jobSeeker: {
+              select: {
+                phone: true,
+                skills: true,
+                city: true,
+              },
+            },
           },
         },
       },

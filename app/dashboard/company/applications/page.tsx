@@ -436,6 +436,19 @@ export default function AllApplicationsPage() {
                         ? "..."
                         : "Message"}
                     </button>
+                    {(application.status === "SHORTLISTED" ||
+                      application.status === "REVIEWED") && (
+                      <button
+                        onClick={() =>
+                          router.push(
+                            `/dashboard/company/interviews/schedule/${application.id}`
+                          )
+                        }
+                        className="px-3 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-md text-sm font-medium hover:shadow-lg transition-shadow"
+                      >
+                        Schedule Interview
+                      </button>
+                    )}
                     {application.status === "PENDING" && (
                       <button
                         onClick={() =>
