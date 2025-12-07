@@ -1,4 +1,5 @@
 export interface EducationItem {
+  type: 'education';
   school: string;
   degree: string;
   startDate: string;
@@ -7,6 +8,7 @@ export interface EducationItem {
 }
 
 export interface ExperienceItem {
+  type: 'experience';
   company: string;
   role: string;
   startDate: string;
@@ -15,9 +17,23 @@ export interface ExperienceItem {
 }
 
 export interface ProjectItem {
+  type: 'project';
   title: string;
   link: string;
   description: string;
+}
+
+
+export interface SkillItem {
+  type: 'skill';
+  id: string;
+  name: string;
+}
+
+export interface LanguageItem {
+  type: 'language';
+  id: string;
+  name: string;
 }
 
 export interface ResumeData {
@@ -25,12 +41,47 @@ export interface ResumeData {
   email: string;
   phone: string;
   summary: string;
-
-  skills: string[];
-  languages: string[];
-
+  skills: SkillItem[];
+  languages: LanguageItem[];
   education: EducationItem[];
   experience: ExperienceItem[];
   projects: ProjectItem[];
+}
 
+export interface TempPersonalInfo {
+  type: 'personal';
+  name: string;
+  email: string;
+  phone: string;
+}
+
+export type EditingData = 
+  | TempPersonalInfo
+  | EducationItem
+  | ExperienceItem
+  | ProjectItem
+  | SkillItem
+  | LanguageItem
+  | string;
+
+  // Raw data coming from API before migration
+export interface RawResumeData {
+  name?: string;
+  email?: string;
+  phone?: string;
+  summary?: string;
+  skills?: (string | SkillItem)[];
+  languages?: (string | LanguageItem)[];
+  education?: EducationItem[];
+  experience?: ExperienceItem[];
+  projects?: ProjectItem[];
+}
+
+// Types exposed by ResumeContext
+export interface ResumeContextProps {
+  resumeData: ResumeData;
+  setResumeData: React.Dispatch<React.SetStateAction<ResumeData>>;
+  saveResume: () => Promise<void>;
+  loading: boolean;
+  loadResume: () => Promise<void>;
 }

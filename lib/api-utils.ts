@@ -5,6 +5,11 @@ export function createApiHeaders(user: User | null): HeadersInit {
     'Content-Type': 'application/json',
   };
 
+  // Add user ID header (required for all authenticated requests)
+  if (user?.id) {
+    headers['x-user-id'] = user.id;
+  }
+
   // Add company ID header for company users
   if (user?.userType === 'COMPANY') {
     const companyId = user.companyId || user.id;
@@ -20,6 +25,11 @@ export function createApiHeaders(user: User | null): HeadersInit {
 
 export function createApiHeadersWithoutContentType(user: User | null): HeadersInit {
   const headers: HeadersInit = {};
+
+  // Add user ID header (required for all authenticated requests)
+  if (user?.id) {
+    headers['x-user-id'] = user.id;
+  }
 
   // Add company ID header for company users
   if (user?.userType === 'COMPANY') {

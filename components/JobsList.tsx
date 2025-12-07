@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import JobCard from "./JobCard";
+import JobListView from "./JobListView";
 import { Job } from "@/types/job.types";
 
 interface JobsListProps {
@@ -100,9 +100,15 @@ const JobsList: React.FC<JobsListProps> = ({
             </div>
           )}
 
-          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-8 text-center">
-            <p className="text-yellow-800 font-semibold text-lg">📭 No jobs available at the moment</p>
-            <p className="text-yellow-700 mt-2">Check back soon for new opportunities!</p>
+          <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-xl p-8 text-center shadow-lg">
+            <div className="text-6xl mb-4 animate-float">📭</div>
+            <p className="text-orange-800 font-semibold text-lg mb-2">
+              No jobs available at the moment
+            </p>
+            <p className="text-orange-700 mb-4">
+              Check back soon for new opportunities!
+            </p>
+            <div className="w-16 h-1 bg-gradient-to-r from-orange-400 to-red-400 rounded-full mx-auto"></div>
           </div>
         </div>
       </section>
@@ -110,19 +116,31 @@ const JobsList: React.FC<JobsListProps> = ({
   }
 
   return (
-    <section className="py-16 px-4">
+    <section className="py-16 px-4 bg-gradient-to-br from-gray-50 to-orange-50/30">
       <div className="max-w-7xl mx-auto">
         {(title || description) && (
           <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900">{title}</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">{description}</p>
+            <div className="inline-flex items-center gap-3 mb-4">
+              <div className="w-8 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
+              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                {title}
+              </h2>
+              <div className="w-8 h-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-full"></div>
+            </div>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
+              {description}
+            </p>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="space-y-4">
           {jobs.map((job, index) => (
-            <div key={job.id} className="animate-fade-in" style={{ animationDelay: `${index * 50}ms` }}>
-              <JobCard job={job} />
+            <div
+              key={job.id}
+              className="animate-slide-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <JobListView job={job} />
             </div>
           ))}
         </div>
@@ -131,7 +149,7 @@ const JobsList: React.FC<JobsListProps> = ({
           <div className="text-center mt-12 animate-fade-in">
             <a
               href="/jobs"
-              className="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-block px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-semibold shadow-lg hover:shadow-xl hover:shadow-orange-200 transform hover:scale-105"
             >
               View All Jobs
             </a>

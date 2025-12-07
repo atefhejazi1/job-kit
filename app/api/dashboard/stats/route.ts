@@ -12,28 +12,78 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get active jobs count
-    const activeJobs = await prisma.job.count({
+    // Get company from database
+    const company = await prisma.company.findUnique({
+      where: { id: companyId },
+    });
+
+    if (!company) {
+      return NextResponse.json(
+        { error: "Company not found" },
+        { status: 404 }
+      );
+    }
+
+    // Get total jobs
+    const totalJobs = await prisma.job.count({
+      where: { companyId },
+    });
+
+    // Get open jobs
+    const openJobs = await prisma.job.count({
       where: {
-        companyId: companyId,
+        companyId,
         isActive: true,
       },
     });
 
-    // Get total applications count (placeholder for now)
-    // Note: This would need a JobApplication model in the future
-    const totalApplications = 0;
+    // Get closed jobs
+    const closedJobs = totalJobs - openJobs;
 
-    // Get interviews scheduled (placeholder for now)
-    // Note: This would need an Interview model in the future
-    const interviewsScheduled = 0;
+    // Get applications this week
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-    // Get hired this month (placeholder for now)
-    // Note: This would need a hiring status in JobApplication model
-    const hiredThisMonth = 0;
+    const thisWeekApplications = await prisma.jobApplication.count({
+      where: {
+        job: { companyId },
+        createdAt: { gte: oneWeekAgo },
+      },
+    });
+
+    // Get total applications
+    const totalApplications = await prisma.jobApplication.count({
+      where: {
+        job: { companyId },
+      },
+    });
+
+    // Get interviews scheduled (applications with SHORTLISTED status)
+    const interviewsScheduled = await prisma.jobApplication.count({
+      where: {
+        job: { companyId },
+        status: "SHORTLISTED",
+      },
+    });
+
+    // Get hired this month
+    const firstDayOfMonth = new Date();
+    firstDayOfMonth.setDate(1);
+    firstDayOfMonth.setHours(0, 0, 0, 0);
+
+    const hiredThisMonth = await prisma.jobApplication.count({
+      where: {
+        job: { companyId },
+        status: "ACCEPTED",
+        updatedAt: { gte: firstDayOfMonth },
+      },
+    });
 
     return NextResponse.json({
-      activeJobs,
+      totalJobs,
+      openJobs,
+      closedJobs,
+      thisWeekApplications,
       totalApplications,
       interviewsScheduled,
       hiredThisMonth,

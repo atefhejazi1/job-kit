@@ -21,20 +21,20 @@ const steps = [
     image: "/resumeSteps/step3.png",
   },
 ];
+
 const ResumeSteps = () => {
   return (
-    <div className="py-16  relative overflow-hidden">
-      <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-12 leading-tight relative z-10">
-        Build your <span className="text-primary">resume</span> in 3 steps
+    <div className="py-16 relative overflow-hidden bg-white dark:bg-gray-900 transition-colors duration-500">
+      {" "}
+      <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-12 leading-tight relative z-10 text-gray-900 dark:text-white">
+        Build your <span className="text-primary">resume</span> in 3 steps{" "}
       </h2>
-
       <div className="flex flex-col gap-12 relative z-10">
         {steps.map((step) => (
           <div
             key={step.id}
-            className={`flex flex-col md:flex-row items-center justify-center rounded-2xl p-6 md:p-10 bg-white shadow-md text-center md:text-left gap-6 md:gap-10 transition-all duration-300
-          ${step.id === 2 ? "md:flex-row-reverse" : ""}
-        `}
+            className={`flex flex-col md:flex-row items-center justify-center rounded-2xl p-6 md:p-10 shadow-md text-center md:text-left gap-6 md:gap-10 transition-all duration-300 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+        ${step.id === 2 ? "md:flex-row-reverse" : ""}`}
           >
             <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 relative flex-shrink-0">
               <Image
@@ -51,7 +51,7 @@ const ResumeSteps = () => {
                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
                   {step.title}
                 </h3>
-                <p className="text-base sm:text-lg text-gray-600">
+                <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">
                   {step.description}
                 </p>
               </div>
