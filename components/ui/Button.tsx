@@ -1,15 +1,23 @@
 import { TButton } from "@/types/button.types";
 
-const Button = ({ children, variant, size = "md", className, onClick }: TButton) => {
+const Button = ({
+  children,
+  variant,
+  size = "md",
+  className,
+  onClick,
+  disabled,
+  type = "button",
+}: TButton) => {
   const baseClasses = "px-6 py-2 rounded-md transition font-medium";
 
   let sizeClasses = "";
   if (size === "sm") {
-    sizeClasses = "px-3 py-1 text-sm";    
+    sizeClasses = "px-3 py-1 text-sm";
   } else if (size === "lg") {
-    sizeClasses = "px-8 py-3 text-lg";    
+    sizeClasses = "px-8 py-3 text-lg";
   } else {
-    sizeClasses = "px-6 py-2";     
+    sizeClasses = "px-6 py-2";
   }
   let variantClasses = "";
 
@@ -27,8 +35,15 @@ const Button = ({ children, variant, size = "md", className, onClick }: TButton)
     variantClasses = "bg-primary text-white hover:bg-[#E04E00] cursor-pointer";
   }
 
+  const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "";
+
   return (
-    <button className={`${baseClasses} ${variantClasses} ${className}`} onClick={onClick}>
+    <button
+      type={type}
+      className={`${baseClasses} ${variantClasses} ${disabledClasses} ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

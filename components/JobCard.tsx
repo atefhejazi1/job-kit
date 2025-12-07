@@ -11,7 +11,7 @@ interface JobCardProps {
   job: Job & {
     company?: {
       companyName: string;
-      location: string;
+      location?: string;
       logo?: string;
     };
   };

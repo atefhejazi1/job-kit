@@ -44,6 +44,8 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, showHome = true }) => {
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
     if (items) return items;
 
+    if (!pathname) return [];
+
     const segments = pathname.split("/").filter(Boolean);
     const breadcrumbs: BreadcrumbItem[] = [];
 

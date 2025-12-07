@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import JobCard from "@/components/JobCard";
 import Button from "@/components/ui/Button";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import { Job, WorkType } from "@/types/job.types";
 
 interface SearchFilters {
   location: string;
@@ -15,25 +16,19 @@ interface SearchFilters {
   skills: string;
 }
 
-interface Job {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  salaryMin: number;
-  salaryMax: number;
-  workType: string;
-  experienceLevel: string;
-  skills: string[];
-  company: {
-    id: string;
-    name: string;
-    logo?: string;
-  };
+interface JobCompany {
+  id?: string;
+  companyName: string;
+  location?: string;
+  logo?: string;
+}
+
+interface SearchJob extends Job {
+  company?: JobCompany;
 }
 
 interface SearchResponse {
-  jobs: Job[];
+  jobs: SearchJob[];
   total: number;
   page: number;
   limit: number;
@@ -45,21 +40,21 @@ export default function SearchPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobs, setJobs] = useState<SearchJob[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
 
   // Filter states
-  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [query, setQuery] = useState(searchParams?.get("q") || "");
   const [filters, setFilters] = useState<SearchFilters>({
-    location: searchParams.get("location") || "",
-    workType: searchParams.get("workType") || "",
-    salaryMin: searchParams.get("salaryMin") || "",
-    salaryMax: searchParams.get("salaryMax") || "",
-    experienceLevel: searchParams.get("experienceLevel") || "",
-    skills: searchParams.get("skills") || "",
+    location: searchParams?.get("location") || "",
+    workType: searchParams?.get("workType") || "",
+    salaryMin: searchParams?.get("salaryMin") || "",
+    salaryMax: searchParams?.get("salaryMax") || "",
+    experienceLevel: searchParams?.get("experienceLevel") || "",
+    skills: searchParams?.get("skills") || "",
   });
 
   // Fetch search results
