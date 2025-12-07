@@ -9,3 +9,5 @@ export default function DashboardUserLayout({
 }) {
   return <ResumeProvider>{children}</ResumeProvider>;
 }
+
+// Note: Metadata is handled in child layouts due to client component

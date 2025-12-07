@@ -3,12 +3,12 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Home - Find Your Dream Job",
+  title: "Terms of Service",
   description:
-    "Welcome to JobKit! Discover thousands of job opportunities from top companies. Build your professional resume and start your career journey today.",
+    "Read JobKit's terms of service to understand the rules and guidelines for using our platform.",
 };
 
-export default function PublicLayout({
+export default function TermsLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -16,7 +16,7 @@ export default function PublicLayout({
   return (
     <>
       <Header />
-      <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {children}
       </main>
       <Footer />
