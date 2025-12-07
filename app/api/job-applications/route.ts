@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createApiHeaders } from '@/lib/api-utils';
+import { notificationService } from '@/lib/notifications';
 
 export async function GET(request: Request) {
   try {
@@ -116,13 +117,30 @@ export async function POST(request: Request) {
             title: true,
             company: {
               select: {
-                companyName: true
+                companyName: true,
+                userId: true
               }
             }
+          }
+        },
+        user: {
+          select: {
+            name: true
           }
         }
       }
     });
+
+    // Send notification to company
+    if (application.job.company.userId) {
+      await notificationService.notifyNewApplication({
+        companyUserId: application.job.company.userId,
+        applicantName: application.user.name,
+        jobTitle: application.job.title,
+        jobId: jobId,
+        applicationId: application.id
+      });
+    }
 
     return NextResponse.json({
       message: 'Application submitted successfully',

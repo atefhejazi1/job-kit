@@ -10,6 +10,7 @@ import Snapchat from "@/components/shared/Snapchat";
 import Testimonials from "@/components/shared/Testimonials";
 import WhyChooseUs from "@/components/shared/WhyChooseUs";
 import Jops from "@/components/Jops";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 export default function Home() {
   return (

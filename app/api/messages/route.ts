@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createApiHeaders } from "@/lib/api-utils";
+import { notificationService } from "@/lib/notifications";
 
 // GET /api/messages - Get all message threads for the user
 export async function GET(request: NextRequest) {
@@ -183,6 +184,28 @@ export async function POST(request: NextRequest) {
         lastMessageAt: new Date(),
         isRead: false
       }
+    });
+
+    // Send notification to receiver
+    // Get job info if exists
+    let jobTitle;
+    if (thread.jobId) {
+      const job = await prisma.job.findUnique({
+        where: { id: thread.jobId },
+        select: { title: true }
+      });
+      jobTitle = job?.title;
+    }
+
+    await notificationService.notifyNewMessage({
+      recipientUserId: receiverId,
+      senderName: message.sender.name,
+      senderId: userId,
+      messagePreview: lastMessage,
+      threadId: thread.id,
+      messageId: message.id,
+      jobId: thread.jobId || undefined,
+      jobTitle: jobTitle
     });
 
     return NextResponse.json(message, { headers, status: 201 });
