@@ -44,6 +44,7 @@ export interface ResumeData {
   skills: SkillItem[];
   languages: LanguageItem[];
   education: EducationItem[];
+  certifications: CertificationItem[];
   experience: ExperienceItem[];
   projects: ProjectItem[];
 }
@@ -73,6 +74,7 @@ export interface RawResumeData {
   skills?: (string | SkillItem)[];
   languages?: (string | LanguageItem)[];
   education?: EducationItem[];
+  certifications?: CertificationItem[];
   experience?: ExperienceItem[];
   projects?: ProjectItem[];
 }
@@ -84,4 +86,15 @@ export interface ResumeContextProps {
   saveResume: () => Promise<void>;
   loading: boolean;
   loadResume: () => Promise<void>;
+}
+
+export interface CertificationItem {
+  id: string;
+  name: string;
+  issuer: string;
+  issueDate: string;
+  credentialId?: string;
+  credentialUrl?: string;
+  fileUrl: string;
+  fileName: string;
 }

@@ -6,7 +6,8 @@ import {
   SkillItem,
   LanguageItem,
   RawResumeData,
-  ResumeContextProps
+  ResumeContextProps,
+  CertificationItem,
 } from "@/types/resume.data.types";
 
 // id generation
@@ -25,6 +26,7 @@ const migrateData = (data: unknown): ResumeData => {
       skills: [],
       languages: [],
       education: [],
+      certifications: [],
       experience: [],
       projects: [],
     };
@@ -64,6 +66,12 @@ const migrateData = (data: unknown): ResumeData => {
     }
   }
 
+// Migrate certifications
+let certifications: CertificationItem[] = [];
+if (Array.isArray(raw.certifications)) {
+  certifications = raw.certifications as CertificationItem[];
+}
+
   return {
     name: raw.name || "",
     email: raw.email || "",
@@ -72,6 +80,7 @@ const migrateData = (data: unknown): ResumeData => {
     skills,
     languages,
     education: raw.education || [],
+    certifications,
     experience: raw.experience || [],
     projects: raw.projects || [],
   };
@@ -88,6 +97,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     skills: [],
     languages: [],
     education: [],
+    certifications: [],
     experience: [],
     projects: [],
   });

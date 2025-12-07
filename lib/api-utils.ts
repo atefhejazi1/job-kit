@@ -1,6 +1,8 @@
 import { User } from '@/types/auth.types';
 
-export function createApiHeaders(user: User | null): HeadersInit {
+export function createApiHeaders(): HeadersInit; // Allow calls without user parameter
+export function createApiHeaders(user: User | null): HeadersInit;
+export function createApiHeaders(user?: User | null): HeadersInit {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   };
@@ -23,7 +25,9 @@ export function createApiHeaders(user: User | null): HeadersInit {
   return headers;
 }
 
-export function createApiHeadersWithoutContentType(user: User | null): HeadersInit {
+export function createApiHeadersWithoutContentType(): HeadersInit; // Allow calls without user parameter
+export function createApiHeadersWithoutContentType(user: User | null): HeadersInit;
+export function createApiHeadersWithoutContentType(user?: User | null): HeadersInit {
   const headers: HeadersInit = {};
 
   // Add user ID header (required for all authenticated requests)

@@ -47,21 +47,22 @@ const whyChooseUsList = [
 
 const WhyChooseUs = () => {
   return (
-    <div className="py-12  lg:px-24">
+    <div className="py-12 lg:px-24 bg-white dark:bg-gray-900 transition-colors duration-500">
+      {" "}
       <div className="text-center mb-12">
-        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3">
-          Benefits Of Using Our Product
-        </h2>
+        {" "}
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3 text-gray-900 dark:text-white">
+          Benefits Of Using Our Product{" "}
+        </h2>{" "}
         <h3 className="text-lg sm:text-xl md:text-2xl text-primary">
-          Why Choose Us?
-        </h3>
+          Why Choose Us?{" "}
+        </h3>{" "}
       </div>
-
       <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-6 sm:gap-8">
         {whyChooseUsList.map((item, index) => (
           <div
             key={index}
-            className="w-full sm:w-[80%] md:w-[45%] lg:w-[30%] bg-white shadow-sm hover:shadow-md transition-shadow duration-300 rounded-2xl p-5 sm:p-6 flex items-start gap-4"
+            className="w-full sm:w-[80%] md:w-[45%] lg:w-[30%] bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-700 hover:shadow-md dark:hover:shadow-gray-600 transition-shadow duration-300 rounded-2xl p-5 sm:p-6 flex items-start gap-4"
           >
             <Image
               src={item.image}
@@ -72,10 +73,10 @@ const WhyChooseUs = () => {
               unoptimized
             />
             <div>
-              <h2 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">
+              <h2 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 text-gray-900 dark:text-white">
                 {item.title}
               </h2>
-              <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
                 {item.description}
               </p>
             </div>
@@ -83,7 +84,6 @@ const WhyChooseUs = () => {
         ))}
       </div>
     </div>
-
   );
 };
 

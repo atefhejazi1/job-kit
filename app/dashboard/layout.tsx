@@ -11,6 +11,7 @@ import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import { NotificationDropdown } from "@/components/notifications";
 import {
+  Award,
   Briefcase,
   Plus,
   FileText,
@@ -126,6 +127,11 @@ export default function DashboardLayout({
               href: "/dashboard/user/resume-builder",
               icon: FileText,
             },
+            {
+      name: "Certificates", 
+      href: "/dashboard/user/certificates",
+      icon: Award,
+    },
             {
               name: "Generate Cover Letter ",
               href: "/dashboard/user/cover-letter",

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useResume } from "@/contexts/ResumeContext";
 import { ApplicationCard } from "@/components/ApplicationCard";
+import CertificationList from "@/components/dashboard/resumeForm/CertificationList ";
 import Link from "next/link";
 
 interface JobApplication {
@@ -229,11 +230,15 @@ export default function UserDashboard() {
               </div>
 
               {/* Stats */}
-              <div className="gap-4 grid grid-cols-2 md:grid-cols-4">
+              <div className="gap-4 grid grid-cols-2 md:grid-cols-5">
                 {[
                   {
                     label: "Education",
                     value: resumeData.education?.length || 0,
+                  },
+                  {
+                    label: "Certificates",
+                    value: resumeData.certifications?.length || 0,
                   },
                   {
                     label: "Experience",
@@ -324,6 +329,12 @@ export default function UserDashboard() {
             )}
           </div>
         </div>
+        <div className="mx-auto px-4 py-8 max-w-4xl container">
+      <h2 className="font-semibold text-gray-900 text-lg">My certificates</h2>
+        <div className="mt-8">
+        <CertificationList certifications={resumeData.certifications} />
+      </div>
+      </div>
       </div>
     </div>
   );

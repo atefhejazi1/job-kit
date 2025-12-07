@@ -1,18 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { Toaster } from "react-hot-toast";
+import ClientAppWrapper from "@/utils/ClientAppWrapper";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
+const jetbrainsMono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
@@ -54,46 +46,19 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  title: "JobKit - Professional Resume Builder",
+  description: "Create professional resumes with our easy-to-use resume builder",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+
+
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
-      >
-        <AuthProvider>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
+        <ClientAppWrapper>
           {children}
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: "#fff",
-                color: "#363636",
-                boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
-                borderRadius: "8px",
-                fontSize: "14px",
-              },
-              success: {
-                iconTheme: {
-                  primary: "#10B981",
-                  secondary: "#fff",
-                },
-              },
-              error: {
-                iconTheme: {
-                  primary: "#EF4444",
-                  secondary: "#fff",
-                },
-              },
-            }}
-          />
-        </AuthProvider>
+        </ClientAppWrapper>
       </body>
     </html>
   );

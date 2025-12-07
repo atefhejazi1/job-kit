@@ -17,6 +17,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   isAuthenticated: boolean;
   refreshAuth: () => Promise<boolean>;
+  updateUser?: (data: Partial<User>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -161,6 +162,32 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isAuthenticated: !!user,
     refreshAuth,
   };
+
+  // updateUser: update local state + localStorage and optionally notify server
+  const updateUser = async (data: Partial<User>) => {
+    const next = { ...user, ...data } as User;
+    setUser(next);
+    try {
+      localStorage.setItem("user", JSON.stringify(next));
+    } catch (err) {
+      console.error("Failed to save user to localStorage", err);
+    }
+
+    // Try to persist to server if endpoint exists; don't block on failure
+    try {
+      await fetch("/api/auth/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+    } catch (err) {
+      // swallow network errors
+      console.debug("No server update for user settings or request failed", err);
+    }
+  };
+
+  // include updateUser in provided context
+  (value as any).updateUser = updateUser;
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

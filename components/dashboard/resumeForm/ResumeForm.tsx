@@ -18,23 +18,24 @@ import EducationList from "./EducationList";
 import ExperienceList from "./ExperienceList";
 import ProjectList from "./ProjectList";
 import { generateId } from "@/contexts/ResumeContext";
+import CertificationSection from "./CertificationSection";
+import CertificationList from "./CertificationList ";
+import { Trash2 } from "lucide-react";
 
 export default function ResumeForm() {
   const { resumeData, setResumeData } = useResume();
   const [skillInput, setSkillInput] = useState("");
   const [languageInput, setLanguageInput] = useState("");
 
-  
-
   const addSkill = () => {
     if (!skillInput.trim()) return;
-    
+
     const newSkill: SkillItem = {
-      type: 'skill',
+      type: "skill",
       id: generateId(),
-      name: skillInput.trim()
+      name: skillInput.trim(),
     };
-    
+
     setResumeData({
       ...resumeData,
       skills: [...resumeData.skills, newSkill],
@@ -44,13 +45,13 @@ export default function ResumeForm() {
 
   const addLanguage = () => {
     if (!languageInput.trim()) return;
-    
+
     const newLanguage: LanguageItem = {
-      type: 'language',
+      type: "language",
       id: generateId(),
-      name: languageInput.trim()
+      name: languageInput.trim(),
     };
-    
+
     setResumeData({
       ...resumeData,
       languages: [...resumeData.languages, newLanguage],
@@ -87,7 +88,7 @@ export default function ResumeForm() {
 
   return (
     <div className="space-y-6">
-        <PersonalInfo />
+      <PersonalInfo />
       <div>
         <h2 className="mb-3 font-semibold text-xl">Skills</h2>
         <div className="flex gap-2">
@@ -103,7 +104,7 @@ export default function ResumeForm() {
         </div>
         <ul className="space-y-2 mt-2">
           {resumeData.skills.map((skill) => (
-            <li key={skill.id} className="flex items-center gap-2">
+            <li key={skill.id} className="group flex items-center gap-2">
               <span>• {skill.name}</span>
               <button
                 onClick={() => {
@@ -112,9 +113,10 @@ export default function ResumeForm() {
                   );
                   setResumeData({ ...resumeData, skills: updated });
                 }}
-                className="text-red-600 hover:text-red-800 text-sm"
+                className="opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-800 transition-opacity cursor-pointer"
+                aria-label="Delete skill"
               >
-                Delete
+                <Trash2 className="w-4 h-4" />
               </button>
             </li>
           ))}
@@ -140,7 +142,7 @@ export default function ResumeForm() {
         </div>
         <ul className="space-y-2 mt-2">
           {resumeData.languages.map((lang) => (
-            <li key={lang.id} className="flex items-center gap-2">
+            <li key={lang.id} className="group flex items-center gap-2">
               <span>• {lang.name}</span>
               <button
                 onClick={() => {
@@ -149,9 +151,10 @@ export default function ResumeForm() {
                   );
                   setResumeData({ ...resumeData, languages: updated });
                 }}
-                className="text-red-600 hover:text-red-800 text-sm"
+                className="opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-800 transition-opacity cursor-pointer"
+                aria-label="Delete language"
               >
-                Delete
+                <Trash2 className="w-4 h-4" />
               </button>
             </li>
           ))}
@@ -165,6 +168,12 @@ export default function ResumeForm() {
           education={resumeData.education}
           onDelete={deleteEducation}
         />
+      </div>
+
+       <div>
+        <CertificationSection />
+        <div className="mt-6"></div>
+        <CertificationList certifications={resumeData.certifications} />
       </div>
 
       <div>
