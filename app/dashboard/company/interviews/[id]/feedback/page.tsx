@@ -27,7 +27,7 @@ export default function FeedbackPage() {
   const router = useRouter();
   const params = useParams();
   const { user } = useAuth();
-  const interviewId = params.id as string;
+  const interviewId = params?.id as string;
 
   const [interview, setInterview] = useState<Interview | null>(null);
   const [loading, setLoading] = useState(true);

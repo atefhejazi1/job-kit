@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 // PublicLayout.tsx
 
 import Header from "@/components/layout/Header";

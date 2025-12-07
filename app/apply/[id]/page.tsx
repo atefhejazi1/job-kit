@@ -42,7 +42,8 @@ interface Job {
 }
 
 export default function ApplyPage() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const router = useRouter();
   const { user } = useAuth();
   const [job, setJob] = useState<Job | null>(null);
@@ -107,12 +108,14 @@ export default function ApplyPage() {
 
     setSubmitting(true);
     try {
-      const headers = createApiHeadersWithoutContentType(user);
-      headers["Content-Type"] = "application/json";
-
       const response = await fetch("/api/job-applications", {
         method: "POST",
-        headers,
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": user?.id || "",
+          "x-user-email": user?.email || "",
+        },
+        credentials: "include",
         body: JSON.stringify({
           jobId: id,
           coverLetter: coverLetter.trim(),

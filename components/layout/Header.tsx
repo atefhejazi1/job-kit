@@ -3,6 +3,7 @@ import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
+import { User, Building, LogOut, MessageCircle, Search } from "lucide-react";
 import { LogOut, MessageCircle } from "lucide-react";
 import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 import ThemeToggle from "../shared/ThemeToggle";
@@ -49,6 +50,14 @@ const Header = () => {
               className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 font-medium transition"
             >
               Browse Jobs
+            </Link>
+            <Link
+              href="/jobs/search"
+              className="flex items-center gap-2 text-gray-600 hover:text-text-primary font-medium transition-colors duration-200 relative group"
+            >
+              <Search className="w-5 h-5" />
+              Advanced Search
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-text-primary transition-all duration-200 group-hover:w-full"></span>
             </Link>
 
             {isAuthenticated && (
@@ -154,6 +163,14 @@ const Header = () => {
               >
                 Browse Jobs
               </Link>
+              <Link
+                href="/jobs/search"
+                className="flex items-center gap-2 py-3 px-4 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors duration-200"
+                onClick={() => setIsOpen(false)}
+              >
+                <Search className="w-5 h-5" />
+                Advanced Search
+              </Link>
 
               {isAuthenticated ? (
                 <>
@@ -185,6 +202,27 @@ const Header = () => {
                       </span>
                     )}
                   </Link>
+                  <div className="py-3 px-4 bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        {user?.userType === "COMPANY"
+                          ? user?.companyName?.charAt(0)?.toUpperCase() || "C"
+                          : user?.name?.charAt(0)?.toUpperCase() || "U"}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-semibold text-gray-800">
+                          {user?.userType === "COMPANY"
+                            ? user?.companyName
+                            : user?.name}
+                        </span>
+                        <span className="text-xs text-text-primary font-medium">
+                          {user?.userType === "COMPANY"
+                            ? "Company"
+                            : "Job Seeker"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
 
                   <button
                     onClick={handleLogout}

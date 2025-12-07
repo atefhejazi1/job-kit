@@ -22,7 +22,7 @@ export default function ProtectedRoute({
 
     // If user is not authenticated, redirect to login
     if (!isAuthenticated) {
-      const returnUrl = encodeURIComponent(pathname);
+      const returnUrl = encodeURIComponent(pathname || "/");
       router.push(`/login?returnUrl=${returnUrl}`);
       return;
     }

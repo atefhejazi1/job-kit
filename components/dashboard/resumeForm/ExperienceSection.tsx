@@ -12,6 +12,7 @@ interface Props {
 
 export default function ExperienceSection({ onAdd }: Props) {
   const [exp, setExp] = useState<ExperienceItem>({
+    type: "experience",
     company: "",
     role: "",
     startDate: "",

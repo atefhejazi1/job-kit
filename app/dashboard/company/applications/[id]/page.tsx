@@ -39,7 +39,7 @@ export default function ApplicationDetailsPage() {
   const [updating, setUpdating] = useState(false);
   const [notes, setNotes] = useState("");
 
-  const applicationId = params.id as string;
+  const applicationId = params?.id as string;
 
   const fetchApplication = async () => {
     try {

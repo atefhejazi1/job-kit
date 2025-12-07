@@ -58,12 +58,12 @@ export const useUnreadMessages = () => {
           fetchUnreadCount();
         };
 
-        socket.on('newMessage', handleNewMessage);
-        socket.on('messageRead', handleMessageRead);
+        socket.on('new-message', handleNewMessage);
+        socket.on('message-read', handleMessageRead);
 
         return () => {
-          socket.off('newMessage', handleNewMessage);
-          socket.off('messageRead', handleMessageRead);
+          socket.off('new-message', handleNewMessage);
+          socket.off('message-read', handleMessageRead);
         };
       }
     }

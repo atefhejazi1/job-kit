@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { createApiHeaders } from "@/lib/api-utils";
 import { Server } from "socket.io";
 
 // Get messages for a specific thread
@@ -9,7 +8,6 @@ export async function GET(
   { params }: { params: Promise<{ threadId: string }> }
 ) {
   try {
-    const headers = createApiHeaders();
     const userId = request.headers.get("x-user-id");
     const { threadId } = await params;
 
@@ -74,7 +72,7 @@ export async function GET(
       data: { isRead: true }
     });
 
-    return NextResponse.json(messages, { headers });
+    return NextResponse.json(messages);
   } catch (error) {
     console.error("Error fetching messages:", error);
     return NextResponse.json(
@@ -90,7 +88,6 @@ export async function POST(
   { params }: { params: Promise<{ threadId: string }> }
 ) {
   try {
-    const headers = createApiHeaders();
     const userId = request.headers.get("x-user-id");
     const { threadId } = await params;
 
@@ -203,7 +200,7 @@ export async function POST(
       console.log('Socket not available for real-time update');
     }
 
-    return NextResponse.json(message, { headers, status: 201 });
+    return NextResponse.json(message, { status: 201 });
   } catch (error) {
     console.error("Error sending message:", error);
     return NextResponse.json(

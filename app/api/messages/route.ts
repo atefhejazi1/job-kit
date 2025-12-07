@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { createApiHeaders } from "@/lib/api-utils";
 import { notificationService } from "@/lib/notifications";
 
 // GET /api/messages - Get all message threads for the user
 export async function GET(request: NextRequest) {
   try {
-    const headers = createApiHeaders();
     const userId = request.headers.get("x-user-id");
     const companyId = request.headers.get("x-company-id");
 
@@ -58,7 +56,7 @@ export async function GET(request: NextRequest) {
       orderBy: { updatedAt: 'desc' }
     });
 
-    return NextResponse.json(threads, { headers });
+    return NextResponse.json(threads);
   } catch (error) {
     console.error("Error fetching message threads:", error);
     return NextResponse.json(
@@ -71,7 +69,6 @@ export async function GET(request: NextRequest) {
 // POST /api/messages - Create a new message or thread
 export async function POST(request: NextRequest) {
   try {
-    const headers = createApiHeaders();
     const userId = request.headers.get("x-user-id");
     const companyId = request.headers.get("x-company-id");
 
@@ -208,7 +205,7 @@ export async function POST(request: NextRequest) {
       jobTitle: jobTitle
     });
 
-    return NextResponse.json(message, { headers, status: 201 });
+    return NextResponse.json(message, { status: 201 });
   } catch (error) {
     console.error("Error creating message:", error);
     return NextResponse.json(

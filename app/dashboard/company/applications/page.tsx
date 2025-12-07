@@ -50,7 +50,7 @@ export default function AllApplicationsPage() {
     string | null
   >(null);
 
-  const jobId = searchParams.get("jobId");
+  const jobId = searchParams?.get("jobId");
 
   // Fetch all applications for the company
   const fetchApplications = async () => {

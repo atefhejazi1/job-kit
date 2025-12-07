@@ -42,6 +42,7 @@ const ResumeSteps = () => {
                 alt={step.title}
                 fill
                 className="object-contain"
+                unoptimized
               />
             </div>
 

@@ -56,12 +56,11 @@ export async function GET(
       );
     }
 
-    // Parse JSON fields safely
     const jobData = {
       ...job,
-      skills: safeJsonParse(job.skills as string | null),
-      requirements: safeJsonParse(job.requirements as string | null),
-      benefits: safeJsonParse(job.benefits as string | null),
+      skills: job.skills || [],
+      requirements: job.requirements || [],
+      benefits: job.benefits || [],
     };
 
     return NextResponse.json(jobData);

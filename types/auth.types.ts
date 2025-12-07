@@ -6,6 +6,7 @@ export interface User {
   userType: 'USER' | 'COMPANY';
   avatarUrl?: string | null;
   companyId?: string | null;
+  companyName?: string | null;
   createdAt: Date;
   updatedAt?: Date;
 }

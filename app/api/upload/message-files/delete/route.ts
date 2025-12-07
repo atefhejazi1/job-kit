@@ -43,8 +43,6 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({
       message: 'Files deletion completed',
       results: deleteResults
-    }, {
-      headers: createApiHeaders()
     });
 
   } catch (error) {
