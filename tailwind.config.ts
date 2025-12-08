@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-export default {
+const config: Config = {
   darkMode: 'class',
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -20,7 +20,7 @@ export default {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/line-clamp'),
-  ],
-} satisfies Config;
+  plugins: [],
+};
+
+export default config;

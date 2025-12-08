@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useLayoutEffect } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 type Theme = "light" | "dark";
 
@@ -12,11 +12,17 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 const applyTheme = (theme: Theme) => {
-    console.log("apply theme  ", theme);
-    if (typeof document !== "undefined") {
-        document.documentElement.classList.toggle("dark", theme === "dark");
-        document.body.classList.remove("dark");
-    }
+  if (typeof document === "undefined") return;
+  
+  const root = document.documentElement;
+  if (theme === "dark") {
+    root.classList.add("dark");
+    console.log(" Added 'dark' class");
+  } else {
+    root.classList.remove("dark");
+    console.log(" Removed 'dark' class");
+  }
+  console.log(" Current classes:", root.className);
 };
 
 const getCookie = (name: string) => {
@@ -32,28 +38,23 @@ const setCookie = (name: string, value: string, days = 365) => {
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const [theme, setTheme] = useState<Theme>("light");
 
-
-    useLayoutEffect(() => {
+    useEffect(() => {
         const storedTheme = getCookie("theme") as Theme | null;
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         const initialTheme = storedTheme || systemTheme;
-        console.log("initialTheme ----- ", initialTheme);
-
+        console.log("📂 Initial theme:", initialTheme);
         setTheme(initialTheme);
-        applyTheme(initialTheme);
     }, []);
 
+    useEffect(() => {
+        applyTheme(theme);
+    }, [theme]);
 
     const toggleTheme = () => {
-        setTheme("light")
         setTheme((prev) => {
             const newTheme = prev === "light" ? "dark" : "light";
-            console.log("new theme ", newTheme);
-
-            applyTheme(newTheme);
             setCookie("theme", newTheme);
+            console.log("🔄 Toggle:", prev, "→", newTheme);
             return newTheme;
         });
     };
