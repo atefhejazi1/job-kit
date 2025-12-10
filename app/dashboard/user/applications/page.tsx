@@ -143,7 +143,10 @@ export default function ApplicationsPage() {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="p-8">Loading your applications...</div>
+        {/* Dark mode loading state */}
+        <div className="p-8 dark:text-white dark:bg-gray-900 min-h-screen">
+          Loading your applications...
+        </div>
       </ProtectedRoute>
     );
   }
@@ -151,12 +154,19 @@ export default function ApplicationsPage() {
   if (allApps.length === 0) {
     return (
       <ProtectedRoute>
-        <div className="py-16 text-center">
-          <FileText className="mx-auto mb-4 w-16 h-16 text-gray-400" />
-          <h2 className="mb-2 font-bold text-2xl">No Applications Yet</h2>
-          <p className="mb-6 text-gray-600">{`You haven't applied to any jobs yet.`}</p>
+        <div className="py-16 text-center dark:bg-gray-900 min-h-screen dark:text-white">
+          {/* Dark mode icon color */}
+          <FileText className="mx-auto mb-4 w-16 h-16 text-gray-400 dark:text-gray-500" />
+          <h2 className="mb-2 font-bold text-2xl dark:text-white">
+            No Applications Yet
+          </h2>
+          {/* Dark mode text color */}
+          <p className="mb-6 text-gray-600 dark:text-gray-400">
+            {`You haven't applied to any jobs yet.`}
+          </p>
           <Link href="/jobs">
-            <button className="bg-blue-600 disabled:opacity-50 px-4 py-2 rounded text-white">
+            {/* Dark mode button color */}
+            <button className="bg-blue-600 disabled:opacity-50 px-4 py-2 rounded text-white dark:bg-primary dark:hover:bg-primary/90">
               Browse Jobs
             </button>
           </Link>
@@ -178,8 +188,11 @@ export default function ApplicationsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="mx-auto p-8 max-w-6xl">
-        <h1 className="mb-8 font-bold text-3xl">My Job Applications</h1>
+      <div className="mx-auto p-8 max-w-6xl dark:bg-gray-900 min-h-screen">
+        {/* Dark mode header text color */}
+        <h1 className="mb-8 font-bold text-3xl dark:text-white">
+          My Job Applications
+        </h1>
 
         <div className="flex flex-wrap items-center gap-2 mb-8">
           {visibleFilters.map((status) => (
@@ -192,8 +205,8 @@ export default function ApplicationsPage() {
               }}
               className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === status
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-blue-600 text-white dark:bg-primary dark:hover:bg-primary/90" // Active dark mode
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600" // Inactive dark mode
               }`}
             >
               {filterLabels[status]} ({statusCounts[status]})
@@ -208,8 +221,8 @@ export default function ApplicationsPage() {
               }}
               className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 isActiveHidden
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-blue-600 text-white dark:bg-primary dark:hover:bg-primary/90" // Active dark mode
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600" // Inactive dark mode
               }`}
             >
               {isActiveHidden
@@ -223,7 +236,10 @@ export default function ApplicationsPage() {
             </button>
 
             {showMore && (
-              <div className="top-full right-0 z-10 absolute bg-white shadow-lg mt-1 border border-gray-200 rounded-lg w-48">
+              <div
+                // Dark mode dropdown menu container
+                className="top-full right-0 z-10 absolute bg-white shadow-lg mt-1 border border-gray-200 rounded-lg w-48 dark:bg-gray-800 dark:border-gray-700 dark:shadow-xl"
+              >
                 {hiddenFilters.map((status) => (
                   <button
                     key={status}
@@ -232,10 +248,10 @@ export default function ApplicationsPage() {
                       setCurrentPage(1);
                       setShowMore(false);
                     }}
-                    className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                    className={`w-full text-left px-3 py-2 text-sm transition-colors ${
                       filter === status
-                        ? "bg-blue-100 text-blue-600 font-medium"
-                        : "text-gray-700"
+                        ? "bg-blue-100 text-blue-600 font-medium dark:bg-primary/20 dark:text-primary" // Active item dark mode
+                        : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700" // Inactive item dark mode
                     }`}
                   >
                     {filterLabels[status]} ({statusCounts[status]})
@@ -247,6 +263,7 @@ export default function ApplicationsPage() {
         </div>
 
         <div className="space-y-4">
+          {/* ApplicationCard component assumes it has its own dark mode styles applied */}
           {paginatedApps.map((app) => (
             <ApplicationCard
               key={app.id}
@@ -266,7 +283,8 @@ export default function ApplicationsPage() {
               variant="outline"
               size="sm"
               onClick={() => handlePageChange("prev")}
-              className={`flex items-center gap-2 border-orange-500 text-orange-600 ${
+              // Dark mode pagination button styles
+              className={`flex items-center gap-2 border-orange-500 text-orange-600 dark:border-primary dark:text-primary ${
                 currentPage === 1
                   ? "opacity-50 cursor-not-allowed pointer-events-none"
                   : ""
@@ -276,7 +294,8 @@ export default function ApplicationsPage() {
               Previous
             </Button>
 
-            <span className="font-medium text-gray-600 text-sm">
+            {/* Dark mode pagination text */}
+            <span className="font-medium text-gray-600 text-sm dark:text-gray-400">
               Page {currentPage} of {totalPages}
             </span>
 
@@ -284,7 +303,8 @@ export default function ApplicationsPage() {
               variant="outline"
               size="sm"
               onClick={() => handlePageChange("next")}
-              className={`flex items-center gap-2 border-orange-500 text-orange-600 ${
+              // Dark mode pagination button styles
+              className={`flex items-center gap-2 border-orange-500 text-orange-600 dark:border-primary dark:text-primary ${
                 currentPage === totalPages
                   ? "opacity-50 cursor-not-allowed pointer-events-none"
                   : ""

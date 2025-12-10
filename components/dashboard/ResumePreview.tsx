@@ -51,17 +51,16 @@ export default function ResumePreview({
     "idle" | "saving" | "saved" | "error"
   >("idle");
   const [pendingSave, setPendingSave] = useState(false);
-const [newCert, setNewCert] = useState<CertificationItem>({
-  id: generateId(),
-  name: "",
-  issuer: "",
-  issueDate: "",
-  credentialId: "",
-  credentialUrl: "",
-  fileUrl: "",
-  fileName: "",
-});
-
+  const [newCert, setNewCert] = useState<CertificationItem>({
+    id: generateId(),
+    name: "",
+    issuer: "",
+    issueDate: "",
+    credentialId: "",
+    credentialUrl: "",
+    fileUrl: "",
+    fileName: "",
+  });
 
   const isEditable = mode === "editable";
 
@@ -237,7 +236,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
   );
 
   const deleteItem = useCallback(
-    (section: "education" | "experience" | "projects", index: number) => {
+    (section: "education" | "experience" | "projects" | "certifications", index: number) => {
       if (!window.confirm("Are you sure you want to delete this item?")) return;
 
       const updates: Partial<ResumeData> = {
@@ -248,6 +247,8 @@ const [newCert, setNewCert] = useState<CertificationItem>({
       const sectionName =
         section === "projects"
           ? "Project"
+          : section === "certifications"
+          ? "Certification"
           : section.charAt(0).toUpperCase() + section.slice(1);
       toast.success(`${sectionName} deleted`);
     },
@@ -255,19 +256,13 @@ const [newCert, setNewCert] = useState<CertificationItem>({
   );
 
   const addNewItem = useCallback(
-    (section: "education" | "experience" | "projects") => {
+    (section: "education" | "experience" | "projects" | "certifications") => {
       const newIndex = resumeData[section].length;
-      const editField = `${
-        section === "education"
-          ? "edu"
-          : section === "experience"
-          ? "exp"
-          : "proj"
-      }-${newIndex}` as EditingField;
-
-      let emptyItem: EducationItem | ExperienceItem | ProjectItem;
+      let editField: EditingField;
+      let emptyItem: EducationItem | ExperienceItem | ProjectItem | CertificationItem;
 
       if (section === "education") {
+        editField = `edu-${newIndex}` as EditingField;
         emptyItem = {
           type: "education",
           school: "",
@@ -277,6 +272,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
           description: "",
         };
       } else if (section === "experience") {
+        editField = `exp-${newIndex}` as EditingField;
         emptyItem = {
           type: "experience",
           company: "",
@@ -285,8 +281,23 @@ const [newCert, setNewCert] = useState<CertificationItem>({
           endDate: "",
           description: "",
         };
-      } else {
+      } else if (section === "projects") {
+        editField = `proj-${newIndex}` as EditingField;
         emptyItem = { type: "project", title: "", link: "", description: "" };
+      } else {
+        // certifications
+        editField = `cert-${newIndex}` as EditingField;
+        emptyItem = {
+          type: "certification",
+          id: generateId(),
+          name: "",
+          issuer: "",
+          issueDate: "",
+          credentialId: "",
+          credentialUrl: "",
+          fileUrl: "",
+          fileName: "",
+        };
       }
 
       setEditing(editField);
@@ -302,7 +313,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
   );
 
   const cancelAdd = useCallback(
-    (section: "education" | "experience" | "projects", index: number) => {
+    (section: "education" | "experience" | "projects" | "certifications", index: number) => {
       const updates: Partial<ResumeData> = {
         [section]: resumeData[section].filter((_, i) => i !== index),
       };
@@ -314,7 +325,10 @@ const [newCert, setNewCert] = useState<CertificationItem>({
   );
 
   const saveArrayItemEdit = useCallback(
-    (section: "education" | "experience" | "projects", index: number) => {
+    (
+      section: "education" | "experience" | "projects" | "certifications",
+      index: number
+    ) => {
       if (editValue === null) return;
 
       const currentArray = [...resumeData[section]];
@@ -329,6 +343,9 @@ const [newCert, setNewCert] = useState<CertificationItem>({
         case "projects":
           currentArray[index] = editValue as ProjectItem;
           break;
+        case "certifications":
+          currentArray[index] = editValue as CertificationItem;
+          break;
       }
 
       saveToServer({ [section]: currentArray } as Partial<ResumeData>);
@@ -337,26 +354,31 @@ const [newCert, setNewCert] = useState<CertificationItem>({
       const sectionName =
         section === "projects"
           ? "Project"
+          : section === "certifications"
+          ? "Certification"
           : section.charAt(0).toUpperCase() + section.slice(1);
       toast.success(`${sectionName} saved`);
     },
     [editValue, resumeData, saveToServer]
   );
 
-  // ----------- CERTIFICATIONS    -----------
+  // ----------- CERTIFICATIONS    -----------
   const addNewCertification = useCallback(() => {
     if (!newItemName.trim()) return;
     const newCert: CertificationItem = {
+      type: "certification",
       id: generateId(),
       name: newItemName.trim(),
       issuer: "Unknown",
       issueDate: "",
       credentialId: "",
+      credentialUrl: "",
       fileUrl: "",
       fileName: "",
     };
     saveToServer({ certifications: [...resumeData.certifications, newCert] });
     setNewItemName("");
+    setEditing(null);
     toast.success("Certification added");
   }, [newItemName, resumeData, saveToServer]);
 
@@ -370,41 +392,37 @@ const [newCert, setNewCert] = useState<CertificationItem>({
     },
     [resumeData, saveToServer]
   );
-
-  const saveCertificationEdit = useCallback(
-    (index: number) => {
-      if (!editValue || typeof editValue !== "object" || !("id" in editValue))
-        return;
-      const updated = [...resumeData.certifications];
-      updated[index] = editValue as CertificationItem;
-      saveToServer({ certifications: updated });
-      setEditing(null);
-      setEditValue(null);
-      toast.success("Certification saved");
-    },
-    [editValue, resumeData, saveToServer]
-  );
+  // Using the generic saveArrayItemEdit for Certification edits now.
   // --------------------------------------------------------------------------
 
   const renderSaveStatus = () => {
     if (!autoSave || !isEditable || saveStatus === "idle") return null;
 
     return (
-      <div className="right-4 bottom-4 fixed flex items-center gap-2 bg-white shadow-lg px-4 py-2 border rounded-lg">
+      <div
+        className="right-4 bottom-4 fixed flex items-center gap-2 bg-white shadow-lg px-4 py-2 border rounded-lg
+        dark:bg-gray-800 dark:border-gray-700 dark:shadow-xl"
+      >
         {saveStatus === "saving" && (
           <>
-            <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
-            <span className="text-gray-600 text-sm">Saving...</span>
+            <Loader2 className="w-4 h-4 text-blue-600 animate-spin dark:text-blue-400" />
+            <span className="text-gray-600 text-sm dark:text-gray-400">
+              Saving...
+            </span>
           </>
         )}
         {saveStatus === "saved" && (
           <>
-            <Save className="w-4 h-4 text-green-600" />
-            <span className="text-green-600 text-sm">Saved</span>
+            <Save className="w-4 h-4 text-green-600 dark:text-green-400" />
+            <span className="text-green-600 text-sm dark:text-green-400">
+              Saved
+            </span>
           </>
         )}
         {saveStatus === "error" && (
-          <span className="text-red-600 text-sm">Save failed</span>
+          <span className="text-red-600 text-sm dark:text-red-400">
+            Save failed
+          </span>
         )}
       </div>
     );
@@ -413,11 +431,12 @@ const [newCert, setNewCert] = useState<CertificationItem>({
   return (
     <>
       <div
-        className={`max-w-3xl mx-auto p-6 bg-white text-gray-900 shadow-md rounded-md ${className}`}
+        className={`max-w-3xl mx-auto p-6 bg-white text-gray-900 shadow-md rounded-md ${className}
+        dark:bg-gray-900 dark:text-white dark:shadow-2xl dark:shadow-gray-700/50`}
       >
         <div id="resume-preview">
-          {/* ---------------  PERSONAL INFO  --------------- */}
-          <div className="flex justify-between items-start mb-6 pb-4 border-gray-300 border-b">
+          {/* ---------------  PERSONAL INFO  --------------- */}
+          <div className="flex justify-between items-start mb-6 pb-4 border-gray-300 border-b dark:border-gray-700">
             <div className="flex-1">
               {editing === "personal-info" &&
               editValue &&
@@ -428,20 +447,20 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                   <input
                     value={editValue.name}
                     onChange={(e) => handleObjectInputChange(e, "name")}
-                    className="px-3 py-2 border rounded w-full"
+                    className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     placeholder="Full Name"
                     autoFocus
                   />
                   <input
                     value={editValue.email}
                     onChange={(e) => handleObjectInputChange(e, "email")}
-                    className="px-3 py-2 border rounded w-full"
+                    className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     placeholder="Email"
                   />
                   <input
                     value={editValue.phone}
                     onChange={(e) => handleObjectInputChange(e, "phone")}
-                    className="px-3 py-2 border rounded w-full"
+                    className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     placeholder="Phone"
                   />
                   <div className="flex gap-2">
@@ -466,10 +485,10 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                 </div>
               ) : (
                 <>
-                  <h1 className="font-bold text-3xl">
+                  <h1 className="font-bold text-3xl dark:text-white">
                     {resumeData.name || "Your Name"}
                   </h1>
-                  <p className="mt-2 text-gray-700 text-sm">
+                  <p className="mt-2 text-gray-700 text-sm dark:text-gray-400">
                     {resumeData.email || "email@example.com"} ·{" "}
                     {resumeData.phone || "Phone"}
                   </p>
@@ -488,19 +507,21 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                     phone: resumeData.phone,
                   });
                 }}
-                className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                className="hover:bg-gray-100 p-2 rounded-lg transition-colors dark:hover:bg-gray-700"
                 aria-label="Edit personal info"
               >
-                <Edit2 className="w-5 h-5 text-blue-600" />
+                <Edit2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </button>
             )}
           </div>
 
-          {/* ---------------  SUMMARY  --------------- */}
+          {/* ---------------  SUMMARY  --------------- */}
           {(resumeData.summary || isEditable) && (
-            <div className="mb-6 pb-4 border-gray-300 border-b">
+            <div className="mb-6 pb-4 border-gray-300 border-b dark:border-gray-700">
               <div className="flex justify-between items-center mb-2">
-                <h2 className="font-semibold text-xl">Summary</h2>
+                <h2 className="font-semibold text-xl dark:text-white">
+                  Summary
+                </h2>
                 {isEditable && (
                   <>
                     {editing === "summary" ? (
@@ -529,10 +550,10 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                           setEditing("summary");
                           setEditValue(resumeData.summary || "");
                         }}
-                        className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                        className="hover:bg-gray-100 p-2 rounded-lg transition-colors dark:hover:bg-gray-700"
                         aria-label="Edit summary"
                       >
-                        <Edit2 className="w-4 h-4 text-blue-600" />
+                        <Edit2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       </button>
                     )}
                   </>
@@ -542,30 +563,30 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                 <textarea
                   value={editValue as string}
                   onChange={handleSimpleInputChange}
-                  className="p-2 border rounded w-full"
+                  className="p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   rows={3}
                   placeholder="Professional summary..."
                   autoFocus
                 />
               ) : (
-                <p className="text-gray-700">
+                <p className="text-gray-700 dark:text-gray-400">
                   {resumeData.summary || "Click edit to add summary"}
                 </p>
               )}
             </div>
           )}
 
-          {/* ---------------  SKILLS  --------------- */}
-          <div className="mb-6 pb-4 border-gray-300 border-b">
+          {/* ---------------  SKILLS  --------------- */}
+          <div className="mb-6 pb-4 border-gray-300 border-b dark:border-gray-700">
             <div className="flex justify-between items-center mb-2">
-              <h2 className="font-semibold text-xl">Skills</h2>
+              <h2 className="font-semibold text-xl dark:text-white">Skills</h2>
               {isEditable && editing !== "skills-new" && (
                 <button
                   onClick={() => setEditing("skills-new")}
-                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors dark:hover:bg-gray-700"
                   aria-label="Add new skill"
                 >
-                  <Plus className="w-5 h-5 text-green-600" />
+                  <Plus className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </button>
               )}
             </div>
@@ -575,7 +596,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                 <input
                   value={newItemName}
                   onChange={(e) => setNewItemName(e.target.value)}
-                  className="flex-1 px-3 py-2 border rounded"
+                  className="flex-1 px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   placeholder="Enter new skill"
                   autoFocus
                 />
@@ -603,7 +624,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
               {resumeData.skills.map((skill) => (
                 <li
                   key={skill.id}
-                  className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded"
+                  className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded dark:bg-gray-700"
                 >
                   {editing === `skill-${skill.id}` &&
                   editValue &&
@@ -614,12 +635,12 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                       <input
                         value={editValue.name}
                         onChange={(e) => handleObjectInputChange(e, "name")}
-                        className="px-2 py-1 border rounded text-sm"
+                        className="px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
                         autoFocus
                       />
                       <button
                         onClick={() => saveSkillOrLanguageEdit("skills")}
-                        className="text-green-600 hover:text-green-700"
+                        className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
                         aria-label="Save skill"
                       >
                         <Save className="w-3 h-3" />
@@ -629,7 +650,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                           setEditing(null);
                           setEditValue(null);
                         }}
-                        className="text-gray-600 hover:text-gray-700"
+                        className="text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                         aria-label="Cancel"
                       >
                         <X className="w-3 h-3" />
@@ -637,14 +658,16 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                     </>
                   ) : (
                     <>
-                      <span className="text-gray-700">{skill.name}</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {skill.name}
+                      </span>
                       {isEditable && editing !== `skill-${skill.id}` && (
                         <>
                           <button
                             onClick={() =>
                               startEditSkillOrLanguage("skills", skill)
                             }
-                            className="text-blue-600 hover:text-blue-700"
+                            className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                             aria-label="Edit skill"
                           >
                             <Edit2 className="w-3 h-3" />
@@ -653,7 +676,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                             onClick={() =>
                               deleteSkillOrLanguage("skills", skill.id)
                             }
-                            className="text-red-600 hover:text-red-700"
+                            className="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-400"
                             aria-label="Delete skill"
                           >
                             <X className="w-3 h-3" />
@@ -671,17 +694,19 @@ const [newCert, setNewCert] = useState<CertificationItem>({
             )}
           </div>
 
-          {/* ---------------  LANGUAGES  --------------- */}
-          <div className="mb-6 pb-4 border-gray-300 border-b">
+          {/* ---------------  LANGUAGES  --------------- */}
+          <div className="mb-6 pb-4 border-gray-300 border-b dark:border-gray-700">
             <div className="flex justify-between items-center mb-2">
-              <h2 className="font-semibold text-xl">Languages</h2>
+              <h2 className="font-semibold text-xl dark:text-white">
+                Languages
+              </h2>
               {isEditable && editing !== "languages-new" && (
                 <button
                   onClick={() => setEditing("languages-new")}
-                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors dark:hover:bg-gray-700"
                   aria-label="Add new language"
                 >
-                  <Plus className="w-5 h-5 text-green-600" />
+                  <Plus className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </button>
               )}
             </div>
@@ -691,7 +716,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                 <input
                   value={newItemName}
                   onChange={(e) => setNewItemName(e.target.value)}
-                  className="flex-1 px-3 py-2 border rounded"
+                  className="flex-1 px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   placeholder="Enter new language"
                   autoFocus
                 />
@@ -719,7 +744,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
               {resumeData.languages.map((lang) => (
                 <li
                   key={lang.id}
-                  className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded"
+                  className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded dark:bg-gray-700"
                 >
                   {editing === `lang-${lang.id}` &&
                   editValue &&
@@ -730,12 +755,12 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                       <input
                         value={editValue.name}
                         onChange={(e) => handleObjectInputChange(e, "name")}
-                        className="px-2 py-1 border rounded text-sm"
+                        className="px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
                         autoFocus
                       />
                       <button
                         onClick={() => saveSkillOrLanguageEdit("languages")}
-                        className="text-green-600 hover:text-green-700"
+                        className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
                         aria-label="Save language"
                       >
                         <Save className="w-3 h-3" />
@@ -745,7 +770,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                           setEditing(null);
                           setEditValue(null);
                         }}
-                        className="text-gray-600 hover:text-gray-700"
+                        className="text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                         aria-label="Cancel"
                       >
                         <X className="w-3 h-3" />
@@ -753,14 +778,16 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                     </>
                   ) : (
                     <>
-                      <span className="text-gray-700">{lang.name}</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {lang.name}
+                      </span>
                       {isEditable && editing !== `lang-${lang.id}` && (
                         <>
                           <button
                             onClick={() =>
                               startEditSkillOrLanguage("languages", lang)
                             }
-                            className="text-blue-600 hover:text-blue-700"
+                            className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                             aria-label="Edit language"
                           >
                             <Edit2 className="w-3 h-3" />
@@ -769,7 +796,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                             onClick={() =>
                               deleteSkillOrLanguage("languages", lang.id)
                             }
-                            className="text-red-600 hover:text-red-700"
+                            className="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-400"
                             aria-label="Delete language"
                           >
                             <X className="w-3 h-3" />
@@ -783,26 +810,32 @@ const [newCert, setNewCert] = useState<CertificationItem>({
             </ul>
 
             {resumeData.languages.length === 0 && !isEditable && (
-              <p className="text-gray-400 italic">No languages added yet</p>
+              <p className="text-gray-400 italic dark:text-gray-500">
+                No languages added yet
+              </p>
             )}
           </div>
 
-          {/* ---------------  EDUCATION  --------------- */}
-          <div className="mb-6 pb-4 border-gray-300 border-b">
+          {/* ---------------  EDUCATION  --------------- */}
+          <div className="mb-6 pb-4 border-gray-300 border-b dark:border-gray-700">
             <div className="flex justify-between items-center mb-3">
-              <h2 className="font-semibold text-xl">Education</h2>
+              <h2 className="font-semibold text-xl dark:text-white">
+                Education
+              </h2>
               {isEditable && (
                 <button
                   onClick={() => addNewItem("education")}
-                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors dark:hover:bg-gray-700"
                   aria-label="Add education"
                 >
-                  <Plus className="w-5 h-5 text-green-600" />
+                  <Plus className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </button>
               )}
             </div>
             {resumeData.education.length === 0 && !isEditable && (
-              <p className="text-gray-400 italic">No education added yet</p>
+              <p className="text-gray-400 italic dark:text-gray-500">
+                No education added yet
+              </p>
             )}
             {resumeData.education.map((edu, i) => {
               if (
@@ -817,7 +850,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
               return (
                 <div
                   key={i}
-                  className="relative mb-4 p-3 border border-gray-200 rounded"
+                  className="relative mb-4 p-3 border border-gray-200 rounded dark:border-gray-700 dark:bg-gray-800"
                 >
                   {isEditable && editing !== `edu-${i}` && (
                     <div className="top-2 right-2 absolute flex gap-2">
@@ -833,15 +866,15 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                             description: edu.description,
                           });
                         }}
-                        className="hover:bg-gray-100 p-1 rounded transition-colors"
+                        className="hover:bg-gray-100 p-1 rounded transition-colors dark:hover:bg-gray-700"
                       >
-                        <Edit2 className="w-4 h-4 text-blue-600" />
+                        <Edit2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       </button>
                       <button
                         onClick={() => deleteItem("education", i)}
-                        className="hover:bg-gray-100 p-1 rounded transition-colors"
+                        className="hover:bg-gray-100 p-1 rounded transition-colors dark:hover:bg-gray-700"
                       >
-                        <Trash2 className="w-4 h-4 text-red-600" />
+                        <Trash2 className="w-4 h-4 text-red-600 dark:text-red-500" />
                       </button>
                     </div>
                   )}
@@ -854,14 +887,14 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                       <input
                         value={editValue.school}
                         onChange={(e) => handleObjectInputChange(e, "school")}
-                        className="px-3 py-2 border rounded w-full"
+                        className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                         placeholder="School/University"
                         autoFocus
                       />
                       <input
                         value={editValue.degree}
                         onChange={(e) => handleObjectInputChange(e, "degree")}
-                        className="px-3 py-2 border rounded w-full"
+                        className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                         placeholder="Degree"
                       />
                       <div className="gap-2 grid grid-cols-2">
@@ -870,15 +903,13 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                           onChange={(e) =>
                             handleObjectInputChange(e, "startDate")
                           }
-                          className="px-3 py-2 border rounded"
+                          className="px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                           placeholder="Start Date"
                         />
                         <input
                           value={editValue.endDate}
-                          onChange={(e) =>
-                            handleObjectInputChange(e, "endDate")
-                          }
-                          className="px-3 py-2 border rounded"
+                          onChange={(e) => handleObjectInputChange(e, "endDate")}
+                          className="px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                           placeholder="End Date"
                         />
                       </div>
@@ -887,7 +918,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                         onChange={(e) =>
                           handleObjectInputChange(e, "description")
                         }
-                        className="px-3 py-2 border rounded w-full"
+                        className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                         rows={2}
                         placeholder="Description"
                       />
@@ -918,21 +949,27 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                   ) : (
                     <>
                       {edu.school || edu.degree ? (
-                        <>
-                          <p className="font-semibold">
-                            {edu.school} {edu.degree && `— ${edu.degree}`}
+                        <div>
+                          <p className="font-semibold dark:text-white">
+                            {edu.school}
                           </p>
-                          {(edu.startDate || edu.endDate) && (
-                            <p className="text-gray-600 text-sm">
-                              {edu.startDate}{" "}
-                              {edu.endDate && `- ${edu.endDate}`}
+                          <p className="text-sm italic dark:text-gray-300">
+                            {edu.degree}
+                          </p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                            {edu.startDate} - {edu.endDate}
+                          </p>
+                          {edu.description && (
+                            <p className="mt-1 text-sm dark:text-gray-300">
+                              {edu.description}
                             </p>
                           )}
-                          {edu.description && (
-                            <p className="text-gray-700">{edu.description}</p>
-                          )}
-                        </>
-                      ) : null}
+                        </div>
+                      ) : (
+                        <p className="text-gray-400 italic dark:text-gray-500">
+                          Click edit to fill in details
+                        </p>
+                      )}
                     </>
                   )}
                 </div>
@@ -940,30 +977,167 @@ const [newCert, setNewCert] = useState<CertificationItem>({
             })}
           </div>
 
-
-
-
-
-
-
-
-
-          {/* ---------------  EXPERIENCE  --------------- */}
-          <div className="mb-6 pb-4 border-gray-300 border-b">
+          {/* ---------------  CERTIFICATIONS  --------------- */}
+          <div className="mb-6 pb-4 border-gray-300 border-b dark:border-gray-700">
             <div className="flex justify-between items-center mb-3">
-              <h2 className="font-semibold text-xl">Experience</h2>
+              <h2 className="font-semibold text-xl dark:text-white">
+                Certifications
+              </h2>
+              {isEditable && editing !== "cert-new" && (
+                <button
+                  onClick={() => setEditing("cert-new")}
+                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors dark:hover:bg-gray-700"
+                  aria-label="Add certification"
+                >
+                  <Plus className="w-5 h-5 text-green-600 dark:text-green-400" />
+                </button>
+              )}
+            </div>
+
+            {editing === "cert-new" && (
+              <div className="flex gap-2 mb-3">
+                <input
+                  value={newItemName}
+                  onChange={(e) => setNewItemName(e.target.value)}
+                  className="flex-1 px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  placeholder="Enter Certification Name"
+                  autoFocus
+                />
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={addNewCertification}
+                >
+                  Add
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setEditing(null);
+                    setNewItemName("");
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
+
+            {resumeData.certifications.length === 0 && !isEditable && (
+              <p className="text-gray-400 italic dark:text-gray-500">
+                No certifications added yet
+              </p>
+            )}
+
+            {resumeData.certifications.map((cert, i) => (
+              <div
+                key={cert.id}
+                className="relative mb-4 p-3 border border-gray-200 rounded dark:border-gray-700 dark:bg-gray-800"
+              >
+                {isEditable && editing !== `cert-${i}` && (
+                  <div className="top-2 right-2 absolute flex gap-2">
+                    <button
+                      onClick={() => {
+                        setEditing(`cert-${i}`);
+                        setEditValue(cert);
+                      }}
+                      className="hover:bg-gray-100 p-1 rounded transition-colors dark:hover:bg-gray-700"
+                    >
+                      <Edit2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    </button>
+                    <button
+                      onClick={() => deleteItem("certifications", i)}
+                      className="hover:bg-gray-100 p-1 rounded transition-colors dark:hover:bg-gray-700"
+                    >
+                      <Trash2 className="w-4 h-4 text-red-600 dark:text-red-500" />
+                    </button>
+                  </div>
+                )}
+                {editing === `cert-${i}` &&
+                editValue &&
+                typeof editValue === "object" &&
+                "type" in editValue &&
+                editValue.type === "certification" ? (
+                  <div className="space-y-2">
+                    <input
+                      value={editValue.name}
+                      onChange={(e) => handleObjectInputChange(e, "name")}
+                      className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="Certification Name"
+                      autoFocus
+                    />
+                    <input
+                      value={editValue.issuer}
+                      onChange={(e) => handleObjectInputChange(e, "issuer")}
+                      className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="Issuer"
+                    />
+                    <input
+                      value={editValue.issueDate}
+                      onChange={(e) => handleObjectInputChange(e, "issueDate")}
+                      className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="Issue Date (e.g., Dec 2023)"
+                    />
+                    {/* Add other optional fields here if needed for full edit */}
+                    <div className="flex gap-2">
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => saveArrayItemEdit("certifications", i)}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => {
+                          setEditing(null);
+                          setEditValue(null);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="font-semibold dark:text-white">
+                      {cert.name}
+                    </p>
+                    <p className="text-sm italic dark:text-gray-300">
+                      {cert.issuer}
+                    </p>
+                    {cert.issueDate && (
+                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                        Issued: {cert.issueDate}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* ---------------  EXPERIENCE  --------------- */}
+          <div className="mb-6 pb-4 border-gray-300 border-b dark:border-gray-700">
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="font-semibold text-xl dark:text-white">
+                Experience
+              </h2>
               {isEditable && (
                 <button
                   onClick={() => addNewItem("experience")}
-                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors dark:hover:bg-gray-700"
                   aria-label="Add experience"
                 >
-                  <Plus className="w-5 h-5 text-green-600" />
+                  <Plus className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </button>
               )}
             </div>
             {resumeData.experience.length === 0 && !isEditable && (
-              <p className="text-gray-400 italic">No experience added yet</p>
+              <p className="text-gray-400 italic dark:text-gray-500">
+                No experience added yet
+              </p>
             )}
             {resumeData.experience.map((exp, i) => {
               if (
@@ -978,7 +1152,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
               return (
                 <div
                   key={i}
-                  className="relative mb-4 p-3 border border-gray-200 rounded"
+                  className="relative mb-4 p-3 border border-gray-200 rounded dark:border-gray-700 dark:bg-gray-800"
                 >
                   {isEditable && editing !== `exp-${i}` && (
                     <div className="top-2 right-2 absolute flex gap-2">
@@ -994,15 +1168,15 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                             description: exp.description,
                           });
                         }}
-                        className="hover:bg-gray-100 p-1 rounded transition-colors"
+                        className="hover:bg-gray-100 p-1 rounded transition-colors dark:hover:bg-gray-700"
                       >
-                        <Edit2 className="w-4 h-4 text-blue-600" />
+                        <Edit2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       </button>
                       <button
                         onClick={() => deleteItem("experience", i)}
-                        className="hover:bg-gray-100 p-1 rounded transition-colors"
+                        className="hover:bg-gray-100 p-1 rounded transition-colors dark:hover:bg-gray-700"
                       >
-                        <Trash2 className="w-4 h-4 text-red-600" />
+                        <Trash2 className="w-4 h-4 text-red-600 dark:text-red-500" />
                       </button>
                     </div>
                   )}
@@ -1013,17 +1187,17 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                   editValue.type === "experience" ? (
                     <div className="space-y-2">
                       <input
-                        value={editValue.company}
-                        onChange={(e) => handleObjectInputChange(e, "company")}
-                        className="px-3 py-2 border rounded w-full"
-                        placeholder="Company"
+                        value={editValue.role}
+                        onChange={(e) => handleObjectInputChange(e, "role")}
+                        className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="Job Title"
                         autoFocus
                       />
                       <input
-                        value={editValue.role}
-                        onChange={(e) => handleObjectInputChange(e, "role")}
-                        className="px-3 py-2 border rounded w-full"
-                        placeholder="Role"
+                        value={editValue.company}
+                        onChange={(e) => handleObjectInputChange(e, "company")}
+                        className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="Company"
                       />
                       <div className="gap-2 grid grid-cols-2">
                         <input
@@ -1031,15 +1205,13 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                           onChange={(e) =>
                             handleObjectInputChange(e, "startDate")
                           }
-                          className="px-3 py-2 border rounded"
+                          className="px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                           placeholder="Start Date"
                         />
                         <input
                           value={editValue.endDate}
-                          onChange={(e) =>
-                            handleObjectInputChange(e, "endDate")
-                          }
-                          className="px-3 py-2 border rounded"
+                          onChange={(e) => handleObjectInputChange(e, "endDate")}
+                          className="px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                           placeholder="End Date"
                         />
                       </div>
@@ -1048,9 +1220,9 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                         onChange={(e) =>
                           handleObjectInputChange(e, "description")
                         }
-                        className="px-3 py-2 border rounded w-full"
-                        rows={2}
-                        placeholder="Description"
+                        className="px-3 py-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        rows={3}
+                        placeholder="Description (bullet points are best)"
                       />
                       <div className="flex gap-2">
                         <Button
@@ -1079,21 +1251,27 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                   ) : (
                     <>
                       {exp.company || exp.role ? (
-                        <>
-                          <p className="font-semibold">
-                            {exp.company} {exp.role && `— ${exp.role}`}
+                        <div>
+                          <p className="font-semibold dark:text-white">
+                            {exp.role}
                           </p>
-                          {(exp.startDate || exp.endDate) && (
-                            <p className="text-gray-600 text-sm">
-                              {exp.startDate}{" "}
-                              {exp.endDate && `- ${exp.endDate}`}
+                          <p className="text-sm italic dark:text-gray-300">
+                            {exp.company}
+                          </p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                            {exp.startDate} - {exp.endDate}
+                          </p>
+                          {exp.description && (
+                            <p className="mt-1 text-sm whitespace-pre-line dark:text-gray-300">
+                              {exp.description}
                             </p>
                           )}
-                          {exp.description && (
-                            <p className="text-gray-700">{exp.description}</p>
-                          )}
-                        </>
-                      ) : null}
+                        </div>
+                      ) : (
+                        <p className="text-gray-400 italic dark:text-gray-500">
+                          Click edit to fill in details
+                        </p>
+                      )}
                     </>
                   )}
                 </div>
@@ -1101,22 +1279,24 @@ const [newCert, setNewCert] = useState<CertificationItem>({
             })}
           </div>
 
-          {/* ---------------  PROJECTS  --------------- */}
-          <div className="mb-6 pb-4 border-gray-300 border-b">
+          {/* ---------------  PROJECTS  --------------- */}
+          <div className="mb-6 pb-4 border-gray-300 border-b dark:border-gray-700">
             <div className="flex justify-between items-center mb-3">
-              <h2 className="font-semibold text-xl">Projects</h2>
+              <h2 className="font-semibold text-xl dark:text-white">Projects</h2>
               {isEditable && (
                 <button
                   onClick={() => addNewItem("projects")}
-                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors dark:hover:bg-gray-700"
                   aria-label="Add project"
                 >
-                  <Plus className="w-5 h-5 text-green-600" />
+                  <Plus className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </button>
               )}
             </div>
             {resumeData.projects.length === 0 && !isEditable && (
-              <p className="text-gray-400 italic">No projects added yet</p>
+              <p className="text-gray-400 italic dark:text-gray-500">
+                No projects added yet
+              </p>
             )}
             {resumeData.projects.map((proj, i) => {
               if (isEditable && editing !== `proj-${i}` && !proj.title) {
@@ -1126,7 +1306,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
               return (
                 <div
                   key={i}
-                  className="relative mb-4 p-3 border border-gray-200 rounded"
+                  className="relative mb-4 p-3 border border-gray-200 rounded dark:border-gray-700 dark:bg-gray-800"
                 >
                   {isEditable && editing !== `proj-${i}` && (
                     <div className="top-2 right-2 absolute flex gap-2">
@@ -1140,15 +1320,15 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                             description: proj.description,
                           });
                         }}
-                        className="hover:bg-gray-100 p-1 rounded transition-colors"
+                        className="hover:bg-gray-100 p-1 rounded transition-colors dark:hover:bg-gray-700"
                       >
-                        <Edit2 className="w-4 h-4 text-blue-600" />
+                        <Edit2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       </button>
                       <button
                         onClick={() => deleteItem("projects", i)}
-                        className="hover:bg-gray-100 p-1 rounded transition-colors"
+                        className="hover:bg-gray-100 p-1 rounded transition-colors dark:hover:bg-gray-700"
                       >
-                        <Trash2 className="w-4 h-4 text-red-600" />
+                        <Trash2 className="w-4 h-4 text-red-600 dark:text-red-500" />
                       </button>
                     </div>
                   )}
@@ -1161,24 +1341,24 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                       <input
                         value={editValue.title}
                         onChange={(e) => handleObjectInputChange(e, "title")}
-                        className="px-3 py-2 border rounded w-full"
+                        className="px-3 py-2 border rounded w-full font-semibold dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                         placeholder="Project Title"
                         autoFocus
                       />
                       <input
                         value={editValue.link}
                         onChange={(e) => handleObjectInputChange(e, "link")}
-                        className="px-3 py-2 border rounded w-full"
-                        placeholder="Link (optional)"
+                        className="px-3 py-2 border rounded w-full text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="Project Link (URL)"
                       />
                       <textarea
                         value={editValue.description}
                         onChange={(e) =>
                           handleObjectInputChange(e, "description")
                         }
-                        className="px-3 py-2 border rounded w-full"
-                        rows={2}
-                        placeholder="Description"
+                        className="px-3 py-2 border rounded w-full text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        rows={3}
+                        placeholder="Description (e.g., Technologies used, outcome)"
                       />
                       <div className="flex gap-2">
                         <Button
@@ -1207,274 +1387,39 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                   ) : (
                     <>
                       {proj.title ? (
-                        <>
-                          <p className="font-semibold">{proj.title}</p>
+                        <div>
+                          <p className="font-semibold dark:text-white">
+                            {proj.title}
+                          </p>
                           {proj.link && (
                             <a
                               href={proj.link}
-                              className="text-blue-600 text-sm underline"
                               target="_blank"
                               rel="noopener noreferrer"
+                              className="text-sm text-blue-600 hover:underline dark:text-blue-400"
                             >
                               {proj.link}
                             </a>
                           )}
                           {proj.description && (
-                            <p className="mt-1 text-gray-700">
+                            <p className="mt-1 text-sm whitespace-pre-line dark:text-gray-300">
                               {proj.description}
                             </p>
                           )}
-                        </>
-                      ) : null}
+                        </div>
+                      ) : (
+                        <p className="text-gray-400 italic dark:text-gray-500">
+                          Click edit to fill in details
+                        </p>
+                      )}
                     </>
                   )}
                 </div>
               );
             })}
           </div>
-
-          {/* ---------------  CERTIFICATIONS   --------------- */}
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-3">
-              <h2 className="font-semibold text-xl">Certificates</h2>
-              {isEditable && editing !== "cert-new" && (
-                <button
-                  onClick={() => setEditing("cert-new")}
-                  className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
-                  aria-label="Add certification"
-                >
-                  <Plus className="w-5 h-5 text-green-600" />
-                </button>
-              )}
-            </div>
-{editing === "cert-new" && (
-  <div className="space-y-3 mb-4 p-4 border border-gray-200 rounded">
-    <input
-      value={newCert.name}
-      onChange={(e) => setNewCert({ ...newCert, name: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-      placeholder="Certification Name *"
-      autoFocus
-    />
-    <input
-      value={newCert.issuer}
-      onChange={(e) => setNewCert({ ...newCert, issuer: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-      placeholder="Issuer *"
-    />
-    <input
-      type="month"
-      value={newCert.issueDate}
-      onChange={(e) => setNewCert({ ...newCert, issueDate: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-    />
-    <input
-      value={newCert.credentialId}
-      onChange={(e) => setNewCert({ ...newCert, credentialId: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-      placeholder="Credential ID (optional)"
-    />
-    <input
-      value={newCert.credentialUrl}
-      onChange={(e) => setNewCert({ ...newCert, credentialUrl: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-      placeholder="Credential URL (optional: verification link)"
-    />
-    <div className="flex gap-2 mt-2">
-      <Button
-        variant="primary"
-        size="sm"
-        onClick={() => {
-          if (!newCert.name.trim() || !newCert.issuer.trim()) {
-            toast.error("Name and Issuer are required");
-            return;
-          }
-          saveToServer({ certifications: [...resumeData.certifications, newCert] });
-          setNewCert({
-            id: generateId(),
-            name: "",
-            issuer: "",
-            issueDate: "",
-            credentialId: "",
-            credentialUrl: "",
-            fileUrl: "",
-            fileName: "",
-          });
-          setEditing(null);
-          toast.success("Certification added");
-        }}
-      >
-        Add
-      </Button>
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={() => {
-          setEditing(null);
-        }}
-      >
-        Cancel
-      </Button>
-    </div>
-  </div>
-)}
-
-            <ul className="space-y-3">
-              {resumeData.certifications.map((cert, i) => (
-                <li
-                  key={cert.id}
-                  className="p-3 border border-gray-200 rounded"
-                >
-                  {editing === `cert-${cert.id}` &&
-                  editValue &&
-                  typeof editValue === "object" &&
-                  "id" in editValue ? (
-                    <div className="space-y-2">
-                      <input
-                        value={(editValue as CertificationItem).name}
-                        onChange={(e) =>
-                          setEditValue({
-                            ...(editValue as CertificationItem),
-                            name: e.target.value,
-                          })
-                        }
-                        className="px-3 py-2 border rounded w-full"
-                        placeholder="Name"
-                        autoFocus
-                      />
-                      <input
-                        value={(editValue as CertificationItem).issuer}
-                        onChange={(e) =>
-                          setEditValue({
-                            ...(editValue as CertificationItem),
-                            issuer: e.target.value,
-                          })
-                        }
-                        className="px-3 py-2 border rounded w-full"
-                        placeholder="Issuer"
-                      />
-                      <input
-                        type="month"
-                        value={(editValue as CertificationItem).issueDate}
-                        onChange={(e) =>
-                          setEditValue({
-                            ...(editValue as CertificationItem),
-                            issueDate: e.target.value,
-                          })
-                        }
-                        className="px-3 py-2 border rounded w-full"
-                      />
-                      <input
-                        value={(editValue as CertificationItem).credentialId}
-                        onChange={(e) =>
-                          setEditValue({
-                            ...(editValue as CertificationItem),
-                            credentialId: e.target.value,
-                          })
-                        }
-                        className="px-3 py-2 border rounded w-full"
-                        placeholder="Credential ID"
-                      />
-
-                      <input
-  value={(editValue as CertificationItem).credentialUrl || ""}
-  onChange={(e) =>
-    setEditValue({
-      ...(editValue as CertificationItem),
-      credentialUrl: e.target.value,
-    })
-  }
-  className="px-3 py-2 border rounded w-full"
-  placeholder="Credential URL (optional: verification link)"
-/>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          onClick={() => saveCertificationEdit(i)}
-                        >
-                          Save
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => {
-                            setEditing(null);
-                            setEditValue(null);
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="font-semibold">{cert.name}</p>
-                        <p className="text-gray-600 text-sm">{cert.issuer}</p>
-                        {cert.issueDate && (
-                          <p className="text-gray-500 text-xs">{cert.issueDate}</p>
-                        )}
-                        {cert.credentialId && (
-                          <p className="text-gray-500 text-xs">ID: {cert.credentialId}</p>
-                        )}
-                        {cert.fileUrl && (
-                          <a
-                            href={cert.fileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 text-sm underline"
-                          >
-                             {cert.fileName || "View file"}
-                          </a>
-
-                          
-                        )}
-{cert.credentialUrl && (
-  <a
-    href={cert.credentialUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="ml-2 text-blue-600 text-sm underline"
-    title="Verify certificate"
-  >
-     Verify
-  </a>
-)}
-
-                      </div>
-                      {isEditable && (
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => {
-                              setEditing(`cert-${cert.id}`);
-                              setEditValue(cert);
-                            }}
-                            className="text-blue-600 hover:text-blue-700"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => deleteCertification(cert.id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-
-            {resumeData.certifications.length === 0 && !isEditable && (
-              <p className="text-gray-400 italic">No Certificates added yet</p>
-            )}
-          </div>
         </div>
       </div>
-
       {renderSaveStatus()}
     </>
   );

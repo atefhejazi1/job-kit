@@ -46,13 +46,19 @@ export default function SearchPage() {
 
 function SearchPageLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 py-8">
+    // الخلفية
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 dark:from-slate-900 dark:via-slate-950 dark:to-black py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
+          {/* محاكي Breadcrumb */}
+          <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-1/4 mb-8"></div>
           <div className="grid gap-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
+              // محاكي JobCard
+              <div
+                key={i}
+                className="h-32 bg-gray-200 dark:bg-slate-800 rounded-lg"
+              ></div>
             ))}
           </div>
         </div>
@@ -158,28 +164,37 @@ function SearchPageContent() {
   const experienceLevels = ["Entry", "Mid", "Senior", "Lead"];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+    // الخلفية الرئيسية
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Breadcrumb */}
+        {/* Breadcrumb - (يفترض أنه يدعم الوضع الداكن داخلياً) */}
         <Breadcrumb />
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">
+          {/* عنوان */}
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
             Search Jobs
           </h1>
-          <p className="text-slate-600">Find your perfect job opportunity</p>
+          {/* وصف */}
+          <p className="text-slate-600 dark:text-slate-400">
+            Find your perfect job opportunity
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar Filters */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-md p-6 sticky top-4">
-              <h2 className="text-lg font-bold text-slate-900 mb-4">Filters</h2>
+            {/* حاوية الفلاتر */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-xl p-6 sticky top-4">
+              {/* عنوان الفلاتر */}
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
+                Filters
+              </h2>
 
               {/* Search Query */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Search
                 </label>
                 <input
@@ -187,13 +202,14 @@ function SearchPageContent() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Job title or keyword"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  // input field style
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 />
               </div>
 
               {/* Location */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Location
                 </label>
                 <input
@@ -203,13 +219,14 @@ function SearchPageContent() {
                     handleFilterChange("location", e.target.value)
                   }
                   placeholder="City or country"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  // input field style
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 />
               </div>
 
               {/* Work Type */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Work Type
                 </label>
                 <select
@@ -217,7 +234,8 @@ function SearchPageContent() {
                   onChange={(e) =>
                     handleFilterChange("workType", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  // select field style
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 >
                   <option value="">All Types</option>
                   {workTypeOptions.map((type) => (
@@ -230,7 +248,7 @@ function SearchPageContent() {
 
               {/* Experience Level */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Experience Level
                 </label>
                 <select
@@ -238,7 +256,8 @@ function SearchPageContent() {
                   onChange={(e) =>
                     handleFilterChange("experienceLevel", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  // select field style
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 >
                   <option value="">All Levels</option>
                   {experienceLevels.map((level) => (
@@ -251,7 +270,7 @@ function SearchPageContent() {
 
               {/* Salary Min */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Min Salary ($)
                 </label>
                 <input
@@ -261,13 +280,14 @@ function SearchPageContent() {
                     handleFilterChange("salaryMin", e.target.value)
                   }
                   placeholder="Min"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  // input field style
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 />
               </div>
 
               {/* Salary Max */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Max Salary ($)
                 </label>
                 <input
@@ -277,13 +297,14 @@ function SearchPageContent() {
                     handleFilterChange("salaryMax", e.target.value)
                   }
                   placeholder="Max"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  // input field style
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 />
               </div>
 
               {/* Skills */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Skills (comma separated)
                 </label>
                 <input
@@ -291,11 +312,12 @@ function SearchPageContent() {
                   value={filters.skills}
                   onChange={(e) => handleFilterChange("skills", e.target.value)}
                   placeholder="React, Node.js"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  // input field style
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 />
               </div>
 
-              {/* Action Buttons */}
+              {/* Action Buttons (يفترض أن مكون Button يدعم الوضع الداكن داخلياً) */}
               <div className="flex gap-2">
                 <Button
                   onClick={handleSearch}
@@ -319,25 +341,27 @@ function SearchPageContent() {
           <div className="lg:col-span-3">
             {/* Results Info */}
             {jobs && jobs.length > 0 && (
-              <div className="mb-4 text-sm text-slate-600">
+              <div className="mb-4 text-sm text-slate-600 dark:text-slate-400">
                 Found <span className="font-bold">{total}</span> job
                 {total !== 1 ? "s" : ""}
               </div>
             )}
 
-            {/* Job Cards */}
+            {/* Job Cards (يفترض أن مكون JobCard يدعم الوضع الداكن داخلياً) */}
             <div className="space-y-4">
               {jobs && jobs.length > 0 ? (
                 jobs.map((job) => <JobCard key={job.id} job={job} />)
               ) : query || Object.values(filters).some((v) => v) ? (
-                <div className="bg-white rounded-lg shadow-md p-12 text-center">
-                  <p className="text-slate-600">
+                // لا يوجد نتائج
+                <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-xl p-12 text-center">
+                  <p className="text-slate-600 dark:text-slate-400">
                     No jobs found matching your search.
                   </p>
                 </div>
               ) : (
-                <div className="bg-white rounded-lg shadow-md p-12 text-center">
-                  <p className="text-slate-600">
+                // الحالة الأولية (قبل البحث)
+                <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-xl p-12 text-center">
+                  <p className="text-slate-600 dark:text-slate-400">
                     Enter search terms or select filters to find jobs.
                   </p>
                 </div>
@@ -347,6 +371,7 @@ function SearchPageContent() {
             {/* Pagination */}
             {jobs && jobs.length > 0 && totalPages > 1 && (
               <div className="mt-8 flex justify-center gap-2">
+                {/* Previous Button (يفترض أن مكون Button يدعم الوضع الداكن داخلياً) */}
                 <Button
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
@@ -354,16 +379,18 @@ function SearchPageContent() {
                 >
                   Previous
                 </Button>
+
                 <div className="flex items-center gap-2">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (page) => (
+                      // زر ترقيم الصفحات
                       <button
                         key={page}
                         onClick={() => setCurrentPage(page)}
                         className={`px-3 py-2 rounded-lg transition ${
                           currentPage === page
                             ? "bg-blue-600 text-white"
-                            : "bg-white text-slate-900 border border-slate-300 hover:bg-slate-50"
+                            : "bg-white text-slate-900 border border-slate-300 hover:bg-slate-50 dark:bg-slate-700 dark:text-white dark:border-slate-600 dark:hover:bg-slate-600"
                         }`}
                       >
                         {page}
@@ -371,6 +398,8 @@ function SearchPageContent() {
                     )
                   )}
                 </div>
+
+                {/* Next Button (يفترض أن مكون Button يدعم الوضع الداكن داخلياً) */}
                 <Button
                   onClick={() =>
                     setCurrentPage(Math.min(totalPages, currentPage + 1))

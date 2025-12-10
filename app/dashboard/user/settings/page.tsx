@@ -40,7 +40,12 @@ export default function UserSettingsPage() {
 
       // Try to use context update first if provided
       if (typeof updateUser === "function") {
-        await updateUser({ name: name.trim(), email: email.trim(), resumeUrl: resumeUrl || null, notifications });
+        await updateUser({
+          name: name.trim(),
+          email: email.trim(),
+          resumeUrl: resumeUrl || null,
+          notifications,
+        });
         setSuccess("Settings updated successfully.");
         // refresh or redirect if needed
         setTimeout(() => router.refresh(), 900);
@@ -51,7 +56,12 @@ export default function UserSettingsPage() {
       const res = await fetch("/api/auth/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), email: email.trim(), resumeUrl, notifications }),
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          resumeUrl,
+          notifications,
+        }),
       });
 
       const data = await res.json();
@@ -67,51 +77,108 @@ export default function UserSettingsPage() {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow p-6">
+    <div className="bg-white rounded-xl shadow p-6 dark:bg-slate-800 dark:shadow-xl dark:border dark:border-slate-700">
       <div className="flex items-center gap-4 mb-6">
         <Avatar name={name || user?.name} size="lg" />
         <div>
-          <h2 className="text-xl font-semibold">User Settings</h2>
-          <p className="text-sm text-gray-500">Manage your profile and preferences</p>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            User Settings
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-slate-400">
+            Manage your profile and preferences
+          </p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Full Name Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Full Name</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} className="mt-1 block w-full rounded-md border-gray-200 p-3" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
+            Full Name
+          </label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="mt-1 block w-full rounded-md border border-gray-200 p-3 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+          />
         </div>
 
+        {/* Email Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Email</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="mt-1 block w-full rounded-md border-gray-200 p-3" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
+            Email
+          </label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            className="mt-1 block w-full rounded-md border border-gray-200 p-3 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+          />
         </div>
 
+        {/* CV Link Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">CV Link (resumeUrl)</label>
-          <input value={resumeUrl} onChange={(e) => setResumeUrl(e.target.value)} placeholder="https://drive.google.com/..." className="mt-1 block w-full rounded-md border-gray-200 p-3" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
+            CV Link (resumeUrl)
+          </label>
+          <input
+            value={resumeUrl}
+            onChange={(e) => setResumeUrl(e.target.value)}
+            placeholder="https://drive.google.com/..."
+            className="mt-1 block w-full rounded-md border border-gray-200 p-3 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"
+          />
         </div>
 
-        <div className="flex items-center justify-between">
+        {/* Notifications Toggle */}
+        <div className="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-slate-700">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email Notifications</label>
-            <p className="text-xs text-gray-500">Receive email updates about new jobs and application status</p>
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
+              Email Notifications
+            </label>
+            <p className="text-xs text-gray-500 dark:text-slate-400">
+              Receive email updates about new jobs and application status
+            </p>
           </div>
           <div>
             <label className="inline-flex items-center gap-2">
-              <input type="checkbox" checked={notifications} onChange={(e) => setNotifications(e.target.checked)} className="form-checkbox h-5 w-5" />
+              <input
+                type="checkbox"
+                checked={notifications}
+                onChange={(e) => setNotifications(e.target.checked)}
+                className="form-checkbox h-5 w-5 text-blue-600 rounded dark:bg-slate-700 dark:border-slate-600 dark:checked:bg-blue-600 dark:checked:border-transparent transition duration-150 ease-in-out"
+              />
             </label>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button disabled={submitting} className="py-2 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-md font-semibold">
+        {/* Submit Button */}
+        <div className="flex items-center gap-3 pt-2">
+          <button
+            disabled={submitting}
+            className={`
+              py-2 px-6 rounded-md font-semibold transition-colors duration-200
+              ${
+                submitting
+                  ? "bg-gray-400 text-gray-700 cursor-not-allowed dark:bg-slate-600 dark:text-slate-400"
+                  : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700"
+              }
+            `}
+          >
             {submitting ? "Saving..." : "Save Changes"}
           </button>
         </div>
 
-        {error && <p className="text-red-600">{error}</p>}
-        {success && <p className="text-green-600">{success}</p>}
+        {/* Status Messages */}
+        {error && (
+          <p className="text-red-600 bg-red-50 p-3 rounded-md dark:bg-red-900/40 dark:text-red-300">
+            Error: {error}
+          </p>
+        )}
+        {success && (
+          <p className="text-green-600 bg-green-50 p-3 rounded-md dark:bg-green-900/40 dark:text-green-300">
+            Success: {success}
+          </p>
+        )}
       </form>
     </div>
   );
