@@ -51,17 +51,17 @@ export default function ResumePreview({
     "idle" | "saving" | "saved" | "error"
   >("idle");
   const [pendingSave, setPendingSave] = useState(false);
-const [newCert, setNewCert] = useState<CertificationItem>({
-  id: generateId(),
-  name: "",
-  issuer: "",
-  issueDate: "",
-  credentialId: "",
-  credentialUrl: "",
-  fileUrl: "",
-  fileName: "",
-});
-
+  const [newCert, setNewCert] = useState<CertificationItem>(() => ({
+    type: "certification",
+    id: generateId(),
+    name: "",
+    issuer: "",
+    issueDate: "",
+    credentialId: "",
+    credentialUrl: "",
+    fileUrl: "",
+    fileName: "",
+  }));
 
   const isEditable = mode === "editable";
 
@@ -343,10 +343,10 @@ const [newCert, setNewCert] = useState<CertificationItem>({
     [editValue, resumeData, saveToServer]
   );
 
-  // ----------- CERTIFICATIONS    -----------
   const addNewCertification = useCallback(() => {
     if (!newItemName.trim()) return;
     const newCert: CertificationItem = {
+      type: "certification",
       id: generateId(),
       name: newItemName.trim(),
       issuer: "Unknown",
@@ -940,14 +940,6 @@ const [newCert, setNewCert] = useState<CertificationItem>({
             })}
           </div>
 
-
-
-
-
-
-
-
-
           {/* ---------------  EXPERIENCE  --------------- */}
           <div className="mb-6 pb-4 border-gray-300 border-b">
             <div className="flex justify-between items-center mb-3">
@@ -1247,88 +1239,100 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                 </button>
               )}
             </div>
-{editing === "cert-new" && (
-  <div className="space-y-3 mb-4 p-4 border border-gray-200 rounded">
-    <input
-      value={newCert.name}
-      onChange={(e) => setNewCert({ ...newCert, name: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-      placeholder="Certification Name *"
-      autoFocus
-    />
-    <input
-      value={newCert.issuer}
-      onChange={(e) => setNewCert({ ...newCert, issuer: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-      placeholder="Issuer *"
-    />
-    <input
-      type="month"
-      value={newCert.issueDate}
-      onChange={(e) => setNewCert({ ...newCert, issueDate: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-    />
-    <input
-      value={newCert.credentialId}
-      onChange={(e) => setNewCert({ ...newCert, credentialId: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-      placeholder="Credential ID (optional)"
-    />
-    <input
-      value={newCert.credentialUrl}
-      onChange={(e) => setNewCert({ ...newCert, credentialUrl: e.target.value })}
-      className="px-3 py-2 border rounded w-full"
-      placeholder="Credential URL (optional: verification link)"
-    />
-    <div className="flex gap-2 mt-2">
-      <Button
-        variant="primary"
-        size="sm"
-        onClick={() => {
-          if (!newCert.name.trim() || !newCert.issuer.trim()) {
-            toast.error("Name and Issuer are required");
-            return;
-          }
-          saveToServer({ certifications: [...resumeData.certifications, newCert] });
-          setNewCert({
-            id: generateId(),
-            name: "",
-            issuer: "",
-            issueDate: "",
-            credentialId: "",
-            credentialUrl: "",
-            fileUrl: "",
-            fileName: "",
-          });
-          setEditing(null);
-          toast.success("Certification added");
-        }}
-      >
-        Add
-      </Button>
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={() => {
-          setEditing(null);
-        }}
-      >
-        Cancel
-      </Button>
-    </div>
-  </div>
-)}
+            {editing === "cert-new" && (
+              <div className="space-y-3 mb-4 p-4 border border-gray-200 rounded">
+                <input
+                  value={newCert.name}
+                  onChange={(e) =>
+                    setNewCert({ ...newCert, name: e.target.value })
+                  }
+                  className="px-3 py-2 border rounded w-full"
+                  placeholder="Certification Name *"
+                  autoFocus
+                />
+                <input
+                  value={newCert.issuer}
+                  onChange={(e) =>
+                    setNewCert({ ...newCert, issuer: e.target.value })
+                  }
+                  className="px-3 py-2 border rounded w-full"
+                  placeholder="Issuer *"
+                />
+                <input
+                  type="month"
+                  value={newCert.issueDate}
+                  onChange={(e) =>
+                    setNewCert({ ...newCert, issueDate: e.target.value })
+                  }
+                  className="px-3 py-2 border rounded w-full"
+                />
+                <input
+                  value={newCert.credentialId}
+                  onChange={(e) =>
+                    setNewCert({ ...newCert, credentialId: e.target.value })
+                  }
+                  className="px-3 py-2 border rounded w-full"
+                  placeholder="Credential ID (optional)"
+                />
+                <input
+                  value={newCert.credentialUrl}
+                  onChange={(e) =>
+                    setNewCert({ ...newCert, credentialUrl: e.target.value })
+                  }
+                  className="px-3 py-2 border rounded w-full"
+                  placeholder="Credential URL (optional: verification link)"
+                />
+                <div className="flex gap-2 mt-2">
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      if (!newCert.name.trim() || !newCert.issuer.trim()) {
+                        toast.error("Name and Issuer are required");
+                        return;
+                      }
+                      setResumeData({
+                        ...resumeData,
+                        certifications: [...resumeData.certifications, newCert],
+                      });
+                      setNewCert({
+                        type: "certification",
+                        id: generateId(),
+                        name: "",
+                        issuer: "",
+                        issueDate: "",
+                        credentialId: "",
+                        credentialUrl: "",
+                        fileUrl: "",
+                        fileName: "",
+                      });
+                      setEditing(null);
+                      toast.success("Certification added");
+                    }}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      setEditing(null);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            )}
 
             <ul className="space-y-3">
               {resumeData.certifications.map((cert, i) => (
-                <li
-                  key={cert.id}
-                  className="p-3 border border-gray-200 rounded"
-                >
+                <li key={cert.id} className="bg-white p-4 rounded-lg border">
                   {editing === `cert-${cert.id}` &&
                   editValue &&
                   typeof editValue === "object" &&
-                  "id" in editValue ? (
+                  "type" in editValue &&
+                  editValue.type === "certification" ? (
                     <div className="space-y-2">
                       <input
                         value={(editValue as CertificationItem).name}
@@ -1336,7 +1340,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                           setEditValue({
                             ...(editValue as CertificationItem),
                             name: e.target.value,
-                          })
+                          } as CertificationItem)
                         }
                         className="px-3 py-2 border rounded w-full"
                         placeholder="Name"
@@ -1348,7 +1352,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                           setEditValue({
                             ...(editValue as CertificationItem),
                             issuer: e.target.value,
-                          })
+                          } as CertificationItem)
                         }
                         className="px-3 py-2 border rounded w-full"
                         placeholder="Issuer"
@@ -1360,7 +1364,7 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                           setEditValue({
                             ...(editValue as CertificationItem),
                             issueDate: e.target.value,
-                          })
+                          } as CertificationItem)
                         }
                         className="px-3 py-2 border rounded w-full"
                       />
@@ -1370,23 +1374,25 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                           setEditValue({
                             ...(editValue as CertificationItem),
                             credentialId: e.target.value,
-                          })
+                          } as CertificationItem)
                         }
                         className="px-3 py-2 border rounded w-full"
                         placeholder="Credential ID"
                       />
 
                       <input
-  value={(editValue as CertificationItem).credentialUrl || ""}
-  onChange={(e) =>
-    setEditValue({
-      ...(editValue as CertificationItem),
-      credentialUrl: e.target.value,
-    })
-  }
-  className="px-3 py-2 border rounded w-full"
-  placeholder="Credential URL (optional: verification link)"
-/>
+                        value={
+                          (editValue as CertificationItem).credentialUrl || ""
+                        }
+                        onChange={(e) =>
+                          setEditValue({
+                            ...(editValue as CertificationItem),
+                            credentialUrl: e.target.value,
+                          } as CertificationItem)
+                        }
+                        className="px-3 py-2 border rounded w-full"
+                        placeholder="Credential URL (optional: verification link)"
+                      />
                       <div className="flex gap-2">
                         <Button
                           variant="primary"
@@ -1413,10 +1419,14 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                         <p className="font-semibold">{cert.name}</p>
                         <p className="text-gray-600 text-sm">{cert.issuer}</p>
                         {cert.issueDate && (
-                          <p className="text-gray-500 text-xs">{cert.issueDate}</p>
+                          <p className="text-gray-500 text-xs">
+                            {cert.issueDate}
+                          </p>
                         )}
                         {cert.credentialId && (
-                          <p className="text-gray-500 text-xs">ID: {cert.credentialId}</p>
+                          <p className="text-gray-500 text-xs">
+                            ID: {cert.credentialId}
+                          </p>
                         )}
                         {cert.fileUrl && (
                           <a
@@ -1425,23 +1435,20 @@ const [newCert, setNewCert] = useState<CertificationItem>({
                             rel="noopener noreferrer"
                             className="text-blue-600 text-sm underline"
                           >
-                             {cert.fileName || "View file"}
+                            {cert.fileName || "View file"}
                           </a>
-
-                          
                         )}
-{cert.credentialUrl && (
-  <a
-    href={cert.credentialUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="ml-2 text-blue-600 text-sm underline"
-    title="Verify certificate"
-  >
-     Verify
-  </a>
-)}
-
+                        {cert.credentialUrl && (
+                          <a
+                            href={cert.credentialUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-2 text-blue-600 text-sm underline"
+                            title="Verify certificate"
+                          >
+                            Verify
+                          </a>
+                        )}
                       </div>
                       {isEditable && (
                         <div className="flex gap-2">

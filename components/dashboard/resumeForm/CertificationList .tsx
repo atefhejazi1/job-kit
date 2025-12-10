@@ -3,20 +3,22 @@
 import { CertificationItem } from "@/types/resume.data.types";
 import { useResume } from "@/contexts/ResumeContext";
 import { toast } from "react-hot-toast";
-import { Award, Trash2, ExternalLink, Calendar, Key, FileText } from "lucide-react";
+import { Award, Trash2, ExternalLink, Calendar, Key } from "lucide-react";
 
 interface CertificationListProps {
   certifications: CertificationItem[];
 }
 
-export default function CertificationList({ certifications }: CertificationListProps) {
+export default function CertificationList({
+  certifications,
+}: CertificationListProps) {
   const { resumeData, setResumeData } = useResume();
 
   const deleteCertification = (index: number) => {
     if (!confirm("Delete this certificate?")) return;
-    setResumeData({ 
-      ...resumeData, 
-      certifications: resumeData.certifications.filter((_, i) => i !== index) 
+    setResumeData({
+      ...resumeData,
+      certifications: resumeData.certifications.filter((_, i) => i !== index),
     });
     toast.success("Certificate deleted successfully");
   };
@@ -47,7 +49,10 @@ export default function CertificationList({ certifications }: CertificationListP
                   {cert.issueDate && (
                     <p className="flex items-center gap-1">
                       <Calendar className="w-4 h-4 text-gray-500" />
-                      {new Date(cert.issueDate + "-01").toLocaleDateString(undefined, { month: "short", year: "numeric" })}
+                      {new Date(cert.issueDate + "-01").toLocaleDateString(
+                        undefined,
+                        { month: "short", year: "numeric" }
+                      )}
                     </p>
                   )}
                   {cert.credentialId && (
@@ -57,23 +62,22 @@ export default function CertificationList({ certifications }: CertificationListP
                     </p>
                   )}
                 </div>
-                <div className="flex items-center gap-3 mt-2">
-                  {cert.credentialUrl && (
-                    <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-blue-600 text-sm hover:underline">
-                      <ExternalLink className="w-4 h-4" /> Verify
-                    </a>
-                  )}
-                  {cert.fileUrl && (
-                    <a href={cert.fileUrl} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-blue-600 text-sm hover:underline">
-                      <FileText className="w-4 h-4" /> View Certificate
-                    </a>
-                  )}
-                </div>
+                {cert.credentialUrl && (
+                  <a
+                    href={cert.credentialUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 mt-2 text-blue-600 text-sm hover:underline"
+                  >
+                    <ExternalLink className="w-4 h-4" /> Verify
+                  </a>
+                )}
               </div>
             </div>
-            <button onClick={() => deleteCertification(index)} className="opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-800 transition-opacity cursor-pointer">
+            <button
+              onClick={() => deleteCertification(index)}
+              className="opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-800 transition-opacity cursor-pointer"
+            >
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
