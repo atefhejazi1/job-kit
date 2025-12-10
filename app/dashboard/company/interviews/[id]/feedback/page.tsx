@@ -65,7 +65,7 @@ export default function FeedbackPage() {
 
     try {
       if (!formData.feedback || formData.rating < 1 || formData.rating > 5) {
-        toast.error("Please fill in all required fields");
+        toast.error("Please fill in the feedback and rating fields.");
         return;
       }
 
@@ -81,6 +81,7 @@ export default function FeedbackPage() {
       }
 
       toast.success("Feedback submitted successfully!");
+      // Navigate back to the interview details page
       router.push(`/dashboard/company/interviews/${interviewId}`);
     } catch (error: any) {
       console.error("Error submitting feedback:", error);
@@ -92,7 +93,7 @@ export default function FeedbackPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
       </div>
     );
@@ -100,46 +101,47 @@ export default function FeedbackPage() {
 
   if (!interview) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <p className="text-red-500">Interview not found</p>
+      <div className="container mx-auto px-4 py-8 dark:bg-gray-900 min-h-screen">
+        <div className="text-center bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <p className="text-red-500 dark:text-red-400">Interview not found</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl dark:bg-gray-900 min-h-screen">
       <button
         onClick={() => router.back()}
-        className="mb-6 text-gray-600 hover:text-gray-900 flex items-center gap-2"
+        className="mb-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white flex items-center gap-2 transition-colors"
       >
         ← Back
       </button>
 
-      <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+      {/* Header/Summary Block */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-2xl p-6 mb-6">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
           Interview Feedback
         </h1>
-        <div className="border-l-4 border-orange-500 pl-4 bg-orange-50 p-4 rounded">
-          <p className="text-sm text-gray-600">Interview</p>
-          <p className="font-semibold text-gray-900">{interview.title}</p>
-          <p className="text-sm text-gray-600 mt-2">Candidate</p>
-          <p className="font-semibold text-gray-900">
+        <div className="border-l-4 border-orange-500 pl-4 bg-orange-50 dark:bg-gray-700 p-4 rounded">
+          <p className="text-sm text-gray-600 dark:text-gray-400">Interview</p>
+          <p className="font-semibold text-gray-900 dark:text-white">{interview.title}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Candidate</p>
+          <p className="font-semibold text-gray-900 dark:text-white">
             {interview.candidate.name}
           </p>
-          <p className="text-sm text-gray-600 mt-2">Job</p>
-          <p className="font-semibold text-gray-900">{interview.job.title}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Job</p>
+          <p className="font-semibold text-gray-900 dark:text-white">{interview.job.title}</p>
         </div>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg shadow-lg p-6"
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-2xl p-6"
       >
         {/* Rating */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
             Overall Rating <span className="text-red-500">*</span>
           </label>
           <div className="flex items-center gap-4">
@@ -148,25 +150,27 @@ export default function FeedbackPage() {
                 key={star}
                 type="button"
                 onClick={() => setFormData({ ...formData, rating: star })}
-                className={`text-4xl transition-all ${
+                className={`text-4xl transition-transform transform ${
                   star <= formData.rating
-                    ? "text-yellow-400 scale-110"
-                    : "text-gray-300 hover:text-yellow-200"
+                    ? "text-yellow-400 scale-110 hover:scale-125"
+                    : "text-gray-300 dark:text-gray-600 hover:text-yellow-300 dark:hover:text-yellow-400"
                 }`}
               >
                 ⭐
               </button>
             ))}
-            <span className="text-gray-600 ml-2">({formData.rating}/5)</span>
+            <span className="text-gray-600 dark:text-gray-400 ml-2">
+              ({formData.rating}/5)
+            </span>
           </div>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
             1 = Poor, 2 = Fair, 3 = Good, 4 = Very Good, 5 = Excellent
           </p>
         </div>
 
         {/* Feedback */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
             Interview Feedback <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -174,20 +178,20 @@ export default function FeedbackPage() {
             onChange={(e) =>
               setFormData({ ...formData, feedback: e.target.value })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
             rows={8}
             placeholder="Provide detailed feedback about the candidate's performance, strengths, areas for improvement, technical skills, communication, etc."
             required
           />
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             This feedback will be stored internally and can be shared with the
-            candidate at your discretion
+            candidate at your discretion.
           </p>
         </div>
 
         {/* Application Status Update */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
             Update Application Status
           </label>
           <select
@@ -195,33 +199,33 @@ export default function FeedbackPage() {
             onChange={(e) =>
               setFormData({ ...formData, applicationStatus: e.target.value })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors appearance-none"
           >
             <option value="">-- Keep Current Status --</option>
-            <option value="INTERVIEWING">Continue Interviewing</option>
-            <option value="ACCEPTED">Accept Candidate (Make Offer)</option>
-            <option value="REJECTED">Reject Candidate</option>
+            <option value="INTERVIEWING">Continue Interviewing (Next Stage)</option>
+            <option value="ACCEPTED">Accepted (Make Offer)</option>
+            <option value="REJECTED">Rejected</option>
             <option value="SHORTLISTED">Move to Shortlist</option>
           </select>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Optionally update the application status based on the interview
-            outcome
+            outcome.
           </p>
         </div>
 
         {/* Submit Button */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
           <button
             type="button"
             onClick={() => router.back()}
-            className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
             disabled={submitting}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:shadow-lg transition-shadow disabled:opacity-50"
+            className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg shadow-md hover:shadow-lg transition-shadow disabled:opacity-50"
             disabled={submitting}
           >
             {submitting ? "Submitting..." : "Submit Feedback"}
@@ -229,16 +233,17 @@ export default function FeedbackPage() {
         </div>
       </form>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-        <h3 className="font-semibold text-blue-900 mb-2">
+      {/* Tips Block */}
+      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mt-6">
+        <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">
           💡 Tips for Effective Feedback
         </h3>
-        <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-          <li>Be specific and provide examples</li>
-          <li>Focus on both strengths and areas for improvement</li>
-          <li>Comment on technical skills, communication, and cultural fit</li>
-          <li>Keep feedback professional and constructive</li>
-          <li>Include any relevant observations or concerns</li>
+        <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-1 list-disc list-inside">
+          <li>Be specific and provide examples.</li>
+          <li>Focus on both strengths and areas for improvement.</li>
+          <li>Comment on technical skills, communication, and cultural fit.</li>
+          <li>Keep feedback professional and constructive.</li>
+          <li>Include any relevant observations or concerns.</li>
         </ul>
       </div>
     </div>

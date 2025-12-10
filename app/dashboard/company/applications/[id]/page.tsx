@@ -122,20 +122,20 @@ export default function ApplicationDetailsPage() {
 
   const getStatusBadge = (status: string) => {
     const statusStyles = {
-      PENDING: "bg-yellow-100 text-yellow-800",
-      REVIEWED: "bg-blue-100 text-blue-800",
-      SHORTLISTED: "bg-green-100 text-green-800",
-      INTERVIEWING: "bg-purple-100 text-purple-800",
-      ACCEPTED: "bg-emerald-100 text-emerald-800",
-      REJECTED: "bg-red-100 text-red-800",
-      WITHDRAWN: "bg-gray-100 text-gray-800",
+      PENDING: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+      REVIEWED: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+      SHORTLISTED: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+      INTERVIEWING: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
+      ACCEPTED: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
+      REJECTED: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+      WITHDRAWN: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
     };
 
     return (
       <span
         className={`px-3 py-1 rounded-full text-sm font-medium ${
           statusStyles[status as keyof typeof statusStyles] ||
-          "bg-gray-100 text-gray-800"
+          "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
         }`}
       >
         {status.replace("_", " ")}
@@ -159,15 +159,15 @@ export default function ApplicationDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-300 rounded w-1/3 mb-4"></div>
-            <div className="h-4 bg-gray-300 rounded w-1/4 mb-8"></div>
-            <div className="bg-white rounded-lg p-6">
+            <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
+            <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/4 mb-8"></div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
               <div className="space-y-4">
                 {[...Array(8)].map((_, i) => (
-                  <div key={i} className="h-4 bg-gray-300 rounded"></div>
+                  <div key={i} className="h-4 bg-gray-300 dark:bg-gray-700 rounded"></div>
                 ))}
               </div>
             </div>
@@ -179,13 +179,13 @@ export default function ApplicationDetailsPage() {
 
   if (!application) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="text-6xl mb-4">❌</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Application Not Found
           </h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             The application you're looking for doesn't exist or you don't have
             access to it.
           </p>
@@ -201,7 +201,7 @@ export default function ApplicationDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-6">
@@ -222,15 +222,15 @@ export default function ApplicationDetailsPage() {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            <span>Back to Applications</span>
+            <span className="dark:text-white">Back to Applications</span>
           </button>
 
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-secondary mb-2">
+              <h1 className="text-3xl font-bold text-secondary dark:text-white mb-2">
                 {application.applicantName}
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Applied for {application.job.title}
               </p>
             </div>
@@ -245,38 +245,38 @@ export default function ApplicationDetailsPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Basic Information */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                 Contact Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Email
                   </label>
-                  <p className="text-gray-900">{application.email}</p>
+                  <p className="text-gray-900 dark:text-white">{application.email}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Phone
                   </label>
-                  <p className="text-gray-900">
+                  <p className="text-gray-900 dark:text-white">
                     {application.phone || "Not provided"}
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Experience Level
                   </label>
-                  <p className="text-gray-900">
+                  <p className="text-gray-900 dark:text-white">
                     {application.experience || "Not specified"}
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Expected Salary
                   </label>
-                  <p className="text-gray-900">
+                  <p className="text-gray-900 dark:text-white">
                     {application.expectedSalary
                       ? formatSalary(
                           application.expectedSalary,
@@ -286,20 +286,20 @@ export default function ApplicationDetailsPage() {
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Available From
                   </label>
-                  <p className="text-gray-900">
+                  <p className="text-gray-900 dark:text-white">
                     {application.availableFrom
                       ? new Date(application.availableFrom).toLocaleDateString()
                       : "Immediately"}
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Applied Date
                   </label>
-                  <p className="text-gray-900">
+                  <p className="text-gray-900 dark:text-white">
                     {formatDate(application.createdAt)}
                   </p>
                 </div>
@@ -308,12 +308,12 @@ export default function ApplicationDetailsPage() {
 
             {/* Cover Letter */}
             {application.coverLetter && (
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg p-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                   Cover Letter
                 </h2>
-                <div className="prose max-w-none">
-                  <p className="text-gray-700 whitespace-pre-wrap">
+                <div className="prose max-w-none dark:prose-invert">
+                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                     {application.coverLetter}
                   </p>
                 </div>
@@ -322,13 +322,13 @@ export default function ApplicationDetailsPage() {
 
             {/* Resume */}
             {application.resumeUrl && (
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg p-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                   Resume
                 </h2>
                 <div className="flex items-center space-x-3">
                   <svg
-                    className="w-8 h-8 text-red-500"
+                    className="w-8 h-8 text-red-500 dark:text-red-400"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -339,8 +339,8 @@ export default function ApplicationDetailsPage() {
                     />
                   </svg>
                   <div>
-                    <p className="font-medium text-gray-900">Resume.pdf</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="font-medium text-gray-900 dark:text-white">Resume.pdf</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       Click to view or download
                     </p>
                   </div>
@@ -360,37 +360,37 @@ export default function ApplicationDetailsPage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Job Details */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Job Details
               </h3>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Position
                   </label>
-                  <p className="text-gray-900">{application.job.title}</p>
+                  <p className="text-gray-900 dark:text-white">{application.job.title}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Location
                   </label>
-                  <p className="text-gray-900">{application.job.location}</p>
+                  <p className="text-gray-900 dark:text-white">{application.job.location}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Work Type
                   </label>
-                  <p className="text-gray-900">
+                  <p className="text-gray-900 dark:text-white">
                     {application.job.workType.replace("_", " ")}
                   </p>
                 </div>
                 {(application.job.salaryMin || application.job.salaryMax) && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Salary Range
                     </label>
-                    <p className="text-gray-900">
+                    <p className="text-gray-900 dark:text-white">
                       {application.job.salaryMin && application.job.salaryMax
                         ? `${formatSalary(
                             application.job.salaryMin,
@@ -415,8 +415,8 @@ export default function ApplicationDetailsPage() {
             </div>
 
             {/* Status Actions */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Actions
               </h3>
               <div className="space-y-3">
@@ -506,8 +506,8 @@ export default function ApplicationDetailsPage() {
             </div>
 
             {/* Notes */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Internal Notes
               </h3>
               <textarea
@@ -515,7 +515,7 @@ export default function ApplicationDetailsPage() {
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add your notes about this candidate..."
                 rows={4}
-                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
               />
               <button
                 onClick={updateNotes}

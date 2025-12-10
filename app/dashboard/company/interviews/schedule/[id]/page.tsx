@@ -142,7 +142,7 @@ export default function ScheduleInterviewPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
       </div>
     );
@@ -150,43 +150,43 @@ export default function ScheduleInterviewPage() {
 
   if (!application) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <p className="text-red-500">Application not found</p>
+      <div className="container mx-auto px-4 py-8 dark:bg-gray-900 min-h-screen">
+        <div className="text-center bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <p className="text-red-500 dark:text-red-400">Application not found</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl dark:bg-gray-900 min-h-screen">
       <button
         onClick={() => router.back()}
-        className="mb-6 text-gray-600 hover:text-gray-900 flex items-center gap-2"
+        className="mb-6 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white flex items-center gap-2 transition-colors"
       >
         ← Back
       </button>
 
-      <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-2xl p-6 mb-6">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
           Schedule Interview
         </h1>
-        <div className="border-l-4 border-orange-500 pl-4 bg-orange-50 p-4 rounded">
-          <p className="text-sm text-gray-600">Candidate</p>
-          <p className="font-semibold text-gray-900">{application.user.name}</p>
-          <p className="text-sm text-gray-600">{application.user.email}</p>
-          <p className="text-sm text-gray-600 mt-2">Job</p>
-          <p className="font-semibold text-gray-900">{application.job.title}</p>
+        <div className="border-l-4 border-orange-500 pl-4 bg-orange-50 dark:bg-gray-700/50 p-4 rounded">
+          <p className="text-sm text-gray-600 dark:text-gray-400">Candidate</p>
+          <p className="font-semibold text-gray-900 dark:text-white">{application.user.name}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{application.user.email}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Job</p>
+          <p className="font-semibold text-gray-900 dark:text-white">{application.job.title}</p>
         </div>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg shadow-lg p-6"
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-2xl p-6"
       >
         {/* Interview Title */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
             Interview Title <span className="text-red-500">*</span>
           </label>
           <input
@@ -195,7 +195,7 @@ export default function ScheduleInterviewPage() {
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             placeholder="e.g., Technical Interview Round 1"
             required
           />
@@ -203,7 +203,7 @@ export default function ScheduleInterviewPage() {
 
         {/* Description */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
             Description
           </label>
           <textarea
@@ -211,7 +211,7 @@ export default function ScheduleInterviewPage() {
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             rows={3}
             placeholder="Brief description of what will be covered in this interview"
           />
@@ -219,7 +219,7 @@ export default function ScheduleInterviewPage() {
 
         {/* Interview Type */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
             Interview Type <span className="text-red-500">*</span>
           </label>
           <select
@@ -227,7 +227,7 @@ export default function ScheduleInterviewPage() {
             onChange={(e) =>
               setFormData({ ...formData, interviewType: e.target.value })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             required
           >
             <option value="VIDEO_CALL">🎥 Video Call</option>
@@ -240,7 +240,7 @@ export default function ScheduleInterviewPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {/* Scheduled Date & Time */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
               Date & Time <span className="text-red-500">*</span>
             </label>
             <input
@@ -249,14 +249,14 @@ export default function ScheduleInterviewPage() {
               onChange={(e) =>
                 setFormData({ ...formData, scheduledAt: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               required
             />
           </div>
 
           {/* Duration */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
               Duration (minutes) <span className="text-red-500">*</span>
             </label>
             <input
@@ -265,7 +265,7 @@ export default function ScheduleInterviewPage() {
               onChange={(e) =>
                 setFormData({ ...formData, duration: parseInt(e.target.value) })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               min={15}
               max={480}
               required
@@ -277,7 +277,7 @@ export default function ScheduleInterviewPage() {
         {(formData.interviewType === "VIDEO_CALL" ||
           formData.interviewType === "PHONE_CALL") && (
           <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
               Meeting Link <span className="text-red-500">*</span>
             </label>
             <input
@@ -286,7 +286,7 @@ export default function ScheduleInterviewPage() {
               onChange={(e) =>
                 setFormData({ ...formData, meetingLink: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="e.g., https://meet.google.com/xxx-xxxx-xxx"
               required
             />
@@ -297,7 +297,7 @@ export default function ScheduleInterviewPage() {
         {(formData.interviewType === "VIDEO_CALL" ||
           formData.interviewType === "PHONE_CALL") && (
           <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
               Meeting Password (optional)
             </label>
             <input
@@ -306,7 +306,7 @@ export default function ScheduleInterviewPage() {
               onChange={(e) =>
                 setFormData({ ...formData, meetingPassword: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="Meeting password"
             />
           </div>
@@ -315,7 +315,7 @@ export default function ScheduleInterviewPage() {
         {/* Location (for IN_PERSON) */}
         {formData.interviewType === "IN_PERSON" && (
           <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
               Location <span className="text-red-500">*</span>
             </label>
             <input
@@ -324,7 +324,7 @@ export default function ScheduleInterviewPage() {
               onChange={(e) =>
                 setFormData({ ...formData, location: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="Office address or meeting location"
               required
             />
@@ -333,7 +333,7 @@ export default function ScheduleInterviewPage() {
 
         {/* Company Notes */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
+          <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
             Internal Notes (not visible to candidate)
           </label>
           <textarea
@@ -341,7 +341,7 @@ export default function ScheduleInterviewPage() {
             onChange={(e) =>
               setFormData({ ...formData, companyNotes: e.target.value })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             rows={3}
             placeholder="Internal notes or reminders for your team"
           />
@@ -352,7 +352,7 @@ export default function ScheduleInterviewPage() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
             disabled={submitting}
           >
             Cancel
