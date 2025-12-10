@@ -17,12 +17,21 @@ export default function ResumeBuilderPage() {
   }, [loadResume]);
 
   return (
-    <div className="gap-6 grid grid-cols-1 md:grid-cols-2 p-6 min-h-screen">
-      <div className="bg-white shadow p-6 rounded-xl">
+    <div
+      // Dark mode for the main page background
+      className="gap-6 grid grid-cols-1 md:grid-cols-2 p-6 min-h-screen dark:bg-gray-900"
+    >
+      <div
+        // Dark mode for the form container
+        className="bg-white shadow p-6 rounded-xl dark:bg-gray-800 dark:shadow-xl"
+      >
         <ResumeForm />
       </div>
 
-      <div className="bg-gray-100 shadow p-6 rounded-xl overflow-y-auto">
+      <div
+        // Dark mode for the preview container background
+        className="bg-gray-100 shadow p-6 rounded-xl overflow-y-auto dark:bg-gray-700 dark:shadow-xl"
+      >
         <ResumePreview />
 
         <div className="flex gap-2 mt-4">
@@ -37,11 +46,13 @@ export default function ResumeBuilderPage() {
               }
             }}
             disabled={loading}
-            className="bg-blue-600 disabled:opacity-50 px-4 py-2 rounded text-white"
+            // Dark mode for Save button color
+            className="bg-blue-600 disabled:opacity-50 px-4 py-2 rounded text-white dark:bg-primary dark:hover:bg-primary/90"
           >
             {loading ? "Saving..." : "Save Resume"}
           </button>
 
+          {/* Assuming Button component handles dark mode internally for 'primary' variant */}
           <Button
             variant="primary"
             onClick={() => window.print()}

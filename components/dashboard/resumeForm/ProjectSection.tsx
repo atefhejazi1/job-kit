@@ -29,32 +29,60 @@ export default function ProjectSection({ onAdd }: Props) {
   };
 
   return (
-    <div className="space-y-4 bg-white shadow-sm p-5 border border-gray-200 rounded-xl">
+    <div
+      // Dark mode styles for container
+      className="space-y-4 bg-white shadow-sm p-5 border border-gray-200 rounded-xl
+      dark:bg-gray-800 dark:shadow-md dark:border-gray-700"
+    >
       <div className="flex items-center gap-2">
-        <Rocket className="w-5 h-5 text-orange-600" />
-        <h2 className="font-semibold text-gray-800 text-lg">Projects</h2>
+        {/* Icon color for dark mode */}
+        <Rocket className="w-5 h-5 text-orange-600 dark:text-primary" />
+        {/* Header text color for dark mode */}
+        <h2 className="font-semibold text-gray-800 text-lg dark:text-white">
+          Projects
+        </h2>
       </div>
 
+      {/* Input fields for dark mode */}
       <input
         value={proj.title}
-        onChange={(e) => setProj({ ...proj, title: e.target.value })}
+        onChange={(e) =>
+          setProj({ ...proj, title: e.target.value, type: "project" })
+        }
         placeholder="Project Title *"
-        className="px-3 py-2 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 w-full"
+        className="px-3 py-2 border border-gray-300 rounded-lg w-full
+          focus:border-transparent focus:ring-2 focus:ring-orange-500/50 
+          dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary/50"
       />
       <input
         value={proj.link}
-        onChange={(e) => setProj({ ...proj, link: e.target.value })}
+        onChange={(e) =>
+          setProj({ ...proj, link: e.target.value, type: "project" })
+        }
         placeholder="Project Link (optional)"
-        className="px-3 py-2 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 w-full"
+        className="px-3 py-2 border border-gray-300 rounded-lg w-full
+          focus:border-transparent focus:ring-2 focus:ring-orange-500/50
+          dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary/50"
       />
       <textarea
         value={proj.description}
-        onChange={(e) => setProj({ ...proj, description: e.target.value })}
+        onChange={(e) =>
+          setProj({ ...proj, description: e.target.value, type: "project" })
+        }
         placeholder="Description (optional)"
         rows={3}
-        className="px-3 py-2 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 w-full"
+        className="px-3 py-2 border border-gray-300 rounded-lg w-full
+          focus:border-transparent focus:ring-2 focus:ring-orange-500/50
+          dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary/50"
       />
       <Button variant="secondary" className="flex justify-center items-center gap-2 w-full" onClick={handleAdd}>
+
+      {/* Button styles (assuming Button component is dark mode compatible, but ensuring layout) */}
+      <Button
+        variant="secondary"
+        className="flex justify-center items-center gap-2 w-full mt-2"
+        onClick={handleAdd}
+      >
         <Plus className="w-4 h-4" /> Add Project
       </Button>
     </div>

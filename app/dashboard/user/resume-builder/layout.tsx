@@ -3,11 +3,9 @@
 import { ResumeProvider } from "@/contexts/ResumeContext";
 
 export default function ResumeBuilderLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        children
-    );
+  return children;
 }

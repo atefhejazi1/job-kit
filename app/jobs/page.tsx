@@ -116,18 +116,18 @@ export default function JobsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <div className="relative mb-8">
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-200 border-t-orange-600 mx-auto"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-200 border-t-orange-600 mx-auto dark:border-orange-600/30 dark:border-t-orange-500"></div>
                 <Briefcase className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-orange-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2 dark:text-white">
                 Loading Amazing Jobs...
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Finding the best opportunities for you
               </p>
             </div>
@@ -138,15 +138,15 @@ export default function JobsPage() {
             {[1, 2, 3].map((item) => (
               <div
                 key={item}
-                className="bg-white rounded-xl p-6 shadow-sm animate-pulse"
+                className="bg-white rounded-xl p-6 shadow-sm animate-pulse dark:bg-gray-800 dark:shadow-lg"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 bg-gray-200 rounded-lg"></div>
+                  <div className="w-14 h-14 bg-gray-200 rounded-lg dark:bg-gray-700"></div>
                   <div className="flex-1">
-                    <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/6 mb-4"></div>
-                    <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/4 mb-2 dark:bg-gray-700"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/6 mb-4 dark:bg-gray-700"></div>
+                    <div className="h-3 bg-gray-200 rounded w-full mb-2 dark:bg-gray-700"></div>
+                    <div className="h-3 bg-gray-200 rounded w-3/4 dark:bg-gray-700"></div>
                   </div>
                 </div>
               </div>
@@ -158,42 +158,43 @@ export default function JobsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Breadcrumb */}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Breadcrumb - assuming it handles dark mode internally */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <Breadcrumb />
       </div>
 
       {/* Header Section */}
-      <div className="bg-gradient-to-br from-orange-50 via-white to-red-50 border-b border-gray-200">
+      <div className="bg-gradient-to-br from-orange-50 via-white to-red-50 border-b border-gray-200 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-3 mb-4">
               <Briefcase className="w-10 h-10 text-orange-600" />
-              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-orange-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-orange-600 bg-clip-text text-transparent dark:from-white dark:to-orange-400">
                 Find Your Dream Job
               </h1>
               <TrendingUp className="w-10 h-10 text-orange-600" />
             </div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Discover thousands of exciting job opportunities from top
-              companies. Start your career journey today!
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed dark:text-gray-400">
+              Discover thousands of exciting job opportunities from top companies.
+              Start your career journey today!
             </p>
           </div>
 
           {/* Search and Filters */}
-          <div className="bg-white rounded-xl shadow-xl p-6 border border-gray-100">
+          <div className="bg-white rounded-xl shadow-xl p-6 border border-gray-100 dark:bg-gray-800 dark:shadow-2xl dark:border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Search Input */}
               <div className="md:col-span-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 dark:text-gray-500" />
                   <input
                     type="text"
                     placeholder="Job title, company, or keywords..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    // Dark mode input styles
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   />
                 </div>
               </div>
@@ -201,14 +202,16 @@ export default function JobsPage() {
               {/* Location Filter */}
               <div>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 dark:text-gray-500" />
                   <select
                     value={locationFilter}
                     onChange={(e) => setLocationFilter(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none transition-all"
+                    // Dark mode select styles
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   >
                     <option value="">All Locations</option>
                     {uniqueLocations.map((location) => (
+                      // Options need to be styled for dark mode if browser doesn't handle it well
                       <option key={location} value={location}>
                         {location}
                       </option>
@@ -220,14 +223,16 @@ export default function JobsPage() {
               {/* Work Type Filter */}
               <div>
                 <div className="relative">
-                  <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 dark:text-gray-500" />
                   <select
                     value={workTypeFilter}
                     onChange={(e) => setWorkTypeFilter(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none transition-all"
+                    // Dark mode select styles
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   >
                     <option value="">All Types</option>
                     {workTypes.map((type) => (
+                      // Options need to be styled for dark mode
                       <option key={type} value={type}>
                         {type}
                       </option>
@@ -239,12 +244,17 @@ export default function JobsPage() {
 
             {/* Results Count */}
             <div className="mt-4 flex items-center justify-between">
-              <div className="text-sm font-medium text-gray-700">
+              {/* Dark mode text color */}
+              <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Showing{" "}
-                <span className="text-orange-600 font-semibold">
+                <span className="text-orange-600 font-semibold dark:text-orange-400">
                   {filteredJobs.length}
                 </span>{" "}
-                of <span className="font-semibold">{jobs.length}</span> jobs
+                of{" "}
+                <span className="font-semibold dark:text-white">
+                  {jobs.length}
+                </span>{" "}
+                jobs
               </div>
               {(searchTerm || locationFilter || workTypeFilter) && (
                 <button
@@ -253,7 +263,8 @@ export default function JobsPage() {
                     setLocationFilter("");
                     setWorkTypeFilter("");
                   }}
-                  className="text-sm text-orange-600 hover:text-orange-700 font-medium transition-colors"
+                  // Dark mode clear filters link
+                  className="text-sm text-orange-600 hover:text-orange-700 font-medium transition-colors dark:text-orange-400 dark:hover:text-orange-300"
                 >
                   Clear Filters
                 </button>
@@ -266,14 +277,17 @@ export default function JobsPage() {
       {/* Jobs List */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {filteredJobs.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-xl shadow-sm">
-            <div className="text-orange-200 mb-6">
+          <div className="text-center py-16 bg-white rounded-xl shadow-sm dark:bg-gray-800 dark:shadow-lg">
+            {/* Dark mode icon color */}
+            <div className="text-orange-200 mb-6 dark:text-orange-500/30">
               <Search className="w-20 h-20 mx-auto" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+            {/* Dark mode text color */}
+            <h3 className="text-2xl font-bold text-gray-900 mb-3 dark:text-white">
               No jobs found
             </h3>
-            <p className="text-gray-600 text-lg mb-6">
+            {/* Dark mode text color */}
+            <p className="text-gray-600 text-lg mb-6 dark:text-gray-400">
               {searchTerm || locationFilter || workTypeFilter
                 ? "Try adjusting your search filters to find more opportunities"
                 : "No jobs are currently available. Check back soon!"}
@@ -285,6 +299,7 @@ export default function JobsPage() {
                   setLocationFilter("");
                   setWorkTypeFilter("");
                 }}
+                // Dark mode clear filters button (preserving gradient color)
                 className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
               >
                 Clear All Filters
@@ -299,6 +314,7 @@ export default function JobsPage() {
                 className="animate-slide-up"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
+                {/* Assuming JobListView handles its own dark mode */}
                 <JobListView job={job} />
               </div>
             ))}

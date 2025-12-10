@@ -6,7 +6,6 @@ import { createApiHeadersWithoutContentType } from "@/lib/api-utils";
 import {
   MessageThread,
   Message,
-  MessageStats,
   MessageAttachment,
 } from "@/types/message.type";
 import toast from "react-hot-toast";
@@ -37,11 +36,8 @@ export default function UserMessagesPage() {
   const [loading, setLoading] = useState(true);
   const [sendingMessage, setSendingMessage] = useState(false);
   const [showMobileThreads, setShowMobileThreads] = useState(true);
-  const [isRealtime, setIsRealtime] = useState(true);
   const [selectedFiles, setSelectedFiles] = useState<MessageAttachment[]>([]);
   const [showFileUpload, setShowFileUpload] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const messageIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom (only if user is near bottom)
@@ -157,6 +153,7 @@ export default function UserMessagesPage() {
                   ...thread,
                   lastMessage,
                   lastMessageAt: new Date().toISOString(),
+                  isRead: true, // Mark as read since user just sent a message
                 }
               : thread
           )
@@ -177,6 +174,10 @@ export default function UserMessagesPage() {
     setSelectedThread(thread);
     setShowMobileThreads(false);
     fetchMessages(thread.id);
+    // Optimistically mark as read in UI
+    setThreads((prev) =>
+      prev.map((t) => (t.id === thread.id ? { ...t, isRead: true } : t))
+    );
     // Refresh unread count after opening a thread
     setTimeout(() => fetchUnreadCount(), 500);
   };
@@ -215,34 +216,39 @@ export default function UserMessagesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
+      // Dark Mode adapted Loading State
+      <div className="flex items-center justify-center h-96 dark:bg-slate-900">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading messages...</p>
+          <p className="text-gray-600 dark:text-slate-400">
+            Loading messages...
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 dark:bg-slate-900 min-h-screen">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Messages</h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Messages
+        </h1>
+        <p className="text-gray-600 mt-1 dark:text-slate-400">
           Chat with companies about job opportunities
         </p>
       </div>
 
-      <div className="h-[calc(100vh-12rem)] bg-white rounded-lg shadow-sm border border-gray-200 flex">
+      <div className="h-[calc(100vh-12rem)] bg-white rounded-lg shadow-sm border border-gray-200 flex dark:bg-slate-800 dark:border-slate-700 dark:shadow-xl">
         {/* Threads Sidebar */}
         <div
           className={`
-          w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col
+          w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col dark:border-slate-700
           ${!showMobileThreads ? "hidden md:flex" : "flex"}
         `}
         >
           {/* Search */}
-          <div className="p-4 border-b border-gray-200">
+          <div className="p-4 border-b border-gray-200 dark:border-slate-700">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
@@ -250,7 +256,7 @@ export default function UserMessagesPage() {
                 placeholder="Search companies..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"
               />
             </div>
           </div>
@@ -258,7 +264,7 @@ export default function UserMessagesPage() {
           {/* Thread List */}
           <div className="flex-1 overflow-y-auto">
             {filteredThreads.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+              <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-slate-500">
                 <MessageCircle className="w-12 h-12 mb-3" />
                 <p className="text-lg font-medium">No conversations yet</p>
                 <p className="text-sm text-center px-4">
@@ -275,10 +281,11 @@ export default function UserMessagesPage() {
                     key={thread.id}
                     onClick={() => selectThread(thread)}
                     className={`
-                      p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors
+                      p-4 border-b border-gray-100 cursor-pointer transition-colors dark:border-slate-700
+                      hover:bg-gray-50 dark:hover:bg-slate-700
                       ${
                         isSelected
-                          ? "bg-blue-50 border-l-4 border-l-blue-600"
+                          ? "bg-blue-50 border-l-4 border-l-blue-600 dark:bg-blue-900/40 dark:border-l-blue-500"
                           : ""
                       }
                     `}
@@ -292,10 +299,10 @@ export default function UserMessagesPage() {
                       <div className="flex-1 min-w-0">
                         {/* Company Name and Time */}
                         <div className="flex items-center justify-between">
-                          <h3 className="font-medium text-gray-900 truncate">
+                          <h3 className="font-medium text-gray-900 truncate dark:text-white">
                             {company?.name || "Company"}
                           </h3>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 dark:text-slate-400">
                             {thread.lastMessageAt
                               ? new Date(
                                   thread.lastMessageAt
@@ -313,22 +320,22 @@ export default function UserMessagesPage() {
                         {/* Job Title */}
                         {thread.job && (
                           <div className="flex items-center gap-1 mb-1">
-                            <Briefcase className="w-3 h-3 text-gray-400" />
-                            <p className="text-sm text-gray-600 truncate">
+                            <Briefcase className="w-3 h-3 text-gray-400 dark:text-slate-500" />
+                            <p className="text-sm text-gray-600 truncate dark:text-slate-300">
                               {thread.job.title}
                             </p>
                           </div>
                         )}
 
                         {/* Last Message */}
-                        <p className="text-sm text-gray-600 truncate">
+                        <p className="text-sm text-gray-600 truncate dark:text-slate-400">
                           {thread.lastMessage || "No messages yet"}
                         </p>
                       </div>
 
                       {/* Unread indicator */}
                       {!thread.isRead && (
-                        <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                        <div className="w-3 h-3 bg-blue-600 rounded-full self-center"></div>
                       )}
                     </div>
                   </div>
@@ -348,12 +355,12 @@ export default function UserMessagesPage() {
           {selectedThread ? (
             <>
               {/* Chat Header */}
-              <div className="p-4 border-b border-gray-200 bg-white">
+              <div className="p-4 border-b border-gray-200 bg-white dark:bg-slate-800 dark:border-slate-700">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => setShowMobileThreads(true)}
-                      className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                      className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg dark:text-slate-400 dark:hover:bg-slate-700"
                     >
                       <ArrowLeft className="w-5 h-5" />
                     </button>
@@ -363,13 +370,13 @@ export default function UserMessagesPage() {
                     </div>
 
                     <div>
-                      <h2 className="font-semibold text-gray-900">
+                      <h2 className="font-semibold text-gray-900 dark:text-white">
                         {selectedThread.company?.name || "Company"}
                       </h2>
                       {selectedThread.job && (
                         <div className="flex items-center gap-1">
-                          <Briefcase className="w-3 h-3 text-gray-400" />
-                          <p className="text-sm text-gray-600">
+                          <Briefcase className="w-3 h-3 text-gray-400 dark:text-slate-500" />
+                          <p className="text-sm text-gray-600 dark:text-slate-300">
                             {selectedThread.job.title}
                           </p>
                         </div>
@@ -380,9 +387,9 @@ export default function UserMessagesPage() {
               </div>
 
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 dark:bg-slate-900/50">
                 {messages.length === 0 ? (
-                  <div className="flex items-center justify-center h-full text-gray-500">
+                  <div className="flex items-center justify-center h-full text-gray-500 dark:text-slate-500">
                     <div className="text-center">
                       <MessageCircle className="w-12 h-12 mx-auto mb-3" />
                       <p>No messages in this conversation</p>
@@ -402,13 +409,13 @@ export default function UserMessagesPage() {
                       >
                         <div
                           className={`
-                          max-w-xs lg:max-w-md px-4 py-2 rounded-2xl
-                          ${
-                            isFromMe
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-100 text-gray-900"
-                          }
-                        `}
+                            max-w-xs lg:max-w-md px-4 py-2 rounded-2xl
+                            ${
+                              isFromMe
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-100 text-gray-900 dark:bg-slate-700 dark:text-white"
+                            }
+                          `}
                         >
                           {message.content && (
                             <p className="text-sm">{message.content}</p>
@@ -424,9 +431,13 @@ export default function UserMessagesPage() {
 
                           <div
                             className={`
-                            flex items-center justify-end gap-1 mt-1
-                            ${isFromMe ? "text-blue-200" : "text-gray-500"}
-                          `}
+                              flex items-center justify-end gap-1 mt-1
+                              ${
+                                isFromMe
+                                  ? "text-blue-200"
+                                  : "text-gray-500 dark:text-slate-400"
+                              }
+                            `}
                           >
                             <span className="text-xs">
                               {new Date(message.createdAt).toLocaleTimeString(
@@ -450,10 +461,10 @@ export default function UserMessagesPage() {
               </div>
 
               {/* Message Input */}
-              <div className="p-4 border-t border-gray-200 bg-white">
+              <div className="p-4 border-t border-gray-200 bg-white dark:bg-slate-800 dark:border-slate-700">
                 {/* File Upload Section */}
                 {showFileUpload && (
-                  <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                  <div className="mb-4 p-3 bg-gray-50 rounded-lg dark:bg-slate-700">
                     <FileUpload
                       onFilesSelected={setSelectedFiles}
                       maxFiles={5}
@@ -463,15 +474,15 @@ export default function UserMessagesPage() {
 
                 {/* Selected Files Preview */}
                 {selectedFiles.length > 0 && (
-                  <div className="mb-3 p-3 bg-blue-50 rounded-lg">
+                  <div className="mb-3 p-3 bg-blue-50 rounded-lg dark:bg-blue-900/40">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-blue-900">
+                      <span className="text-sm font-medium text-blue-900 dark:text-blue-200">
                         {selectedFiles.length} file
                         {selectedFiles.length > 1 ? "s" : ""} selected
                       </span>
                       <button
                         onClick={() => setSelectedFiles([])}
-                        className="text-xs text-blue-600 hover:text-blue-800"
+                        className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                       >
                         Clear all
                       </button>
@@ -480,7 +491,7 @@ export default function UserMessagesPage() {
                       {selectedFiles.map((file, index) => (
                         <div
                           key={index}
-                          className="text-xs text-blue-700 truncate"
+                          className="text-xs text-blue-700 truncate dark:text-blue-300"
                         >
                           📎 {file.name}
                         </div>
@@ -492,7 +503,7 @@ export default function UserMessagesPage() {
                 <div className="flex items-end gap-2">
                   <button
                     onClick={() => setShowFileUpload(!showFileUpload)}
-                    className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-700"
                     title="Attach files"
                   >
                     <Paperclip className="w-5 h-5" />
@@ -510,7 +521,7 @@ export default function UserMessagesPage() {
                       }}
                       placeholder="Type a message..."
                       rows={1}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"
                       style={{ minHeight: "40px", maxHeight: "120px" }}
                     />
                   </div>
@@ -529,14 +540,14 @@ export default function UserMessagesPage() {
               </div>
             </>
           ) : (
-            // No thread selected
-            <div className="flex-1 flex items-center justify-center bg-gray-50">
+            // No thread selected (Dark Mode Adapted)
+            <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-slate-900/50">
               <div className="text-center">
-                <MessageCircle className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <MessageCircle className="w-16 h-16 mx-auto mb-4 text-gray-400 dark:text-slate-600" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2 dark:text-white">
                   Select a conversation
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-slate-400">
                   Choose a company from the sidebar to start messaging
                 </p>
               </div>

@@ -134,19 +134,25 @@ const CompanySettingsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      // Dark/Light Mode for Loading State
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading company settings...</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading company settings...
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    // Dark/Light Mode for Main Container
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden">
+        {/* Dark/Light Mode for Card Container */}
+        <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
+          {/* Header remains with gradient for contrast */}
           <div className="bg-linear-to-r from-primary to-orange-600 px-6 py-8">
             <div className="flex items-center space-x-4">
               <div className="bg-white p-3 rounded-full">
@@ -184,8 +190,8 @@ const CompanySettingsPage = () => {
             >
               {({ values, errors, touched, isSubmitting }) => (
                 <Form className="space-y-8">
-                  {/* Company Logo */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
+                  {/* Company Logo - Dark/Light Mode for section background */}
+                  <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
                     <LogoUploader
                       currentLogo={values.logo || ""}
                       onLogoChange={(logoUrl: string) => {
@@ -197,21 +203,23 @@ const CompanySettingsPage = () => {
                     />
                   </div>
 
-                  {/* Basic Information */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                  {/* Basic Information - Dark/Light Mode for section background and text */}
+                  <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
                       Basic Information
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {/* Dark/Light Mode for Label Text */}
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Company Name *
                         </label>
                         <Field
                           name="companyName"
                           type="text"
-                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                          // Dark/Light Mode for Input Field
+                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
                             errors.companyName && touched.companyName
                               ? "border-red-300"
                               : "border-gray-300"
@@ -226,13 +234,15 @@ const CompanySettingsPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {/* Dark/Light Mode for Label Text */}
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Industry *
                         </label>
                         <Field
                           name="industry"
                           type="text"
-                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                          // Dark/Light Mode for Input Field
+                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
                             errors.industry && touched.industry
                               ? "border-red-300"
                               : "border-gray-300"
@@ -247,13 +257,15 @@ const CompanySettingsPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {/* Dark/Light Mode for Label Text */}
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Company Size *
                         </label>
                         <Field
                           as="select"
                           name="companySize"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                          // Dark/Light Mode for Select Field
+                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                         >
                           <option value="">Select company size</option>
                           <option value="1-10">1-10 employees</option>
@@ -271,13 +283,15 @@ const CompanySettingsPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {/* Dark/Light Mode for Label Text */}
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Established Year
                         </label>
                         <Field
                           name="establishedYear"
                           type="number"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                          // Dark/Light Mode for Input Field
+                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                           placeholder="e.g., 2015"
                           min="1800"
                           max={new Date().getFullYear()}
@@ -291,14 +305,16 @@ const CompanySettingsPage = () => {
                     </div>
 
                     <div className="mt-6">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {/* Dark/Light Mode for Label Text */}
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Company Description *
                       </label>
                       <Field
                         as="textarea"
                         name="description"
                         rows={4}
-                        className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                        // Dark/Light Mode for Textarea Field
+                        className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
                           errors.description && touched.description
                             ? "border-red-300"
                             : "border-gray-300"
@@ -313,21 +329,23 @@ const CompanySettingsPage = () => {
                     </div>
                   </div>
 
-                  {/* Contact Information */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                  {/* Contact Information - Dark/Light Mode for section background and text */}
+                  <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
                       Contact Information
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {/* Dark/Light Mode for Label Text */}
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Location *
                         </label>
                         <Field
                           name="location"
                           type="text"
-                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                          // Dark/Light Mode for Input Field
+                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
                             errors.location && touched.location
                               ? "border-red-300"
                               : "border-gray-300"
@@ -342,13 +360,15 @@ const CompanySettingsPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {/* Dark/Light Mode for Label Text */}
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Website
                         </label>
                         <Field
                           name="website"
                           type="url"
-                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                          // Dark/Light Mode for Input Field
+                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
                             errors.website && touched.website
                               ? "border-red-300"
                               : "border-gray-300"
@@ -363,13 +383,15 @@ const CompanySettingsPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {/* Dark/Light Mode for Label Text */}
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Contact Phone *
                         </label>
                         <Field
                           name="contactPhone"
                           type="tel"
-                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                          // Dark/Light Mode for Input Field
+                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
                             errors.contactPhone && touched.contactPhone
                               ? "border-red-300"
                               : "border-gray-300"
@@ -384,13 +406,15 @@ const CompanySettingsPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {/* Dark/Light Mode for Label Text */}
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Contact Email *
                         </label>
                         <Field
                           name="contactEmail"
                           type="email"
-                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                          // Dark/Light Mode for Input Field
+                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
                             errors.contactEmail && touched.contactEmail
                               ? "border-red-300"
                               : "border-gray-300"
@@ -406,8 +430,8 @@ const CompanySettingsPage = () => {
                     </div>
                   </div>
 
-                  {/* Submit Buttons */}
-                  <div className="flex gap-4 pt-6 border-t border-gray-200">
+                  {/* Submit Buttons - Dark/Light Mode for border separator */}
+                  <div className="flex gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
                     <Button
                       type="button"
                       variant="outline"

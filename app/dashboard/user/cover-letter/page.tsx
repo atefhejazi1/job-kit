@@ -49,36 +49,57 @@ export default function GeneratePage() {
 
   return (
     <div className="max-w-3xl mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">Generate Cover Letter</h1>
+      {/* Dark mode header text color */}
+      <h1 className="text-3xl font-bold mb-6 dark:text-white">
+        Generate Cover Letter
+      </h1>
 
       {/* Company */}
       <div className="mb-4">
-        <label className="block font-semibold">Company</label>
+        {/* Dark mode label text color */}
+        <label className="block font-semibold dark:text-gray-200">
+          Company
+        </label>
         <input
           type="text"
-          className="w-full bg-gray-100 p-2 rounded"
+          // Dark mode input background and text color
+          className="w-full bg-gray-100 p-2 rounded dark:bg-gray-700 dark:text-white"
           onChange={(e) => setForm({ ...form, company: e.target.value })}
         />
       </div>
 
       {/* Position */}
       <div className="mb-4">
-        <label className="block font-semibold">Position</label>
+        {/* Dark mode label text color */}
+        <label className="block font-semibold dark:text-gray-200">
+          Position
+        </label>
         <input
           type="text"
-          className="w-full bg-gray-100 p-2 rounded"
+          // Dark mode input background and text color
+          className="w-full bg-gray-100 p-2 rounded dark:bg-gray-700 dark:text-white"
           onChange={(e) => setForm({ ...form, position: e.target.value })}
         />
       </div>
 
+      {/* Assuming Button component handles 'secondary' dark mode styles internally */}
       <Button variant="secondary" onClick={handleSubmit}>
         {loading ? "Generating..." : "Generate"}
       </Button>
 
       {result && (
-        <div className="mt-6 bg-white shadow p-4 rounded">
-          <h2 className="text-xl font-bold mb-2">Generated Cover Letter:</h2>
-          <pre className="whitespace-pre-wrap">{result}</pre>
+        <div
+          // Dark mode background for result box
+          className="mt-6 bg-white shadow p-4 rounded dark:bg-gray-800 dark:shadow-lg"
+        >
+          {/* Dark mode header text color */}
+          <h2 className="text-xl font-bold mb-2 dark:text-white">
+            Generated Cover Letter:
+          </h2>
+          {/* Dark mode result text color */}
+          <pre className="whitespace-pre-wrap dark:text-gray-300">
+            {result}
+          </pre>
         </div>
       )}
     </div>

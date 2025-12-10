@@ -62,8 +62,8 @@ export default function MessagesPage() {
       if (container) {
         const isNearBottom =
           container.scrollHeight -
-            container.scrollTop -
-            container.clientHeight <
+          container.scrollTop -
+          container.clientHeight <
           100;
         if (isNearBottom) {
           messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -271,30 +271,30 @@ export default function MessagesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
+      <div className="flex items-center justify-center h-96 dark:bg-gray-900 dark:text-gray-300">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading messages...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading messages...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="h-[calc(100vh-4rem)] bg-white rounded-lg shadow-sm border border-gray-200 flex">
+    <div className="h-[calc(100vh-4rem)] bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex">
       {/* Threads Sidebar */}
       <div
         className={`
-        w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col
+        w-full md:w-80 lg:w-96 border-r border-gray-200 dark:border-gray-700 flex flex-col
         ${!showMobileThreads ? "hidden md:flex" : "flex"}
       `}
       >
         {/* Header */}
-        <div className="p-4 border-b border-gray-200">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-semibold text-gray-900">Messages</h1>
+            <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Messages</h1>
             <div className="flex items-center gap-2">
-              <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+              <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
                 {stats.unreadCount} unread
               </span>
             </div>
@@ -302,13 +302,13 @@ export default function MessagesPage() {
 
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-4 h-4" />
             <input
               type="text"
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
             />
           </div>
         </div>
@@ -316,7 +316,7 @@ export default function MessagesPage() {
         {/* Thread List */}
         <div className="flex-1 overflow-y-auto">
           {filteredThreads.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+            <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">
               <MessageCircle className="w-12 h-12 mb-3" />
               <p className="text-lg font-medium">No conversations yet</p>
               <p className="text-sm">Start messaging with job applicants</p>
@@ -334,10 +334,10 @@ export default function MessagesPage() {
                   key={thread.id}
                   onClick={() => selectThread(thread)}
                   className={`
-                    p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors
+                    p-4 border-b border-gray-100 dark:border-gray-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors
                     ${
                       isSelected
-                        ? "bg-blue-50 border-l-4 border-l-blue-600"
+                        ? "bg-blue-50 dark:bg-blue-900/40 border-l-4 border-l-blue-600"
                         : ""
                     }
                   `}
@@ -351,10 +351,10 @@ export default function MessagesPage() {
                     <div className="flex-1 min-w-0">
                       {/* Name and Job */}
                       <div className="flex items-center justify-between">
-                        <h3 className="font-medium text-gray-900 truncate">
+                        <h3 className="font-medium text-gray-900 dark:text-white truncate">
                           {otherUser?.name || "Unknown User"}
                         </h3>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
                           {thread.lastMessageAt
                             ? new Date(thread.lastMessageAt).toLocaleTimeString(
                                 [],
@@ -368,13 +368,13 @@ export default function MessagesPage() {
                       </div>
 
                       {thread.job && (
-                        <p className="text-sm text-blue-600 mb-1">
+                        <p className="text-sm text-blue-600 dark:text-blue-400 mb-1">
                           {thread.job.title}
                         </p>
                       )}
 
                       {/* Last Message */}
-                      <p className="text-sm text-gray-600 truncate">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
                         {thread.lastMessage || "No messages yet"}
                       </p>
                     </div>
@@ -401,12 +401,12 @@ export default function MessagesPage() {
         {selectedThread ? (
           <>
             {/* Chat Header */}
-            <div className="p-4 border-b border-gray-200 bg-white">
+            <div className="p-4 border-b border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setShowMobileThreads(true)}
-                    className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                    className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800"
                   >
                     <ArrowLeft className="w-5 h-5" />
                   </button>
@@ -421,13 +421,13 @@ export default function MessagesPage() {
                   </div>
 
                   <div>
-                    <h2 className="font-semibold text-gray-900">
+                    <h2 className="font-semibold text-gray-900 dark:text-white">
                       {user?.id === selectedThread.companyId
                         ? selectedThread.applicant?.name
                         : selectedThread.company?.name || "Unknown User"}
                     </h2>
                     {selectedThread.job && (
-                      <p className="text-sm text-blue-600">
+                      <p className="text-sm text-blue-600 dark:text-blue-400">
                         {selectedThread.job.title}
                       </p>
                     )}
@@ -435,13 +435,13 @@ export default function MessagesPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800">
                     <Phone className="w-5 h-5" />
                   </button>
-                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800">
                     <Video className="w-5 h-5" />
                   </button>
-                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800">
                     <MoreVertical className="w-5 h-5" />
                   </button>
                 </div>
@@ -449,9 +449,9 @@ export default function MessagesPage() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 dark:bg-gray-900">
               {messages.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-gray-500">
+                <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
                   <div className="text-center">
                     <MessageCircle className="w-12 h-12 mx-auto mb-3" />
                     <p>No messages in this conversation</p>
@@ -475,7 +475,7 @@ export default function MessagesPage() {
                         ${
                           isFromMe
                             ? "bg-blue-600 text-white"
-                            : "bg-gray-100 text-gray-900"
+                            : "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
                         }
                       `}
                       >
@@ -494,7 +494,7 @@ export default function MessagesPage() {
                         <div
                           className={`
                           flex items-center justify-end gap-1 mt-1
-                          ${isFromMe ? "text-blue-200" : "text-gray-500"}
+                          ${isFromMe ? "text-blue-200" : "text-gray-500 dark:text-gray-400"}
                         `}
                         >
                           <span className="text-xs">
@@ -519,25 +519,25 @@ export default function MessagesPage() {
             </div>
 
             {/* Message Input */}
-            <div className="p-4 border-t border-gray-200 bg-white">
+            <div className="p-4 border-t border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-700">
               {/* File Upload Section */}
               {showFileUpload && (
-                <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                <div className="mb-4 p-3 bg-gray-50 rounded-lg dark:bg-gray-800">
                   <FileUpload onFilesSelected={setSelectedFiles} maxFiles={5} />
                 </div>
               )}
 
               {/* Selected Files Preview */}
               {selectedFiles.length > 0 && (
-                <div className="mb-3 p-3 bg-blue-50 rounded-lg">
+                <div className="mb-3 p-3 bg-blue-50 rounded-lg dark:bg-blue-950">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-blue-900">
+                    <span className="text-sm font-medium text-blue-900 dark:text-blue-300">
                       {selectedFiles.length} file
                       {selectedFiles.length > 1 ? "s" : ""} selected
                     </span>
                     <button
                       onClick={() => setSelectedFiles([])}
-                      className="text-xs text-blue-600 hover:text-blue-800"
+                      className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
                     >
                       Clear all
                     </button>
@@ -546,7 +546,7 @@ export default function MessagesPage() {
                     {selectedFiles.map((file, index) => (
                       <div
                         key={index}
-                        className="text-xs text-blue-700 truncate"
+                        className="text-xs text-blue-700 dark:text-blue-400 truncate"
                       >
                         📎 {file.name}
                       </div>
@@ -558,7 +558,7 @@ export default function MessagesPage() {
               <div className="flex items-end gap-2">
                 <button
                   onClick={() => setShowFileUpload(!showFileUpload)}
-                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800"
                   title="Attach files"
                 >
                   <Paperclip className="w-5 h-5" />
@@ -576,7 +576,7 @@ export default function MessagesPage() {
                     }}
                     placeholder="Type a message..."
                     rows={1}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                     style={{ minHeight: "40px", maxHeight: "120px" }}
                   />
                 </div>
@@ -587,7 +587,7 @@ export default function MessagesPage() {
                     (!messageInput.trim() && !selectedFiles.length) ||
                     sendingMessage
                   }
-                  className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors m-auto"
+                  className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors m-auto dark:bg-blue-700 dark:hover:bg-blue-600 dark:disabled:bg-gray-700"
                 >
                   <Send className="w-5 h-5" />
                 </button>
@@ -596,13 +596,13 @@ export default function MessagesPage() {
           </>
         ) : (
           // No thread selected
-          <div className="flex-1 flex items-center justify-center bg-gray-50">
+          <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-800">
             <div className="text-center">
-              <MessageCircle className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <MessageCircle className="w-16 h-16 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Select a conversation
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Choose a conversation from the sidebar to start messaging
               </p>
             </div>

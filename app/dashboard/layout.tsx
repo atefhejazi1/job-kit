@@ -128,6 +128,11 @@ export default function DashboardLayout({
               icon: FileText,
             },
             {
+              name: "Certificates",
+              href: "/dashboard/user/certificates",
+              icon: Award,
+            },
+            {
               name: "Generate Cover Letter ",
               href: "/dashboard/user/cover-letter",
               icon: FileText,
@@ -170,8 +175,9 @@ export default function DashboardLayout({
   return (
     <ProtectedRoute>
       <NotificationProvider>
-        <div className="lg:flex bg-gray-50 min-h-screen">
-          {/* Mobile sidebar overlay */}
+        {/* Main layout container with dark mode background */}
+        <div className="lg:flex bg-gray-50 min-h-screen dark:bg-gray-900">
+          {/* Mobile sidebar overlay (dark mode background) */}
           {sidebarOpen && (
             <div
               className="lg:hidden z-40 fixed inset-0 bg-black bg-opacity-50"
@@ -185,18 +191,22 @@ export default function DashboardLayout({
         fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out flex flex-col
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0 lg:relative lg:shrink-0
+        dark:bg-gray-800 dark:shadow-2xl dark:shadow-gray-900/50
       `}
           >
-            <div className="flex justify-between items-center px-6 border-gray-200 border-b h-16 shrink-0">
+            {/* Sidebar Header */}
+            <div className="flex justify-between items-center px-6 border-gray-200 border-b h-16 shrink-0 dark:border-gray-700">
               <div className="flex items-center space-x-2 rtl:space-x-reverse">
                 <Briefcase className="w-8 h-8 text-primary" />
-                <span className="font-bold text-secondary text-xl">JobKit</span>
+                <span className="font-bold text-secondary text-xl dark:text-white">
+                  JobKit
+                </span>
               </div>
               <button
-                className="lg:hidden hover:bg-gray-100 p-2 rounded-md"
+                className="lg:hidden hover:bg-gray-100 p-2 rounded-md dark:hover:bg-gray-700"
                 onClick={() => setSidebarOpen(false)}
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 dark:text-gray-300" />
               </button>
             </div>
 
@@ -209,7 +219,7 @@ export default function DashboardLayout({
                     return (
                       <li key={section.name}>
                         <div className="mb-3">
-                          <h3 className="px-4 font-semibold text-gray-500 text-xs uppercase tracking-wider">
+                          <h3 className="px-4 font-semibold text-gray-500 text-xs uppercase tracking-wider dark:text-gray-400">
                             {section.name}
                           </h3>
                         </div>
@@ -217,27 +227,30 @@ export default function DashboardLayout({
                           {section.items.map((item) => {
                             const Icon = item.icon;
                             const active = isActive(item.href);
-                            const isMessagesLink =
-                              item.href.includes("/messages");
+                            const isMessagesLink = item.href.includes(
+                              "/messages"
+                            );
 
                             return (
                               <li key={item.name}>
                                 <Link
                                   href={item.href}
                                   className={`
-                                flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200
-                                ${
-                                  active
-                                    ? "bg-primary text-white shadow-md"
-                                    : "text-gray-700 hover:bg-gray-100 hover:text-primary"
-                                }
-                              `}
+                                  flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200
+                                  ${
+                                    active
+                                      ? "bg-primary text-white shadow-md" // Primary color unchanged for activation
+                                      : "text-gray-700 hover:bg-gray-100 hover:text-primary dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+                                  }
+                                `}
                                   onClick={() => setSidebarOpen(false)}
                                 >
                                   <div className="flex items-center">
                                     <Icon
                                       className={`h-4 w-4 mr-3 ${
-                                        active ? "text-white" : "text-gray-500"
+                                        active
+                                          ? "text-white"
+                                          : "text-gray-500 dark:text-gray-400"
                                       }`}
                                     />
                                     {item.name}
@@ -264,18 +277,20 @@ export default function DashboardLayout({
                         <Link
                           href={section.href}
                           className={`
-                        flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
-                        ${
-                          active
-                            ? "bg-primary text-white shadow-md"
-                            : "text-gray-700 hover:bg-gray-100 hover:text-primary"
-                        }
-                      `}
+                            flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
+                            ${
+                              active
+                                ? "bg-primary text-white shadow-md"
+                                : "text-gray-700 hover:bg-gray-100 hover:text-primary dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+                            }
+                          `}
                           onClick={() => setSidebarOpen(false)}
                         >
                           <Icon
                             className={`h-5 w-5 mr-3 ${
-                              active ? "text-white" : "text-gray-500"
+                              active
+                                ? "text-white"
+                                : "text-gray-500 dark:text-gray-400"
                             }`}
                           />
                           {section.name}
@@ -288,14 +303,14 @@ export default function DashboardLayout({
             </nav>
 
             {/* User section */}
-            <div className="mt-auto p-4 border-gray-200 border-t shrink-0">
+            <div className="mt-auto p-4 border-gray-200 border-t shrink-0 dark:border-gray-700">
               {isLoading ? (
                 <div className="animate-pulse">
                   <div className="flex items-center space-x-3 mb-4">
-                    <div className="bg-gray-300 rounded-full w-10 h-10"></div>
+                    <div className="bg-gray-300 rounded-full w-10 h-10 dark:bg-gray-600"></div>
                     <div>
-                      <div className="bg-gray-300 mb-1 rounded w-20 h-4"></div>
-                      <div className="bg-gray-300 rounded w-32 h-3"></div>
+                      <div className="bg-gray-300 mb-1 rounded w-20 h-4 dark:bg-gray-600"></div>
+                      <div className="bg-gray-300 rounded w-32 h-3 dark:bg-gray-600"></div>
                     </div>
                   </div>
                 </div>
@@ -304,17 +319,17 @@ export default function DashboardLayout({
                   <div className="flex items-center space-x-3 mb-4">
                     <Avatar name={user.name} size="lg" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 text-sm truncate">
+                      <p className="font-medium text-gray-900 text-sm truncate dark:text-white">
                         {user.name || "User"}
                       </p>
-                      <p className="text-gray-500 text-xs truncate">
+                      <p className="text-gray-500 text-xs truncate dark:text-gray-400">
                         {user.email}
                       </p>
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mt-1 ${
                           user.userType === "COMPANY"
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-green-100 text-green-800"
+                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                            : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                         }`}
                       >
                         {user.userType === "COMPANY" ? "Company" : "Job Seeker"}
@@ -323,15 +338,17 @@ export default function DashboardLayout({
                   </div>
                   <button
                     onClick={logout}
-                    className="flex items-center hover:bg-gray-100 px-4 py-2 rounded-lg w-full text-gray-700 text-sm transition-colors"
+                    className="flex items-center hover:bg-gray-100 px-4 py-2 rounded-lg w-full text-gray-700 text-sm transition-colors dark:text-gray-300 dark:hover:bg-gray-700"
                   >
-                    <LogOut className="mr-2 w-4 h-4 text-gray-500" />
+                    <LogOut className="mr-2 w-4 h-4 text-gray-500 dark:text-gray-400" />
                     Sign Out
                   </button>
                 </>
               ) : (
                 <div className="text-center">
-                  <p className="mb-2 text-gray-500 text-sm">Not logged in</p>
+                  <p className="mb-2 text-gray-500 text-sm dark:text-gray-400">
+                    Not logged in
+                  </p>
                   <Link
                     href="/auth/login"
                     className="text-primary text-sm hover:underline"
@@ -343,24 +360,24 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          {/* Main content */}
+          {/* Main content wrapper */}
           <div className="flex-1 lg:ml-0">
             {/* Top header */}
-            <header className="top-0 z-30 sticky bg-white shadow-sm border-gray-200 border-b">
+            <header className="top-0 z-30 sticky bg-white shadow-sm border-gray-200 border-b dark:bg-gray-800 dark:border-gray-700 dark:shadow-md">
               <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 h-16">
                 <div className="flex items-center space-x-4">
                   <button
-                    className="lg:hidden hover:bg-gray-100 p-2 rounded-md"
+                    className="lg:hidden hover:bg-gray-100 p-2 rounded-md dark:hover:bg-gray-700"
                     onClick={() => setSidebarOpen(true)}
                   >
-                    <Menu className="w-5 h-5" />
+                    <Menu className="w-5 h-5 dark:text-gray-300" />
                   </button>
 
                   <div>
-                    <h1 className="font-semibold text-gray-900 text-xl">
+                    <h1 className="font-semibold text-gray-900 text-xl dark:text-white">
                       JobKit Dashboard
                     </h1>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-gray-500 text-sm dark:text-gray-400">
                       Your complete job management platform
                     </p>
                   </div>
@@ -373,11 +390,11 @@ export default function DashboardLayout({
                     <input
                       type="text"
                       placeholder="Search..."
-                      className="py-2 pr-4 pl-10 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 focus:ring-primary text-sm"
+                      className="py-2 pr-4 pl-10 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 focus:ring-primary text-sm dark:bg-gray-900 dark:border-gray-700 dark:text-white"
                     />
                   </div>
 
-                  {/* Notifications */}
+                  {/* Notifications (Assuming NotificationDropdown handles its own dark mode) */}
                   <NotificationDropdown />
 
                   {/* Profile */}
@@ -385,7 +402,7 @@ export default function DashboardLayout({
                     <div className="relative profile-dropdown">
                       <button
                         onClick={() => setProfileDropdown(!profileDropdown)}
-                        className="flex items-center space-x-2 hover:bg-gray-100 p-1 rounded-lg transition-colors"
+                        className="flex items-center space-x-2 hover:bg-gray-100 p-1 rounded-lg transition-colors dark:hover:bg-gray-700"
                       >
                         <Avatar
                           name={user.name}
@@ -396,12 +413,12 @@ export default function DashboardLayout({
 
                       {/* Profile Dropdown */}
                       {profileDropdown && (
-                        <div className="right-0 z-50 absolute bg-white shadow-lg mt-2 py-2 border rounded-md w-48">
-                          <div className="px-4 py-2 border-gray-100 border-b">
-                            <p className="font-medium text-gray-900 text-sm">
+                        <div className="right-0 z-50 absolute bg-white shadow-lg mt-2 py-2 border rounded-md w-48 dark:bg-gray-700 dark:border-gray-600 dark:shadow-xl">
+                          <div className="px-4 py-2 border-gray-100 border-b dark:border-gray-600">
+                            <p className="font-medium text-gray-900 text-sm dark:text-white">
                               {user.name}
                             </p>
-                            <p className="text-gray-500 text-xs">
+                            <p className="text-gray-500 text-xs dark:text-gray-400">
                               {user.email}
                             </p>
                           </div>
@@ -410,15 +427,15 @@ export default function DashboardLayout({
                               onClick={() =>
                                 setProfileDropdown(!profileDropdown)
                               }
-                              className="w-full px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 flex items-center space-x-2"
+                              className="w-full px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 flex items-center space-x-2 dark:text-gray-300 dark:hover:bg-gray-600"
                             >
-                              <User className="h-4 w-4" />
+                              <User className="h-4 w-4 dark:text-gray-400" />
                               <span>Profile</span>
                             </button>
                           </Link>
                           <button
                             onClick={logout}
-                            className="flex items-center space-x-2 hover:bg-red-50 px-4 py-2 w-full text-red-600 text-sm text-left"
+                            className="flex items-center space-x-2 hover:bg-red-50 px-4 py-2 w-full text-red-600 text-sm text-left dark:hover:bg-red-900/30 dark:text-red-400"
                           >
                             <LogOut className="w-4 h-4" />
                             <span>Logout</span>
@@ -427,7 +444,7 @@ export default function DashboardLayout({
                       )}
                     </div>
                   ) : (
-                    <div className="flex justify-center items-center bg-gray-400 rounded-full w-8 h-8">
+                    <div className="flex justify-center items-center bg-gray-400 rounded-full w-8 h-8 dark:bg-gray-600">
                       <User className="w-4 h-4 text-white" />
                     </div>
                   )}
@@ -438,8 +455,10 @@ export default function DashboardLayout({
             {/* Page content */}
             <main className="p-4 sm:p-6">
               <div className="max-w-7xl mx-auto">
-                <Breadcrumb />
+                {/* Assuming Breadcrumb component handles dark mode internally or is generic enough */}
+                <Breadcrumb /> 
                 <CompanyIdChecker>
+                  {/* Assuming ResumeProvider does not render any visible elements here */}
                   <ResumeProvider>{children}</ResumeProvider>
                 </CompanyIdChecker>
               </div>

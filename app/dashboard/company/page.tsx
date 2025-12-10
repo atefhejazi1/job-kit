@@ -22,8 +22,10 @@ import {
   TrendingUp,
   Calendar,
   ChevronRight,
+  Loader2, // Added for loading state in the chart
 } from "lucide-react";
 
+// --- Interfaces (Kept as is) ---
 interface DashboardStats {
   totalJobs: number;
   openJobs: number;
@@ -54,6 +56,7 @@ interface ChartData {
   date: string;
   applications: number;
 }
+// --- End Interfaces ---
 
 export default function CompanyDashboard() {
   const router = useRouter();
@@ -77,13 +80,28 @@ export default function CompanyDashboard() {
   // Fetch dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
+      // Check if user is COMPANY and is available before fetching
+      if (!user || user.userType !== "COMPANY") {
+        setLoading(false);
+        return;
+      }
+
       try {
         const headers = createApiHeadersWithoutContentType(user);
 
         // Fetch stats
-        const statsResponse = await fetch("/api/dashboard/stats", {
-          headers,
-        });
+        const [
+          statsResponse,
+          jobsResponse,
+          applicationsResponse,
+          chartDataResponse,
+        ] = await Promise.all([
+          fetch("/api/dashboard/stats", { headers }),
+          fetch("/api/dashboard/company/jobs?limit=5", { headers }),
+          fetch("/api/dashboard/company/applications?limit=5", { headers }),
+          fetch("/api/dashboard/company/chart-data", { headers }),
+        ]);
+
         if (statsResponse.ok) {
           const statsData = await statsResponse.json();
           setStats(statsData);
@@ -92,13 +110,6 @@ export default function CompanyDashboard() {
           toast.error("Failed to load stats");
         }
 
-        // Fetch recent jobs (last 5)
-        const jobsResponse = await fetch(
-          "/api/dashboard/company/jobs?limit=5",
-          {
-            headers,
-          }
-        );
         if (jobsResponse.ok) {
           const jobsData = await jobsResponse.json();
           setRecentJobs(jobsData);
@@ -106,11 +117,6 @@ export default function CompanyDashboard() {
           console.error("Jobs API error:", jobsResponse.status);
         }
 
-        // Fetch recent applications (last 5)
-        const applicationsResponse = await fetch(
-          "/api/dashboard/company/applications?limit=5",
-          { headers }
-        );
         if (applicationsResponse.ok) {
           const applicationsData = await applicationsResponse.json();
           setRecentApplications(applicationsData);
@@ -118,39 +124,28 @@ export default function CompanyDashboard() {
           console.error("Applications API error:", applicationsResponse.status);
         }
 
-        // Generate 30-day chart data with real applications count
-        const last30Days = await generateLast30DaysWithData(headers);
-        setChartData(last30Days);
+        if (chartDataResponse.ok) {
+          const chartData = await chartDataResponse.json();
+          setChartData(chartData);
+        } else {
+          console.warn("Chart data API failed. Using mock data.");
+          setChartData(generateMockData());
+        }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
         toast.error("Failed to load dashboard data");
+        // Use mock data for chart if network fails completely
+        setChartData(generateMockData());
       } finally {
         setLoading(false);
       }
     };
 
-    if (user?.userType === "COMPANY") {
-      fetchDashboardData();
-    }
+    fetchDashboardData();
   }, [user]);
 
-  const generateLast30DaysWithData = async (headers: HeadersInit) => {
-    try {
-      const response = await fetch("/api/dashboard/company/chart-data", {
-        headers,
-      });
-      if (response.ok) {
-        return await response.json();
-      }
-      // Fallback to mock data if API fails
-      return generateMockData();
-    } catch (error) {
-      console.error("Error fetching real chart data:", error);
-      return generateMockData();
-    }
-  };
-
-  const generateMockData = () => {
+  // Mock data generator (kept as is)
+  const generateMockData = (): ChartData[] => {
     const data = [];
     for (let i = 29; i >= 0; i--) {
       const date = new Date();
@@ -169,6 +164,7 @@ export default function CompanyDashboard() {
     return data;
   };
 
+  // Stat Card Component (Updated for Dark Mode and dynamic color class handling)
   const StatCard = ({
     title,
     value,
@@ -180,30 +176,64 @@ export default function CompanyDashboard() {
     value: number | string;
     subtitle: string;
     icon: any;
-    color: string;
-  }) => (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
-          <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
-        </div>
-        <div className={`p-3 rounded-lg bg-${color}-100`}>
-          <Icon className={`w-6 h-6 text-${color}-600`} />
+    color: "blue" | "green" | "purple" | "orange";
+  }) => {
+    const iconClasses = {
+      blue: "bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400",
+      green:
+        "bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400",
+      purple:
+        "bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-400",
+      orange:
+        "bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400",
+    };
+
+    return (
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow dark:bg-slate-800 dark:border-slate-700">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-600 dark:text-slate-400">
+              {title}
+            </p>
+            <p className="text-3xl font-bold text-gray-900 mt-2 dark:text-white">
+              {value}
+            </p>
+            <p className="text-sm text-gray-500 mt-1 dark:text-slate-500">
+              {subtitle}
+            </p>
+          </div>
+          <div className={`p-3 rounded-lg ${iconClasses[color]}`}>
+            <Icon className="w-6 h-6" />
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
+
+  // Helper for Application Status colors
+  const getStatusClasses = (status: string) => {
+    switch (status) {
+      case "PENDING":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300";
+      case "SHORTLISTED":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300";
+      case "HIRED":
+        return "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-slate-300";
+    }
+  };
 
   return (
     <div className="space-y-6 pb-8">
-      {/* User Info */}
+      {/* User Info (Assuming UserInfo handles its own dark mode) */}
       <UserInfo />
 
       {/* Welcome Banner */}
-      <div className="bg-linear-to-r from-blue-600 to-blue-700 rounded-lg p-6 text-white">
-        <h1 className="text-3xl font-bold mb-2">Welcome back, {user?.name}!</h1>
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-6 text-white shadow-lg">
+        <h1 className="text-3xl font-bold mb-2">
+          Welcome back, {user?.name || "Team"}!
+        </h1>
         <p className="text-blue-100">
           Here's your company recruitment dashboard for this week
         </p>
@@ -244,35 +274,49 @@ export default function CompanyDashboard() {
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Application Trend Chart */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6 dark:bg-slate-800 dark:border-slate-700">
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               Application Activity (Last 30 Days)
             </h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-gray-500 mt-1 dark:text-slate-400">
               Number of applications received daily
             </p>
           </div>
           {loading ? (
-            <div className="h-64 flex items-center justify-center">
-              <p className="text-gray-500">Loading chart...</p>
+            <div className="h-64 flex flex-col items-center justify-center space-y-2">
+              <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+              <p className="text-gray-500 dark:text-slate-400">
+                Loading chart...
+              </p>
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#e0e0e0"
+                  vertical={false}
+                  className="dark:stroke-slate-700"
+                />
                 <XAxis
                   dataKey="date"
                   stroke="#9ca3af"
                   style={{ fontSize: "12px" }}
+                  tick={{ fill: user ? "var(--tw-color-slate-400)" : "#9ca3af" }}
                 />
-                <YAxis stroke="#9ca3af" style={{ fontSize: "12px" }} />
+                <YAxis
+                  stroke="#9ca3af"
+                  style={{ fontSize: "12px" }}
+                  tick={{ fill: user ? "var(--tw-color-slate-400)" : "#9ca3af" }}
+                />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#fff",
+                    backgroundColor: "rgb(255 255 255 / 0.9)",
                     border: "1px solid #e5e7eb",
                     borderRadius: "0.5rem",
                   }}
+                  itemStyle={{ color: "#333" }}
                   cursor={{ fill: "rgba(59, 130, 246, 0.1)" }}
                 />
                 <Bar
@@ -286,55 +330,61 @@ export default function CompanyDashboard() {
         </div>
 
         {/* Quick Stats Summary */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Summary</h3>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 dark:bg-slate-800 dark:border-slate-700">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 dark:text-white">
+            Summary
+          </h3>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium text-gray-600">
+            {/* Total Applications */}
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg dark:bg-slate-700/50">
+              <span className="text-sm font-medium text-gray-600 dark:text-slate-400">
                 Total Applications
               </span>
-              <span className="text-lg font-bold text-gray-900">
+              <span className="text-lg font-bold text-gray-900 dark:text-white">
                 {loading ? "..." : stats.totalApplications}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium text-gray-600">
+            {/* Hired This Month */}
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg dark:bg-slate-700/50">
+              <span className="text-sm font-medium text-gray-600 dark:text-slate-400">
                 Hired This Month
               </span>
               <span className="text-lg font-bold text-green-600">
                 {loading ? "..." : stats.hiredThisMonth}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium text-gray-600">
+            {/* Open Positions */}
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg dark:bg-slate-700/50">
+              <span className="text-sm font-medium text-gray-600 dark:text-slate-400">
                 Open Positions
               </span>
               <span className="text-lg font-bold text-blue-600">
                 {loading ? "..." : stats.openJobs}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium text-gray-600">
+            {/* Closed Positions */}
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg dark:bg-slate-700/50">
+              <span className="text-sm font-medium text-gray-600 dark:text-slate-400">
                 Closed Positions
               </span>
-              <span className="text-lg font-bold text-gray-600">
+              <span className="text-lg font-bold text-gray-600 dark:text-slate-400">
                 {loading ? "..." : stats.closedJobs}
               </span>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="mt-6 pt-6 border-t border-gray-200 space-y-2">
+          <div className="mt-6 pt-6 border-t border-gray-200 space-y-3 dark:border-slate-700">
             <button
               onClick={() => router.push("/dashboard/company/add-job")}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium shadow-md hover:shadow-lg"
             >
               <Plus className="w-4 h-4" />
               Post New Job
             </button>
             <button
               onClick={() => router.push("/dashboard/company/all-jobs")}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg transition-colors font-medium"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg transition-colors font-medium dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/60"
             >
               <Briefcase className="w-4 h-4" />
               View All Jobs
@@ -346,18 +396,22 @@ export default function CompanyDashboard() {
       {/* Recent Jobs & Applications */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Jobs */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-            <h3 className="text-lg font-semibold text-gray-900">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden dark:bg-slate-800 dark:border-slate-700">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 dark:border-slate-700 dark:bg-slate-700/50">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Latest 5 Jobs Posted
             </h3>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-200 dark:divide-slate-700">
             {loading ? (
-              <div className="p-6 text-center text-gray-500">Loading...</div>
+              <div className="p-6 text-center text-gray-500 dark:text-slate-400">
+                Loading...
+              </div>
             ) : recentJobs.length === 0 ? (
               <div className="p-6 text-center">
-                <p className="text-gray-500">No jobs posted yet</p>
+                <p className="text-gray-500 dark:text-slate-400">
+                  No jobs posted yet
+                </p>
                 <button
                   onClick={() => router.push("/dashboard/company/add-job")}
                   className="mt-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
@@ -369,25 +423,25 @@ export default function CompanyDashboard() {
               recentJobs.map((job) => (
                 <div
                   key={job.id}
-                  className="p-4 hover:bg-gray-50 transition-colors"
+                  className="p-4 hover:bg-gray-50 transition-colors dark:hover:bg-slate-700/50"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900">
+                      <h4 className="font-semibold text-gray-900 dark:text-white">
                         {job.title}
                       </h4>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-gray-500 mt-1 dark:text-slate-400">
                         {job.applicationsCount} applications
                       </p>
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-gray-400 mt-1 dark:text-slate-500">
                         Posted {job.postedDate}
                       </p>
                     </div>
                     <span
                       className={`px-2 py-1 text-xs font-medium rounded-full ${
                         job.status === "active"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
+                          ? "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300"
+                          : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-slate-300"
                       }`}
                     >
                       {job.status === "active" ? "Active" : "Closed"}
@@ -397,7 +451,7 @@ export default function CompanyDashboard() {
               ))
             )}
           </div>
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 dark:bg-slate-700/50 dark:border-slate-700">
             <button
               onClick={() => router.push("/dashboard/company/all-jobs")}
               className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1"
@@ -408,45 +462,45 @@ export default function CompanyDashboard() {
         </div>
 
         {/* Recent Applications */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-            <h3 className="text-lg font-semibold text-gray-900">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden dark:bg-slate-800 dark:border-slate-700">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 dark:border-slate-700 dark:bg-slate-700/50">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Latest 5 Applications
             </h3>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-200 dark:divide-slate-700">
             {loading ? (
-              <div className="p-6 text-center text-gray-500">Loading...</div>
+              <div className="p-6 text-center text-gray-500 dark:text-slate-400">
+                Loading...
+              </div>
             ) : recentApplications.length === 0 ? (
               <div className="p-6 text-center">
-                <p className="text-gray-500">No applications yet</p>
+                <p className="text-gray-500 dark:text-slate-400">
+                  No applications yet
+                </p>
               </div>
             ) : (
               recentApplications.map((app) => (
                 <div
                   key={app.id}
-                  className="p-4 hover:bg-gray-50 transition-colors"
+                  className="p-4 hover:bg-gray-50 transition-colors dark:hover:bg-slate-700/50"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900">
+                      <h4 className="font-semibold text-gray-900 dark:text-white">
                         {app.applicantName}
                       </h4>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-sm text-gray-600 mt-1 dark:text-slate-400">
                         {app.position}
                       </p>
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-gray-400 mt-1 dark:text-slate-500">
                         Applied {app.appliedDate}
                       </p>
                     </div>
                     <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        app.status === "PENDING"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : app.status === "SHORTLISTED"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-green-100 text-green-800"
-                      }`}
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusClasses(
+                        app.status
+                      )}`}
                     >
                       {app.status}
                     </span>
@@ -455,7 +509,7 @@ export default function CompanyDashboard() {
               ))
             )}
           </div>
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 dark:bg-slate-700/50 dark:border-slate-700">
             <button
               onClick={() => router.push("/dashboard/company/applications")}
               className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1"

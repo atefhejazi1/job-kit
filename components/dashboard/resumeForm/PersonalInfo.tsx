@@ -9,45 +9,56 @@ export default function PersonalInfo() {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
-      setResumeData(prev => ({ ...prev, [name]: value }));
+      setResumeData((prev) => ({ ...prev, [name]: value }));
     },
     [setResumeData]
   );
 
   return (
-    <div>
-      <h2 className="mb-3 font-semibold text-xl">Personal Info</h2>
+    <div
+      // Optional: Add dark mode background to the container if needed,
+      // though typically the inputs themselves are styled.
+    >
+      {/* Dark mode for header text color */}
+      <h2 className="mb-3 font-semibold text-xl dark:text-white">
+        Personal Info
+      </h2>
       <input
-      key="name-input"
+        key="name-input"
         name="name"
         value={resumeData.name}
         onChange={handleChange}
         placeholder="Full Name"
-        className="block mb-2 p-2 border rounded w-full"
+        // Dark mode styles for input
+        className="block mb-2 p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
       />
       <input
-      key="email-input"
+        key="email-input"
         name="email"
         value={resumeData.email}
         onChange={handleChange}
         placeholder="Email"
-        className="block mb-2 p-2 border rounded w-full"
+        // Dark mode styles for input
+        className="block mb-2 p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
       />
       <input
-      key="phone-input"
+        key="phone-input"
         name="phone"
         value={resumeData.phone}
         onChange={handleChange}
         placeholder="Phone"
-        className="block mb-2 p-2 border rounded w-full"
+        // Dark mode styles for input
+        className="block mb-2 p-2 border rounded w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
       />
       <textarea
-      key="summary-input"
+        key="summary-input"
         name="summary"
         value={resumeData.summary}
         onChange={handleChange}
         placeholder="Professional summary..."
-        className="block p-2 border rounded w-full h-24"
+        rows={4} // Increased rows for better visual summary input
+        // Dark mode styles for textarea
+        className="block p-2 border rounded w-full h-24 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
       />
     </div>
   );

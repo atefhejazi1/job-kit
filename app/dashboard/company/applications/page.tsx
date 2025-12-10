@@ -180,6 +180,8 @@ export default function AllApplicationsPage() {
   };
 
   const getStatusBadge = (status: string) => {
+    // Note: Tailwind utility classes that don't change in dark mode (e.g., bg-yellow-100) are kept as is,
+    // as the badge colors are typically meant to stand out regardless of the background.
     const statusStyles = {
       PENDING: "bg-yellow-100 text-yellow-800",
       REVIEWED: "bg-blue-100 text-blue-800",
@@ -216,14 +218,18 @@ export default function AllApplicationsPage() {
 
   if (loading && !applications.length) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-7xl mx-auto px-4">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-300 rounded w-1/3 mb-4"></div>
-            <div className="h-4 bg-gray-300 rounded w-1/4 mb-8"></div>
+            {/* Dark Mode Skeleton */}
+            <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
+            <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/4 mb-8"></div>
             <div className="space-y-4">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-24 bg-gray-300 rounded"></div>
+                <div
+                  key={i}
+                  className="h-24 bg-gray-300 dark:bg-gray-800 rounded"
+                ></div>
               ))}
             </div>
           </div>
@@ -233,21 +239,21 @@ export default function AllApplicationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        {/* Header and Filters Container */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-lg p-6 mb-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-secondary mb-2">
+              <h1 className="text-3xl font-bold text-secondary dark:text-gray-100 mb-2">
                 All Applications
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Manage all job applications across your company
               </p>
             </div>
             <div className="mt-4 md:mt-0">
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 {totalApplications} total applications
               </div>
             </div>
@@ -263,10 +269,10 @@ export default function AllApplicationsPage() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                   placeholder="Search by applicant name, email, or job title..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary/20 focus:border-primary dark:focus:border-primary"
                 />
                 <svg
-                  className="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
+                  className="absolute left-3 top-2.5 h-5 w-5 text-gray-400 dark:text-gray-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -291,37 +297,37 @@ export default function AllApplicationsPage() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary/20 focus:border-primary dark:focus:border-primary"
             >
-              <option value="ALL">All Status</option>
-              <option value="PENDING">Pending</option>
-              <option value="REVIEWED">Reviewed</option>
-              <option value="SHORTLISTED">Shortlisted</option>
-              <option value="INTERVIEWING">Interviewing</option>
-              <option value="ACCEPTED">Accepted</option>
-              <option value="REJECTED">Rejected</option>
-              <option value="WITHDRAWN">Withdrawn</option>
+              <option value="ALL" className="dark:bg-gray-700">All Status</option>
+              <option value="PENDING" className="dark:bg-gray-700">Pending</option>
+              <option value="REVIEWED" className="dark:bg-gray-700">Reviewed</option>
+              <option value="SHORTLISTED" className="dark:bg-gray-700">Shortlisted</option>
+              <option value="INTERVIEWING" className="dark:bg-gray-700">Interviewing</option>
+              <option value="ACCEPTED" className="dark:bg-gray-700">Accepted</option>
+              <option value="REJECTED" className="dark:bg-gray-700">Rejected</option>
+              <option value="WITHDRAWN" className="dark:bg-gray-700">Withdrawn</option>
             </select>
           </div>
         </div>
 
         {/* Applications List */}
-        <div className="bg-white rounded-lg shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-lg">
           {loading ? (
             <div className="p-6">
               <div className="animate-pulse space-y-4">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-20 bg-gray-200 rounded"></div>
+                  <div key={i} className="h-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 ))}
               </div>
             </div>
           ) : applications.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">📭</div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                 No Applications Found
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
                 {filterStatus !== "ALL" || searchTerm
                   ? "Try adjusting your filters or search terms."
                   : "No one has applied to your jobs yet."}
@@ -345,7 +351,7 @@ export default function AllApplicationsPage() {
               {applications.map((application) => (
                 <div
                   key={application.id}
-                  className="border-b border-gray-200 last:border-b-0 p-4 hover:bg-gray-50"
+                  className="border-b border-gray-200 dark:border-gray-700 last:border-b-0 p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150"
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex-1">
@@ -355,11 +361,11 @@ export default function AllApplicationsPage() {
                             `/dashboard/company/applications/${application.id}`
                           )
                         }
-                        className="font-semibold text-gray-900 hover:text-primary transition-colors"
+                        className="font-semibold text-gray-900 dark:text-gray-100 hover:text-primary transition-colors"
                       >
                         {application.user.name}
                       </button>
-                      <p className="text-sm text-gray-600 mb-1">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                         {application.user.email}
                       </p>
                       <button
@@ -380,14 +386,14 @@ export default function AllApplicationsPage() {
 
                   <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                     <div>
-                      <span className="text-gray-600">Phone:</span>
-                      <span className="ml-1 text-gray-900">
+                      <span className="text-gray-600 dark:text-gray-400">Phone:</span>
+                      <span className="ml-1 text-gray-900 dark:text-gray-100">
                         {application.user.jobSeeker?.phone || "Not provided"}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-600">Applied:</span>
-                      <span className="ml-1 text-gray-900">
+                      <span className="text-gray-600 dark:text-gray-400">Applied:</span>
+                      <span className="ml-1 text-gray-900 dark:text-gray-100">
                         {formatDate(application.createdAt)}
                       </span>
                     </div>
@@ -397,7 +403,7 @@ export default function AllApplicationsPage() {
                   {application.user.jobSeeker?.skills &&
                     application.user.jobSeeker.skills.length > 0 && (
                       <div className="mb-3">
-                        <span className="text-sm text-gray-600 mb-2 block">
+                        <span className="text-sm text-gray-600 dark:text-gray-400 mb-2 block">
                           Skills:
                         </span>
                         <div className="flex flex-wrap gap-1">
@@ -405,6 +411,7 @@ export default function AllApplicationsPage() {
                             (skill, index) => (
                               <span
                                 key={index}
+                                // Kept light badge colors for visibility on dark background
                                 className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
                               >
                                 {skill}
@@ -429,7 +436,7 @@ export default function AllApplicationsPage() {
                     <button
                       onClick={() => createConversation(application.id)}
                       disabled={creatingConversation === application.id}
-                      className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-md text-sm font-medium hover:bg-green-600 disabled:bg-gray-400 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-md text-sm font-medium hover:bg-green-600 disabled:bg-gray-400 dark:disabled:bg-gray-600 transition-colors"
                     >
                       <MessageCircle className="h-4 w-4" />
                       {creatingConversation === application.id
@@ -468,9 +475,9 @@ export default function AllApplicationsPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="bg-white rounded-lg shadow-sm p-4 mt-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-lg p-4 mt-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-              <div className="text-sm text-gray-600 mb-4 md:mb-0">
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-4 md:mb-0">
                 Page {currentPage} of {totalPages} ({totalApplications} total
                 applications)
               </div>
@@ -480,7 +487,7 @@ export default function AllApplicationsPage() {
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
                   disabled={currentPage === 1}
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Previous
                 </button>
@@ -502,7 +509,7 @@ export default function AllApplicationsPage() {
                       className={`px-3 py-2 border rounded-md text-sm font-medium ${
                         currentPage === pageNum
                           ? "border-primary bg-primary text-white"
-                          : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                          : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                       }`}
                     >
                       {pageNum}
@@ -514,7 +521,7 @@ export default function AllApplicationsPage() {
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
                   disabled={currentPage === totalPages}
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Next
                 </button>

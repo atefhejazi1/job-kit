@@ -64,33 +64,39 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
       }
     };
 
+    // هذا الجزء يحتاج إلى تنفيذ منطق تحديد ما إذا كانت الوظيفة مفضلة أو تم التقديم عليها
+    // setBookmarked(checkBookmarkStatus(id, user));
+    // setApplied(checkApplicationStatus(id, user));
+
     fetchJobDetails();
   }, [id, user]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
+      // خلفية التحميل
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
         <div className="max-w-5xl mx-auto px-4 py-16">
           <div className="text-center mb-8">
             <div className="relative mb-8">
-              <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-200 border-t-orange-600 mx-auto"></div>
+              {/* أيقونة التحميل */}
+              <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-200 border-t-orange-600 dark:border-slate-700 dark:border-t-orange-500 mx-auto"></div>
               <Briefcase className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-orange-600" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               Loading Job Details...
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-slate-400">
               Please wait while we fetch the information
             </p>
           </div>
 
           {/* Loading Skeleton */}
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden animate-pulse">
-            <div className="bg-gray-200 h-48 w-full"></div>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden animate-pulse">
+            <div className="bg-gray-200 dark:bg-slate-700 h-48 w-full"></div>
             <div className="p-8 space-y-4">
-              <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-full"></div>
-              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+              <div className="h-6 bg-gray-200 dark:bg-slate-600 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-600 rounded w-full"></div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-600 rounded w-5/6"></div>
             </div>
           </div>
         </div>
@@ -100,7 +106,8 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
 
   if (error || !job) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
+      // خلفية الخطأ
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
         <div className="max-w-5xl mx-auto px-4 py-12">
           <Link
             href="/jobs"
@@ -109,14 +116,15 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
             <ArrowLeft className="w-5 h-5" />
             Back to jobs
           </Link>
-          <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
-            <div className="bg-red-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <AlertCircle className="w-12 h-12 text-red-600" />
+          {/* حاوية الخطأ */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl dark:shadow-2xl p-12 text-center">
+            <div className="bg-red-100 dark:bg-red-900 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <AlertCircle className="w-12 h-12 text-red-600 dark:text-red-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
               Oops! Something went wrong
             </h2>
-            <p className="text-red-700 text-lg mb-6">
+            <p className="text-red-700 dark:text-red-400 text-lg mb-6">
               {error || "Job not found"}
             </p>
             <Link
@@ -152,9 +160,10 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
     new Date(job.deadline) < new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 py-12">
+    // الخلفية الرئيسية
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 py-12">
       <div className="max-w-5xl mx-auto px-4">
-        {/* Header Navigation */}
+        {/* Header Navigation (لون النص يبقى كما هو لكونه لون براند) */}
         <Link
           href="/jobs"
           className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 mb-8 font-semibold transition-colors transform hover:scale-105"
@@ -164,8 +173,8 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
         </Link>
 
         {/* Main Content Card */}
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
-          {/* Hero Section */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-slate-700">
+          {/* Hero Section - (الخلفية المتدرجة للعنوان ستبقى ثابتة لأنها تعبر عن الهوية البصرية) */}
           <div className="bg-gradient-to-r from-orange-500 to-red-500 p-8 text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-32 -mt-32"></div>
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-10 rounded-full -ml-24 -mb-24"></div>
@@ -194,33 +203,33 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
               </div>
             </div>
 
-            {/* Quick Info */}
+            {/* Quick Info (يجب تكييف لون النص ليكون مقروءًا على خلفية داكنة خفيفة) */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
               <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 hover:bg-opacity-30 transition-all">
-                <p className="text-black text-xs font-medium mb-1">Posted On</p>
-                <p className="font-bold text-black text-sm">
+                <p className="text-black dark:text-gray-200 text-xs font-medium mb-1">Posted On</p>
+                <p className="font-bold text-black dark:text-white text-sm">
                   {formatDate(job.createdAt)}
                 </p>
               </div>
               <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 hover:bg-opacity-30 transition-all">
-                <p className="text-black text-xs font-medium mb-1">Location</p>
-                <p className="font-bold text-black text-sm flex items-center gap-1">
+                <p className="text-black dark:text-gray-200 text-xs font-medium mb-1">Location</p>
+                <p className="font-bold text-black dark:text-white text-sm flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
                   {job.location}
                 </p>
               </div>
               <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 hover:bg-opacity-30 transition-all">
-                <p className="text-black text-xs font-medium mb-1">Job Type</p>
-                <p className="font-bold text-black text-sm flex items-center gap-1">
+                <p className="text-black dark:text-gray-200 text-xs font-medium mb-1">Job Type</p>
+                <p className="font-bold text-black dark:text-white text-sm flex items-center gap-1">
                   <Briefcase className="w-4 h-4" />
                   {job.workType}
                 </p>
               </div>
               <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 hover:bg-opacity-30 transition-all">
-                <p className="text-black text-xs font-medium mb-1">
+                <p className="text-black dark:text-gray-200 text-xs font-medium mb-1">
                   Experience
                 </p>
-                <p className="font-bold text-black text-sm">
+                <p className="font-bold text-black dark:text-white text-sm">
                   {job.experienceLevel}
                 </p>
               </div>
@@ -230,20 +239,20 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
           {/* Content Section */}
           <div className="p-8">
             {/* Salary Section */}
-            <div className="mb-8 pb-8 border-b-2 border-gray-200">
+            <div className="mb-8 pb-8 border-b-2 border-gray-200 dark:border-slate-700">
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-3 bg-green-100 rounded-lg">
-                  <DollarSign className="w-6 h-6 text-green-600" />
+                <div className="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
+                  <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <p className="text-gray-600 text-sm">Expected Salary</p>
-                  <p className="text-2xl font-bold text-green-600">
+                  <p className="text-gray-600 dark:text-slate-400 text-sm">Expected Salary</p>
+                  <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                     {formatSalary(job.salaryMin, job.salaryMax)}
                   </p>
                 </div>
               </div>
               {job.currency && (
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-slate-500">
                   Currency: {job.currency}
                 </p>
               )}
@@ -254,8 +263,8 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
               <div
                 className={`mb-8 p-4 rounded-lg flex items-start gap-3 ${
                   isDeadlineApproaching
-                    ? "bg-orange-50 border-2 border-orange-200"
-                    : "bg-blue-50 border-2 border-blue-200"
+                    ? "bg-orange-50 border-2 border-orange-200 dark:bg-orange-900 dark:border-orange-700"
+                    : "bg-blue-50 border-2 border-blue-200 dark:bg-blue-900 dark:border-blue-700"
                 }`}
               >
                 <Clock
@@ -264,14 +273,14 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
                   }`}
                 />
                 <div>
-                  <p className="font-semibold text-gray-900">
+                  <p className="font-semibold text-gray-900 dark:text-white">
                     Application Deadline
                   </p>
                   <p
                     className={
                       isDeadlineApproaching
-                        ? "text-orange-700"
-                        : "text-blue-700"
+                        ? "text-orange-700 dark:text-orange-400"
+                        : "text-blue-700 dark:text-blue-400"
                     }
                   >
                     {formatDate(job.deadline)}
@@ -285,17 +294,18 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
 
             {/* Description */}
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                 Job Description
               </h2>
-              <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+              {/* تحتاج إلى التأكد من أن Prose يدعم الوضع الداكن في إعدادات Tailwind */}
+              <div className="prose prose-lg max-w-none text-gray-700 dark:text-slate-300 leading-relaxed">
                 <p className="whitespace-pre-wrap">{job.description}</p>
               </div>
             </div>
 
             {/* Requirements */}
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <CheckCircle className="w-6 h-6 text-orange-600" />
                 Requirements
               </h2>
@@ -304,14 +314,14 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
                   job.requirements.map((req, idx) => (
                     <li
                       key={idx}
-                      className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
+                      className="flex items-start gap-3 p-3 bg-orange-50 dark:bg-slate-700 rounded-lg hover:bg-orange-100 dark:hover:bg-slate-600 transition-colors"
                     >
                       <span className="text-orange-600 font-bold mt-1">✓</span>
-                      <span className="text-gray-700">{req}</span>
+                      <span className="text-gray-700 dark:text-slate-200">{req}</span>
                     </li>
                   ))
                 ) : (
-                  <li className="text-gray-600">
+                  <li className="text-gray-600 dark:text-slate-400">
                     No specific requirements listed
                   </li>
                 )}
@@ -320,7 +330,7 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
 
             {/* Skills */}
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <Zap className="w-6 h-6 text-yellow-500" />
                 Required Skills
               </h2>
@@ -329,13 +339,13 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
                   job.skills.map((skill, idx) => (
                     <span
                       key={idx}
-                      className="px-4 py-2 bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 rounded-full font-semibold hover:shadow-md transition-all hover:scale-105 cursor-pointer"
+                      className="px-4 py-2 bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 rounded-full font-semibold hover:shadow-md transition-all hover:scale-105 cursor-pointer dark:from-slate-700 dark:to-slate-800 dark:text-orange-400"
                     >
                       {skill}
                     </span>
                   ))
                 ) : (
-                  <p className="text-gray-600">No specific skills listed</p>
+                  <p className="text-gray-600 dark:text-slate-400">No specific skills listed</p>
                 )}
               </div>
             </div>
@@ -343,17 +353,17 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
             {/* Benefits */}
             {job.benefits && job.benefits.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                   Benefits
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {job.benefits.map((benefit, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                      className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg"
                     >
                       <span className="text-green-500 text-xl">✨</span>
-                      <span className="text-gray-700">{benefit}</span>
+                      <span className="text-gray-700 dark:text-slate-200">{benefit}</span>
                     </div>
                   ))}
                 </div>
@@ -362,32 +372,33 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
 
             {/* Company Info Section */}
             {job.company && (
-              <div className="mb-8 pb-8 border-b-2 border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <div className="mb-8 pb-8 border-b-2 border-gray-200 dark:border-slate-700">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                   About the Company
                 </h2>
                 <div className="flex gap-4 items-start">
                   {job.company.logo && (
+                    // يجب أن يظهر الشعار بوضوح، قد يحتاج إلى خلفية بيضاء في الوضع الداكن إذا كان شفافاً
                     <Image
                       src={job.company.logo}
                       alt={job.company.companyName}
                       width={80}
                       height={80}
-                      className="rounded-lg"
+                      className="rounded-lg bg-white p-1 dark:bg-slate-900" // إضافة خلفية بيضاء للشعار في الوضع الداكن
                     />
                   )}
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                       {job.company.companyName}
                     </h3>
                     {job.company.industry && (
-                      <p className="text-gray-600 mb-2">
+                      <p className="text-gray-600 dark:text-slate-400 mb-2">
                         <span className="font-semibold">Industry:</span>{" "}
                         {job.company.industry}
                       </p>
                     )}
                     {job.company.location && (
-                      <p className="text-gray-600 flex items-center gap-1">
+                      <p className="text-gray-600 dark:text-slate-400 flex items-center gap-1">
                         <MapPin className="w-4 h-4" />
                         {job.company.location}
                       </p>
@@ -397,7 +408,7 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
               </div>
             )}
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - (الأزرار الرئيسية ستبقى بألوانها الزاهية لتمييزها) */}
             <div className="flex flex-col sm:flex-row gap-4">
               {isAuthenticated ? (
                 user?.userType === "USER" ? (
@@ -412,7 +423,7 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
                     {applied ? "✓ Application Submitted" : "Apply Now"}
                   </Link>
                 ) : (
-                  <div className="flex-1 py-4 px-6 rounded-xl font-bold text-lg bg-gray-100 text-gray-500 inline-flex items-center justify-center">
+                  <div className="flex-1 py-4 px-6 rounded-xl font-bold text-lg bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-slate-400 inline-flex items-center justify-center">
                     <Building className="w-5 h-5 mr-2" />
                     Companies cannot apply
                   </div>
@@ -430,7 +441,7 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
               )}
               <Link
                 href="/jobs"
-                className="py-4 px-6 rounded-xl font-bold text-lg border-2 border-orange-300 text-orange-600 hover:bg-orange-50 transition-all transform hover:scale-105"
+                className="py-4 px-6 rounded-xl font-bold text-lg border-2 border-orange-300 text-orange-600 hover:bg-orange-50 dark:border-orange-500 dark:text-orange-400 dark:hover:bg-slate-700 transition-all transform hover:scale-105"
               >
                 View Other Jobs
               </Link>
