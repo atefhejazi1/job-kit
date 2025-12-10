@@ -200,7 +200,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
       <Shape
         type="square"
         className="absolute top-20 left-10 animate-bounce opacity-20"
@@ -218,17 +218,19 @@ export default function RegisterPage() {
             <span className="bg-primary w-12 h-12 rounded-full flex justify-center items-center text-white font-bold text-xl">
               JK
             </span>
-            <h1 className="text-3xl font-bold text-gray-900">JobKit</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              JobKit
+            </h1>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Create an account
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             Start building your professional resume
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
           <Formik
             initialValues={initialValues}
             validationSchema={registerSchema}
@@ -237,7 +239,7 @@ export default function RegisterPage() {
             {({ isSubmitting, errors, touched }) => (
               <Form className="space-y-6">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Account Type
                   </label>
                   <Field name="userType">
@@ -254,8 +256,8 @@ export default function RegisterPage() {
                           <div
                             className={`p-4 border-2 rounded-lg transition-all ${
                               field.value === "USER"
-                                ? "border-primary bg-primary/5"
-                                : "border-gray-300 hover:border-gray-400"
+                                ? "border-primary bg-primary/5 dark:bg-primary/10"
+                                : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                             }`}
                           >
                             <div className="flex items-center space-x-3">
@@ -263,7 +265,7 @@ export default function RegisterPage() {
                                 className={`w-4 h-4 rounded-full border-2 transition-colors ${
                                   field.value === "USER"
                                     ? "border-primary bg-primary"
-                                    : "border-gray-300"
+                                    : "border-gray-300 dark:border-gray-600"
                                 }`}
                               >
                                 {field.value === "USER" && (
@@ -271,10 +273,10 @@ export default function RegisterPage() {
                                 )}
                               </div>
                               <div>
-                                <div className="font-medium text-gray-900">
+                                <div className="font-medium text-gray-900 dark:text-white">
                                   Job Seeker
                                 </div>
-                                <div className="text-sm text-gray-600">
+                                <div className="text-sm text-gray-600 dark:text-gray-400">
                                   Looking for opportunities
                                 </div>
                               </div>
@@ -292,8 +294,8 @@ export default function RegisterPage() {
                           <div
                             className={`p-4 border-2 rounded-lg transition-all ${
                               field.value === "COMPANY"
-                                ? "border-primary bg-primary/5"
-                                : "border-gray-300 hover:border-gray-400"
+                                ? "border-primary bg-primary/5 dark:bg-primary/10"
+                                : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                             }`}
                           >
                             <div className="flex items-center space-x-3">
@@ -301,7 +303,7 @@ export default function RegisterPage() {
                                 className={`w-4 h-4 rounded-full border-2 transition-colors ${
                                   field.value === "COMPANY"
                                     ? "border-primary bg-primary"
-                                    : "border-gray-300"
+                                    : "border-gray-300 dark:border-gray-600"
                                 }`}
                               >
                                 {field.value === "COMPANY" && (
@@ -309,10 +311,10 @@ export default function RegisterPage() {
                                 )}
                               </div>
                               <div>
-                                <div className="font-medium text-gray-900">
+                                <div className="font-medium text-gray-900 dark:text-white">
                                   Company
                                 </div>
-                                <div className="text-sm text-gray-600">
+                                <div className="text-sm text-gray-600 dark:text-gray-400">
                                   Hiring professionals
                                 </div>
                               </div>
@@ -334,8 +336,8 @@ export default function RegisterPage() {
                   {({ field }: any) => (
                     <>
                       {field.value === "COMPANY" && (
-                        <div className="space-y-4 border-t pt-4">
-                          <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                        <div className="space-y-4 border-t pt-4 border-gray-200 dark:border-gray-700">
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                             Company Information
                           </h3>
 
@@ -343,7 +345,7 @@ export default function RegisterPage() {
                             <div className="space-y-2">
                               <label
                                 htmlFor="companyName"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 Company Name *
                               </label>
@@ -352,10 +354,10 @@ export default function RegisterPage() {
                                 name="companyName"
                                 type="text"
                                 placeholder="Enter company name"
-                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:placeholder-gray-400 ${
                                   errors.companyName && touched.companyName
-                                    ? "border-error bg-red-50"
-                                    : "border-gray-300 bg-white hover:border-gray-400"
+                                    ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                                    : "border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                                 }`}
                               />
                               <ErrorMessage
@@ -368,7 +370,7 @@ export default function RegisterPage() {
                             <div className="space-y-2">
                               <label
                                 htmlFor="industry"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 Industry *
                               </label>
@@ -376,23 +378,23 @@ export default function RegisterPage() {
                                 as="select"
                                 id="industry"
                                 name="industry"
-                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:bg-gray-700 dark:border-gray-600 ${
                                   errors.industry && touched.industry
-                                    ? "border-error bg-red-50"
-                                    : "border-gray-300 bg-white hover:border-gray-400"
+                                    ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                                    : "border-gray-300 bg-white hover:border-gray-400 dark:hover:border-gray-500"
                                 }`}
                               >
-                                <option value="">Select industry</option>
-                                <option value="Technology">Technology</option>
-                                <option value="Healthcare">Healthcare</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Education">Education</option>
-                                <option value="Manufacturing">
+                                <option value="" className="dark:bg-gray-700">Select industry</option>
+                                <option value="Technology" className="dark:bg-gray-700">Technology</option>
+                                <option value="Healthcare" className="dark:bg-gray-700">Healthcare</option>
+                                <option value="Finance" className="dark:bg-gray-700">Finance</option>
+                                <option value="Education" className="dark:bg-gray-700">Education</option>
+                                <option value="Manufacturing" className="dark:bg-gray-700">
                                   Manufacturing
                                 </option>
-                                <option value="Retail">Retail</option>
-                                <option value="Consulting">Consulting</option>
-                                <option value="Other">Other</option>
+                                <option value="Retail" className="dark:bg-gray-700">Retail</option>
+                                <option value="Consulting" className="dark:bg-gray-700">Consulting</option>
+                                <option value="Other" className="dark:bg-gray-700">Other</option>
                               </Field>
                               <ErrorMessage
                                 name="industry"
@@ -404,7 +406,7 @@ export default function RegisterPage() {
                             <div className="space-y-2">
                               <label
                                 htmlFor="companySize"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 Company Size *
                               </label>
@@ -412,23 +414,23 @@ export default function RegisterPage() {
                                 as="select"
                                 id="companySize"
                                 name="companySize"
-                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:bg-gray-700 dark:border-gray-600 ${
                                   errors.companySize && touched.companySize
-                                    ? "border-error bg-red-50"
-                                    : "border-gray-300 bg-white hover:border-gray-400"
+                                    ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                                    : "border-gray-300 bg-white hover:border-gray-400 dark:hover:border-gray-500"
                                 }`}
                               >
-                                <option value="">Select company size</option>
-                                <option value="1-10">1-10 employees</option>
-                                <option value="11-50">11-50 employees</option>
-                                <option value="51-200">51-200 employees</option>
-                                <option value="201-500">
+                                <option value="" className="dark:bg-gray-700">Select company size</option>
+                                <option value="1-10" className="dark:bg-gray-700">1-10 employees</option>
+                                <option value="11-50" className="dark:bg-gray-700">11-50 employees</option>
+                                <option value="51-200" className="dark:bg-gray-700">51-200 employees</option>
+                                <option value="201-500" className="dark:bg-gray-700">
                                   201-500 employees
                                 </option>
-                                <option value="501-1000">
+                                <option value="501-1000" className="dark:bg-gray-700">
                                   501-1000 employees
                                 </option>
-                                <option value="1000+">1000+ employees</option>
+                                <option value="1000+" className="dark:bg-gray-700">1000+ employees</option>
                               </Field>
                               <ErrorMessage
                                 name="companySize"
@@ -440,7 +442,7 @@ export default function RegisterPage() {
                             <div className="space-y-2">
                               <label
                                 htmlFor="location"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 Location *
                               </label>
@@ -449,10 +451,10 @@ export default function RegisterPage() {
                                 name="location"
                                 type="text"
                                 placeholder="Enter company location"
-                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:placeholder-gray-400 ${
                                   errors.location && touched.location
-                                    ? "border-error bg-red-50"
-                                    : "border-gray-300 bg-white hover:border-gray-400"
+                                    ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                                    : "border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                                 }`}
                               />
                               <ErrorMessage
@@ -466,7 +468,7 @@ export default function RegisterPage() {
                           <div className="space-y-2">
                             <label
                               htmlFor="website"
-                              className="block text-sm font-medium text-gray-700"
+                              className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                             >
                               Company Website
                             </label>
@@ -475,14 +477,14 @@ export default function RegisterPage() {
                               name="website"
                               type="url"
                               placeholder="https://yourcompany.com"
-                              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400"
+                              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:hover:border-gray-500"
                             />
                           </div>
 
                           <div className="space-y-2">
                             <label
                               htmlFor="description"
-                              className="block text-sm font-medium text-gray-700"
+                              className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                             >
                               Company Description
                             </label>
@@ -492,15 +494,15 @@ export default function RegisterPage() {
                               name="description"
                               rows={3}
                               placeholder="Tell us about your company..."
-                              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400"
+                              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:hover:border-gray-500"
                             />
                           </div>
                         </div>
                       )}
 
                       {field.value === "USER" && (
-                        <div className="space-y-4 border-t pt-4">
-                          <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                        <div className="space-y-4 border-t pt-4 border-gray-200 dark:border-gray-700">
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                             Personal Information
                           </h3>
 
@@ -508,7 +510,7 @@ export default function RegisterPage() {
                             <div className="space-y-2">
                               <label
                                 htmlFor="firstName"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 First Name *
                               </label>
@@ -517,10 +519,10 @@ export default function RegisterPage() {
                                 name="firstName"
                                 type="text"
                                 placeholder="Enter first name"
-                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:placeholder-gray-400 ${
                                   errors.firstName && touched.firstName
-                                    ? "border-error bg-red-50"
-                                    : "border-gray-300 bg-white hover:border-gray-400"
+                                    ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                                    : "border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                                 }`}
                               />
                               <ErrorMessage
@@ -533,7 +535,7 @@ export default function RegisterPage() {
                             <div className="space-y-2">
                               <label
                                 htmlFor="lastName"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 Last Name *
                               </label>
@@ -542,10 +544,10 @@ export default function RegisterPage() {
                                 name="lastName"
                                 type="text"
                                 placeholder="Enter last name"
-                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:placeholder-gray-400 ${
                                   errors.lastName && touched.lastName
-                                    ? "border-error bg-red-50"
-                                    : "border-gray-300 bg-white hover:border-gray-400"
+                                    ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                                    : "border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                                 }`}
                               />
                               <ErrorMessage
@@ -558,7 +560,7 @@ export default function RegisterPage() {
                             <div className="space-y-2">
                               <label
                                 htmlFor="phone"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 Phone Number *
                               </label>
@@ -567,10 +569,10 @@ export default function RegisterPage() {
                                 name="phone"
                                 type="tel"
                                 placeholder="Enter phone number"
-                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:placeholder-gray-400 ${
                                   errors.phone && touched.phone
-                                    ? "border-error bg-red-50"
-                                    : "border-gray-300 bg-white hover:border-gray-400"
+                                    ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                                    : "border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                                 }`}
                               />
                               <ErrorMessage
@@ -583,7 +585,7 @@ export default function RegisterPage() {
                             <div className="space-y-2">
                               <label
                                 htmlFor="city"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 City *
                               </label>
@@ -592,10 +594,10 @@ export default function RegisterPage() {
                                 name="city"
                                 type="text"
                                 placeholder="Enter your city"
-                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:placeholder-gray-400 ${
                                   errors.city && touched.city
-                                    ? "border-error bg-red-50"
-                                    : "border-gray-300 bg-white hover:border-gray-400"
+                                    ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                                    : "border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                                 }`}
                               />
                               <ErrorMessage
@@ -608,7 +610,7 @@ export default function RegisterPage() {
                             <div className="space-y-2">
                               <label
                                 htmlFor="country"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 Country
                               </label>
@@ -617,14 +619,14 @@ export default function RegisterPage() {
                                 name="country"
                                 type="text"
                                 placeholder="Enter your country"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:hover:border-gray-500"
                               />
                             </div>
 
                             <div className="space-y-2">
                               <label
                                 htmlFor="experienceLevel"
-                                className="block text-sm font-medium text-gray-700"
+                                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                               >
                                 Experience Level
                               </label>
@@ -632,17 +634,17 @@ export default function RegisterPage() {
                                 as="select"
                                 id="experienceLevel"
                                 name="experienceLevel"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:border-gray-500"
                               >
-                                <option value="">
+                                <option value="" className="dark:bg-gray-700">
                                   Select experience level
                                 </option>
-                                <option value="Entry Level">Entry Level</option>
-                                <option value="Mid Level">Mid Level</option>
-                                <option value="Senior Level">
+                                <option value="Entry Level" className="dark:bg-gray-700">Entry Level</option>
+                                <option value="Mid Level" className="dark:bg-gray-700">Mid Level</option>
+                                <option value="Senior Level" className="dark:bg-gray-700">
                                   Senior Level
                                 </option>
-                                <option value="Executive">Executive</option>
+                                <option value="Executive" className="dark:bg-gray-700">Executive</option>
                               </Field>
                             </div>
                           </div>
@@ -650,7 +652,7 @@ export default function RegisterPage() {
                           <div className="space-y-2">
                             <label
                               htmlFor="currentPosition"
-                              className="block text-sm font-medium text-gray-700"
+                              className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                             >
                               Current Position
                             </label>
@@ -659,7 +661,7 @@ export default function RegisterPage() {
                               name="currentPosition"
                               type="text"
                               placeholder="e.g. Software Developer"
-                              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400"
+                              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white hover:border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:hover:border-gray-500"
                             />
                           </div>
                         </div>
@@ -670,23 +672,23 @@ export default function RegisterPage() {
                 <div className="space-y-2">
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                   >
                     Email Address
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FiMail className="h-5 w-5 text-gray-400" />
+                      <FiMail className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                     </div>
                     <Field
                       id="email"
                       name="email"
                       type="email"
                       placeholder="Enter your email"
-                      className={`w-full pl-10 pr-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                      className={`w-full pl-10 pr-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:placeholder-gray-400 ${
                         errors.email && touched.email
-                          ? "border-error bg-red-50"
-                          : "border-gray-300 bg-white hover:border-gray-400"
+                          ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                          : "border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                       }`}
                     />
                   </div>
@@ -700,34 +702,35 @@ export default function RegisterPage() {
                 <div className="space-y-2">
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                   >
                     Password
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FiLock className="h-5 w-5 text-gray-400" />
+                      <FiLock className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                     </div>
                     <Field
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Create a password"
-                      className={`w-full pl-10 pr-12 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                      className={`w-full pl-10 pr-12 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:placeholder-gray-400 ${
                         errors.password && touched.password
-                          ? "border-error bg-red-50"
-                          : "border-gray-300 bg-white hover:border-gray-400"
+                          ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                          : "border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                       }`}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? (
-                        <FiEyeOff className="h-5 w-5 text-gray-400 hover:text-primary transition-colors" />
+                        <FiEyeOff className="h-5 w-5" />
                       ) : (
-                        <FiEye className="h-5 w-5 text-gray-400 hover:text-primary transition-colors" />
+                        <FiEye className="h-5 w-5" />
                       )}
                     </button>
                   </div>
@@ -741,21 +744,38 @@ export default function RegisterPage() {
                 <div className="space-y-2">
                   <label
                     htmlFor="confirmPassword"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                   >
                     Confirm Password
                   </label>
-                  <Field
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Confirm your password"
-                    className={`w-full pl-4 pr-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
-                      errors.confirmPassword && touched.confirmPassword
-                        ? "border-error bg-red-50"
-                        : "border-gray-300 bg-white hover:border-gray-400"
-                    }`}
-                  />
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FiLock className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                    </div>
+                    <Field
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Confirm your password"
+                      className={`w-full pl-10 pr-12 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors dark:text-white dark:placeholder-gray-400 ${
+                        errors.confirmPassword && touched.confirmPassword
+                          ? "border-error bg-red-50 dark:bg-red-900/50 dark:border-error-dark"
+                          : "border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+                      }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? (
+                        <FiEyeOff className="h-5 w-5" />
+                      ) : (
+                        <FiEye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                   <ErrorMessage
                     name="confirmPassword"
                     component="p"
@@ -763,86 +783,64 @@ export default function RegisterPage() {
                   />
                 </div>
 
-                <div className="flex items-center">
-                  <Field
-                    id="acceptTerms"
-                    name="acceptTerms"
-                    type="checkbox"
-                    className="h-4 w-4 text-primary focus:ring-primary/20 border-gray-300 rounded"
-                  />
-
-                  <label
-                    htmlFor="acceptTerms"
-                    className="ml-2 text-sm text-gray-700"
-                  >
-                    I agree to the{" "}
-                    <Link href="/terms" className="text-primary underline">
-                      Terms
-                    </Link>{" "}
-                    and{" "}
-                    <Link href="/privacy" className="text-primary underline">
-                      Privacy Policy
-                    </Link>
-                  </label>
+                <div className="flex items-start">
+                  <div className="flex items-center h-5">
+                    <Field
+                      id="acceptTerms"
+                      name="acceptTerms"
+                      type="checkbox"
+                      className={`h-4 w-4 text-primary rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:ring-primary/50 transition-colors cursor-pointer ${
+                        errors.acceptTerms && touched.acceptTerms
+                          ? "border-error focus:ring-error"
+                          : "border-gray-300"
+                      }`}
+                    />
+                  </div>
+                  <div className="ml-3 text-sm">
+                    <label
+                      htmlFor="acceptTerms"
+                      className="font-medium text-gray-700 dark:text-gray-200 cursor-pointer"
+                    >
+                      I agree to the{" "}
+                      <Link
+                        href="/terms"
+                        className="text-primary hover:text-primary-dark transition-colors"
+                      >
+                        Terms and Conditions
+                      </Link>
+                    </label>
+                    <ErrorMessage
+                      name="acceptTerms"
+                      component="p"
+                      className="text-sm text-error"
+                    />
+                  </div>
                 </div>
-                <ErrorMessage
-                  name="acceptTerms"
-                  component="p"
-                  className="text-sm text-error flex items-center gap-1"
-                />
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full px-6 py-3 rounded-md transition font-medium ${
-                    isSubmitting
-                      ? "bg-gray-400 cursor-not-allowed text-white"
-                      : "bg-primary text-white hover:bg-[#E04E00]"
-                  }`}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Creating account...
-                    </div>
-                  ) : (
-                    "Create account"
-                  )}
-                </button>
+
+                <div>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50 disabled:opacity-50 transition-colors"
+                  >
+                    {isSubmitting ? "Processing..." : "Register"}
+                  </button>
+                </div>
               </Form>
             )}
           </Formik>
-
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-medium text-primary hover:text-[#E04E00] transition-colors"
+                className="font-medium text-primary hover:text-primary-dark transition-colors"
               >
-                Sign in
+                Log In
               </Link>
             </p>
           </div>
         </div>
-
-        <div className="mt-8 text-center">
-          <p className="text-xs text-gray-500">
-            By creating an account you agree to our{" "}
-            <Link href="/terms" className="text-primary hover:underline">
-              Terms
-            </Link>{" "}
-            and{" "}
-            <Link href="/privacy" className="text-primary hover:underline">
-              Privacy Policy
-            </Link>
-          </p>
-        </div>
-
-        <Shape
-          type="rectangle"
-          className="absolute bottom-20 right-10 animate-bounce opacity-10"
-          size={40}
-        />
       </div>
     </div>
   );
