@@ -25,22 +25,22 @@ const Header = () => {
 
   return (
     <header className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-100 dark:border-gray-700 sticky top-0 z-50 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           {/* LOGO */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 w-10 h-10 rounded-lg flex justify-center items-center text-white font-bold text-xl shadow-lg">
+          <div className="flex items-center flex-shrink-0">
+            <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
+              <div className="bg-gradient-to-r from-orange-500 to-red-500 w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center text-white font-bold text-lg sm:text-xl shadow-lg">
                 JK
               </div>
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">
+              <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                 JobKit
               </span>
             </Link>
           </div>
 
           {/* DESKTOP MENU */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
             <Link
               href="/jobs"
               className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 font-medium transition"
@@ -54,6 +54,12 @@ const Header = () => {
               <Search className="w-5 h-5" />
               Advanced Search
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-text-primary transition-all duration-200 group-hover:w-full"></span>
+            </Link>
+            <Link
+              href="/about"
+              className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 font-medium transition"
+            >
+              About Us
             </Link>
 
             {isAuthenticated && (
@@ -85,25 +91,25 @@ const Header = () => {
           </nav>
 
           {/* RIGHT SIDE BUTTONS */}
-          <div className="hidden sm:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4">
             {isAuthenticated ? (
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 xl:space-x-3">
                 <ThemeToggle />
 
-                <div className="flex items-center space-x-3 px-4 py-2 bg-orange-50 dark:bg-gray-800 border border-orange-200 dark:border-gray-600 rounded-lg">
-                  <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                <div className="flex items-center space-x-2 px-3 py-1.5 xl:px-4 xl:py-2 bg-orange-50 dark:bg-gray-800 border border-orange-200 dark:border-gray-600 rounded-lg">
+                  <div className="w-7 h-7 xl:w-8 xl:h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-xs xl:text-sm font-bold flex-shrink-0">
                     {user?.userType === "COMPANY"
                       ? user?.companyName?.charAt(0)?.toUpperCase() || "C"
                       : user?.name?.charAt(0)?.toUpperCase() || "U"}
                   </div>
 
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-gray-800 dark:text-white">
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs xl:text-sm font-semibold text-gray-800 dark:text-white truncate max-w-[120px] xl:max-w-[150px]">
                       {user?.userType === "COMPANY"
                         ? user?.companyName
                         : user?.name}
                     </span>
-                    <span className="text-xs text-orange-600 dark:text-orange-400 font-medium">
+                    <span className="text-[10px] xl:text-xs text-orange-600 dark:text-orange-400 font-medium">
                       {user?.userType === "COMPANY" ? "Company" : "Job Seeker"}
                     </span>
                   </div>
@@ -111,25 +117,25 @@ const Header = () => {
 
                 <button
                   onClick={handleLogout}
-                  className="flex items-center space-x-2 px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-800 rounded-lg transition"
+                  className="flex items-center space-x-1 xl:space-x-2 px-3 py-1.5 xl:px-4 xl:py-2 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-800 rounded-lg transition"
                 >
                   <LogOut className="w-4 h-4" />
-                  <span className="text-sm font-medium">Logout</span>
+                  <span className="text-xs xl:text-sm font-medium">Logout</span>
                 </button>
               </div>
             ) : (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2 xl:space-x-3">
                 <ThemeToggle />
 
                 <Link
                   href="/login"
-                  className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition"
+                  className="px-3 py-1.5 xl:px-4 xl:py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 font-medium shadow-lg transition"
+                  className="px-4 py-1.5 xl:px-6 xl:py-2 text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 font-medium shadow-lg transition"
                 >
                   Sign Up
                 </Link>
@@ -137,21 +143,22 @@ const Header = () => {
             )}
           </div>
 
-          {/* MOBILE MENU BUTTON */}
-          <div className="sm:hidden">
+          {/* MOBILE/TABLET MENU BUTTON */}
+          <div className="lg:hidden flex items-center space-x-2">
+            <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+              className="p-1.5 sm:p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
             >
               {isOpen ? <HiX size={24} /> : <HiMenu size={24} />}
             </button>
           </div>
         </div>
 
-        {/* MOBILE MENU */}
+        {/* MOBILE/TABLET MENU */}
         {isOpen && (
-          <div className="sm:hidden border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 transition">
-            <div className="px-4 py-4 space-y-3">
+          <div className="lg:hidden border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 transition animate-slideDown">
+            <div className="px-3 sm:px-4 py-3 sm:py-4 space-y-2">
               <Link
                 href="/jobs"
                 className="block py-3 px-4 text-gray-600 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800 rounded-lg transition"
@@ -161,18 +168,25 @@ const Header = () => {
               </Link>
               <Link
                 href="/jobs/search"
-                className="flex items-center gap-2 py-3 px-4 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors duration-200"
+                className="flex items-center gap-2 py-2.5 sm:py-3 px-3 sm:px-4 text-gray-600 dark:text-gray-300 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
                 onClick={() => setIsOpen(false)}
               >
-                <Search className="w-5 h-5" />
-                Advanced Search
+                <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="text-sm sm:text-base">Advanced Search</span>
+              </Link>
+              <Link
+                href="/about"
+                className="block py-2.5 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800 rounded-lg transition"
+                onClick={() => setIsOpen(false)}
+              >
+                About Us
               </Link>
 
               {isAuthenticated ? (
                 <>
                   <Link
                     href={getDashboardLink()}
-                    className="block py-3 px-4 text-gray-600 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800 rounded-lg transition"
+                    className="block py-2.5 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800 rounded-lg transition"
                     onClick={() => setIsOpen(false)}
                   >
                     Dashboard
@@ -184,34 +198,34 @@ const Header = () => {
                         ? "/dashboard/company/messages"
                         : "/dashboard/user/messages"
                     }
-                    className="flex items-center justify-between py-3 px-4 text-gray-600 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800 rounded-lg transition"
+                    className="flex items-center justify-between py-2.5 sm:py-3 px-3 sm:px-4 text-gray-600 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800 rounded-lg transition"
                     onClick={() => setIsOpen(false)}
                   >
                     <span className="flex items-center gap-2">
-                      <MessageCircle className="w-5 h-5" />
-                      Messages
+                      <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="text-sm sm:text-base">Messages</span>
                     </span>
 
                     {unreadCount > 0 && (
-                      <span className="bg-red-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg">
+                      <span className="bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shadow-lg">
                         {unreadCount > 9 ? "9+" : unreadCount}
                       </span>
                     )}
                   </Link>
-                  <div className="py-3 px-4 bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                  <div className="py-2.5 sm:py-3 px-3 sm:px-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-gray-800 dark:to-gray-700 border border-orange-200 dark:border-gray-600 rounded-lg">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                         {user?.userType === "COMPANY"
                           ? user?.companyName?.charAt(0)?.toUpperCase() || "C"
                           : user?.name?.charAt(0)?.toUpperCase() || "U"}
                       </div>
-                      <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-800">
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white truncate">
                           {user?.userType === "COMPANY"
                             ? user?.companyName
                             : user?.name}
                         </span>
-                        <span className="text-xs text-text-primary font-medium">
+                        <span className="text-xs text-orange-600 dark:text-orange-400 font-medium">
                           {user?.userType === "COMPANY"
                             ? "Company"
                             : "Job Seeker"}
@@ -222,17 +236,17 @@ const Header = () => {
 
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-800 rounded-lg transition"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-800 rounded-lg transition font-medium"
                   >
                     <LogOut className="w-4 h-4" />
                     Logout
                   </button>
                 </>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2 pt-2">
                   <Link
                     href="/login"
-                    className="block w-full py-3 px-4 text-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                    className="block w-full py-2.5 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition font-medium"
                     onClick={() => setIsOpen(false)}
                   >
                     Sign In
@@ -240,21 +254,13 @@ const Header = () => {
 
                   <Link
                     href="/register"
-                    className="block w-full py-3 px-4 text-center bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 font-medium transition"
+                    className="block w-full py-2.5 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-center bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 font-medium transition shadow-lg"
                     onClick={() => setIsOpen(false)}
                   >
                     Sign Up
                   </Link>
                 </div>
               )}
-
-              {/* Theme Toggle for Mobile */}
-              <div className="flex items-center justify-between py-3 px-4 border-t border-gray-100 dark:border-gray-700">
-                <span className="text-gray-600 dark:text-gray-300 text-sm">
-                  Theme
-                </span>
-                <ThemeToggle />
-              </div>
             </div>
           </div>
         )}
