@@ -88,6 +88,8 @@ const Header = () => {
           <div className="hidden sm:flex items-center space-x-4">
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
+                <ThemeToggle />
+
                 <div className="flex items-center space-x-3 px-4 py-2 bg-orange-50 dark:bg-gray-800 border border-orange-200 dark:border-gray-600 rounded-lg">
                   <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
                     {user?.userType === "COMPANY"
@@ -117,6 +119,8 @@ const Header = () => {
               </div>
             ) : (
               <div className="flex items-center space-x-3">
+                <ThemeToggle />
+
                 <Link
                   href="/login"
                   className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition"
@@ -129,8 +133,6 @@ const Header = () => {
                 >
                   Sign Up
                 </Link>
-
-                <ThemeToggle />
               </div>
             )}
           </div>
