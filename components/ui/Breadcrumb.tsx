@@ -35,6 +35,11 @@ const routeLabels: Record<string, string> = {
   register: "Register",
   privacy: "Privacy Policy",
   terms: "Terms of Service",
+  "resume-builder": "Resume Builder",
+  certificates: "Certificates",
+  "cover-letter": "Cover Letter",
+  "add-job": "Add Job",
+  "all-jobs": "All Jobs",
 };
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, showHome = true }) => {
@@ -53,7 +58,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, showHome = true }) => {
     segments.forEach((segment, index) => {
       currentPath += `/${segment}`;
 
-      // Skip dynamic segments like [id]
+      // Skip dynamic segments like [id] or long IDs
       if (segment.startsWith("[") || segment.match(/^[a-z0-9]{20,}$/i)) {
         breadcrumbs.push({
           label: "Details",
@@ -80,19 +85,22 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, showHome = true }) => {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="flex items-center space-x-1 text-sm text-gray-600 mb-6 py-3 px-4 bg-white/50 backdrop-blur-sm rounded-lg border border-gray-100"
+      className="flex items-center space-x-1 text-sm text-gray-600 mb-6 py-3 px-4 rounded-lg border 
+        bg-white/50 backdrop-blur-sm border-gray-100
+        dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-300"
     >
       {showHome && (
         <>
           <Link
             href="/"
-            className="flex items-center gap-1 text-gray-500 hover:text-orange-600 transition-colors"
+            className="flex items-center gap-1 text-gray-500 hover:text-orange-600 transition-colors
+              dark:text-gray-400 dark:hover:text-primary"
           >
             <Home className="w-4 h-4" />
             <span className="hidden sm:inline">Home</span>
           </Link>
           {breadcrumbItems.length > 0 && (
-            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <ChevronRight className="w-4 h-4 text-gray-400 dark:text-gray-500" />
           )}
         </>
       )}
@@ -102,15 +110,19 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, showHome = true }) => {
           {item.href ? (
             <Link
               href={item.href}
-              className="text-gray-500 hover:text-orange-600 transition-colors"
+              className="text-gray-500 hover:text-orange-600 transition-colors
+                dark:text-gray-400 dark:hover:text-primary"
             >
               {item.label}
             </Link>
           ) : (
-            <span className="text-orange-600 font-medium">{item.label}</span>
+            // Current/Last item
+            <span className="text-orange-600 font-medium dark:text-primary">
+              {item.label}
+            </span>
           )}
           {index < breadcrumbItems.length - 1 && (
-            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <ChevronRight className="w-4 h-4 text-gray-400 dark:text-gray-500" />
           )}
         </React.Fragment>
       ))}
