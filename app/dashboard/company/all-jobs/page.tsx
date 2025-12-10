@@ -162,7 +162,9 @@ const AllJobsPage = () => {
     return (
       <span
         className={`px-2 py-1 rounded-full text-xs font-medium ${
-          isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          isActive
+            ? "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
+            : "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100"
         }`}
       >
         {isActive ? "Active" : "Inactive"}
@@ -171,16 +173,22 @@ const AllJobsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    // Added dark:bg-gray-900 to the main container
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        {/* Added dark:bg-gray-800 and dark:shadow-lg */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg p-6 mb-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-secondary mb-2">
+              {/* Added dark:text-primary */}
+              <h1 className="text-3xl font-bold text-secondary dark:text-primary mb-2">
                 All Jobs
               </h1>
-              <p className="text-gray-600">Manage your job postings</p>
+              {/* Added dark:text-gray-400 */}
+              <p className="text-gray-600 dark:text-gray-400">
+                Manage your job postings
+              </p>
             </div>
             <Link href="/dashboard/company/add-job">
               <Button variant="primary" className="mt-4 md:mt-0">
@@ -197,7 +205,8 @@ const AllJobsPage = () => {
                 placeholder="Search jobs..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                // Added dark classes for input field
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
               />
             </div>
 
@@ -207,7 +216,8 @@ const AllJobsPage = () => {
                 onChange={(e) =>
                   setFilterWorkType(e.target.value as WorkType | "")
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                // Added dark classes for select field
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary dark:bg-gray-700 dark:text-gray-100"
               >
                 <option value="">All Work Types</option>
                 <option value="FULL_TIME">Full Time</option>
@@ -223,7 +233,8 @@ const AllJobsPage = () => {
               <select
                 value={filterExperience}
                 onChange={(e) => setFilterExperience(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                // Added dark classes for select field
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary dark:bg-gray-700 dark:text-gray-100"
               >
                 <option value="">All Experience Levels</option>
                 <option value="Entry Level">Entry Level</option>
@@ -233,26 +244,32 @@ const AllJobsPage = () => {
               </select>
             </div>
 
-            <div className="text-sm text-gray-600 flex items-center">
+            {/* Added dark:text-gray-400 */}
+            <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
               Total: {totalJobs} jobs
             </div>
           </div>
         </div>
 
         {/* Jobs List */}
-        <div className="bg-white rounded-lg shadow-sm">
+        {/* Added dark:bg-gray-800 and dark:shadow-lg */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg">
           {loading ? (
+            // Added dark:text-gray-400
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading jobs...</p>
+              <p className="mt-4 text-gray-600 dark:text-gray-400">
+                Loading jobs...
+              </p>
             </div>
           ) : jobs.length === 0 ? (
+            // Added dark:text-gray-300 and dark:text-gray-400
             <div className="p-8 text-center">
               <div className="text-6xl mb-4">📝</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">
+              <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 No jobs found
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
                 {searchTerm || filterWorkType || filterExperience
                   ? "Try adjusting your filters or search terms."
                   : "Start by posting your first job."}
@@ -265,7 +282,8 @@ const AllJobsPage = () => {
             <>
               {/* Table Header - Desktop */}
               <div className="hidden md:block">
-                <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 font-semibold text-gray-700 bg-gray-50">
+                {/* Added dark:border-gray-700, dark:text-gray-300, and dark:bg-gray-700 */}
+                <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 dark:border-gray-700 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700">
                   <div className="col-span-3">Job Title</div>
                   <div className="col-span-2">Work Type</div>
                   <div className="col-span-1">Experience</div>
@@ -280,10 +298,12 @@ const AllJobsPage = () => {
               {jobs.map((job) => (
                 <div
                   key={job.id}
-                  className="border-b border-gray-200 last:border-b-0"
+                  // Added dark:border-gray-700
+                  className="border-b border-gray-200 dark:border-gray-700 last:border-b-0"
                 >
                   {/* Desktop View */}
-                  <div className="hidden md:grid md:grid-cols-12 gap-4 p-4 hover:bg-gray-50 transition-colors">
+                  {/* Added dark:hover:bg-gray-700/50 */}
+                  <div className="hidden md:grid md:grid-cols-12 gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div className="col-span-3">
                       <button
                         onClick={() =>
@@ -293,32 +313,39 @@ const AllJobsPage = () => {
                         }
                         className="text-left hover:text-primary transition-colors"
                       >
-                        <h3 className="font-semibold text-gray-900 mb-1 hover:text-primary">
+                        {/* Added dark:text-gray-100 */}
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 hover:text-primary">
                           {job.title}
                         </h3>
                       </button>
-                      <p className="text-sm text-gray-600">{job.location}</p>
+                      {/* Added dark:text-gray-400 */}
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {job.location}
+                      </p>
                       {job.deadline && (
-                        <p className="text-xs text-red-600 mt-1">
+                        <p className="text-xs text-red-600 dark:text-red-400 mt-1">
                           Deadline: {formatDate(job.deadline.toString())}
                         </p>
                       )}
                     </div>
 
                     <div className="col-span-2">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                      {/* Added dark classes for work type badge */}
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium dark:bg-blue-800 dark:text-blue-100">
                         {getWorkTypeLabel(job.workType)}
                       </span>
                     </div>
 
                     <div className="col-span-1">
-                      <span className="text-sm text-gray-600">
+                      {/* Added dark:text-gray-400 */}
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
                         {job.experienceLevel}
                       </span>
                     </div>
 
                     <div className="col-span-2">
-                      <span className="text-sm text-gray-700">
+                      {/* Added dark:text-gray-300 */}
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
                         {formatSalary(
                           job.salaryMin || undefined,
                           job.salaryMax || undefined,
@@ -332,13 +359,15 @@ const AllJobsPage = () => {
                     </div>
 
                     <div className="col-span-1">
-                      <span className="text-xs text-gray-500">
+                      {/* Added dark:text-gray-500 */}
+                      <span className="text-xs text-gray-500 dark:text-gray-500">
                         {formatDate(job.createdAt.toString())}
                       </span>
                     </div>
 
                     <div className="col-span-2">
                       <div className="flex space-x-1">
+                        {/* No dark classes needed for action buttons as they are colored */}
                         <button
                           onClick={() =>
                             router.push(
@@ -458,15 +487,18 @@ const AllJobsPage = () => {
                           }
                           className="text-left hover:text-primary transition-colors mb-1"
                         >
-                          <h3 className="font-semibold text-gray-900 hover:text-primary">
+                          {/* Added dark:text-gray-100 */}
+                          <h3 className="font-semibold text-gray-900 dark:text-gray-100 hover:text-primary">
                             {job.title}
                           </h3>
                         </button>
-                        <p className="text-sm text-gray-600 mb-2">
+                        {/* Added dark:text-gray-400 */}
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                           {job.location}
                         </p>
                         <div className="flex flex-wrap gap-2 mb-2">
-                          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                          {/* Added dark classes for work type badge */}
+                          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium dark:bg-blue-800 dark:text-blue-100">
                             {getWorkTypeLabel(job.workType)}
                           </span>
                           {getStatusBadge(job.isActive)}
@@ -474,24 +506,32 @@ const AllJobsPage = () => {
                       </div>
                     </div>
 
+                    {/* Added dark:text-gray-400 and dark:text-gray-300 */}
                     <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                       <div>
-                        <span className="text-gray-600">Experience:</span>
-                        <span className="ml-1 text-gray-900">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Experience:
+                        </span>
+                        <span className="ml-1 text-gray-900 dark:text-gray-300">
                           {job.experienceLevel}
                         </span>
                       </div>
                       <div>
-                        <span className="text-gray-600">Posted:</span>
-                        <span className="ml-1 text-gray-900">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Posted:
+                        </span>
+                        <span className="ml-1 text-gray-900 dark:text-gray-300">
                           {formatDate(job.createdAt.toString())}
                         </span>
                       </div>
                     </div>
 
+                    {/* Added dark:text-gray-400 and dark:text-gray-300 */}
                     <div className="text-sm mb-3">
-                      <span className="text-gray-600">Salary:</span>
-                      <span className="ml-1 text-gray-900">
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Salary:
+                      </span>
+                      <span className="ml-1 text-gray-900 dark:text-gray-300">
                         {formatSalary(
                           job.salaryMin || undefined,
                           job.salaryMax || undefined,
@@ -501,11 +541,12 @@ const AllJobsPage = () => {
                     </div>
 
                     {job.deadline && (
-                      <div className="text-xs text-red-600 mb-3">
+                      <div className="text-xs text-red-600 dark:text-red-400 mb-3">
                         Deadline: {formatDate(job.deadline.toString())}
                       </div>
                     )}
 
+                    {/* Action buttons - no dark classes needed as they are colored */}
                     <div className="flex space-x-2">
                       <button
                         onClick={() =>
@@ -618,9 +659,11 @@ const AllJobsPage = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="bg-white rounded-lg shadow-sm p-4 mt-6">
+          // Added dark:bg-gray-800 and dark:shadow-lg
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg p-4 mt-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-              <div className="text-sm text-gray-600 mb-4 md:mb-0">
+              {/* Added dark:text-gray-400 */}
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-4 md:mb-0">
                 Showing {(currentPage - 1) * jobsPerPage + 1} to{" "}
                 {Math.min(currentPage * jobsPerPage, totalJobs)} of {totalJobs}{" "}
                 jobs
@@ -632,7 +675,8 @@ const AllJobsPage = () => {
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
                   disabled={currentPage === 1}
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  // Added dark classes for pagination button
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed dark:disabled:text-gray-500"
                 >
                   Previous
                 </button>
@@ -653,10 +697,11 @@ const AllJobsPage = () => {
                     <button
                       key={pageNum}
                       onClick={() => setCurrentPage(pageNum)}
+                      // Added dark classes for active/inactive page buttons
                       className={`px-3 py-2 border rounded-md text-sm font-medium ${
                         currentPage === pageNum
-                          ? "border-primary bg-primary text-white"
-                          : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                          ? "border-primary bg-primary text-white dark:border-primary dark:bg-primary"
+                          : "border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                       }`}
                     >
                       {pageNum}
@@ -669,7 +714,8 @@ const AllJobsPage = () => {
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
                   disabled={currentPage === totalPages}
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  // Added dark classes for pagination button
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed dark:disabled:text-gray-500"
                 >
                   Next
                 </button>
@@ -681,11 +727,14 @@ const AllJobsPage = () => {
         {/* Delete Confirmation Modal */}
         {deleteModal.show && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            {/* Added dark:bg-gray-800 and dark:shadow-lg */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 dark:shadow-lg">
+              {/* Added dark:text-gray-100 */}
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Delete Job Posting
               </h3>
-              <p className="text-gray-600 mb-6">
+              {/* Added dark:text-gray-400 */}
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Are you sure you want to delete "{deleteModal.jobTitle}"? This
                 action cannot be undone.
               </p>
@@ -694,10 +743,12 @@ const AllJobsPage = () => {
                   onClick={() =>
                     setDeleteModal({ show: false, jobId: "", jobTitle: "" })
                   }
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                  // Added dark classes for Cancel button
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   Cancel
                 </button>
+                {/* Delete button doesn't need dark classes (red color) */}
                 <button
                   onClick={() => deleteJob(deleteModal.jobId)}
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md font-medium hover:bg-red-700 transition-colors"
