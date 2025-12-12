@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+} from "react";
 import {
   ResumeData,
   SkillItem,
@@ -9,15 +15,18 @@ import {
   ResumeContextProps,
   CertificationItem,
 } from "@/types/resume.data.types";
+import { TemplateType } from "@/types/resume.template.types";
 
 // id generation
 export function generateId() {
-  return Math.random().toString(36).substring(2, 15) + 
-         Math.random().toString(36).substring(2, 15);
+  return (
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
+  );
 }
 
 const migrateData = (data: unknown): ResumeData => {
-  if (!data || typeof data !== 'object') {
+  if (!data || typeof data !== "object") {
     return {
       name: "",
       email: "",
@@ -39,11 +48,11 @@ const migrateData = (data: unknown): ResumeData => {
   if (Array.isArray(raw.skills)) {
     if (raw.skills.length === 0) {
       skills = [];
-    } else if (typeof raw.skills[0] === 'string') {
-      skills = (raw.skills as string[]).map(name => ({
-        type: 'skill',
+    } else if (typeof raw.skills[0] === "string") {
+      skills = (raw.skills as string[]).map((name) => ({
+        type: "skill",
         id: generateId(),
-        name
+        name,
       }));
     } else {
       skills = raw.skills as SkillItem[];
@@ -55,22 +64,22 @@ const migrateData = (data: unknown): ResumeData => {
   if (Array.isArray(raw.languages)) {
     if (raw.languages.length === 0) {
       languages = [];
-    } else if (typeof raw.languages[0] === 'string') {
-      languages = (raw.languages as string[]).map(name => ({
-        type: 'language',
+    } else if (typeof raw.languages[0] === "string") {
+      languages = (raw.languages as string[]).map((name) => ({
+        type: "language",
         id: generateId(),
-        name
+        name,
       }));
     } else {
       languages = raw.languages as LanguageItem[];
     }
   }
 
-// Migrate certifications
-let certifications: CertificationItem[] = [];
-if (Array.isArray(raw.certifications)) {
-  certifications = raw.certifications as CertificationItem[];
-}
+  // Migrate certifications
+  let certifications: CertificationItem[] = [];
+  if (Array.isArray(raw.certifications)) {
+    certifications = raw.certifications as CertificationItem[];
+  }
 
   return {
     name: raw.name || "",
@@ -103,6 +112,8 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<TemplateType>("modern");
 
   const loadResume = useCallback(async () => {
     setLoading(true);
@@ -153,7 +164,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...resumeData,
-          userId
+          userId,
         }),
       });
 
@@ -174,7 +185,17 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
   }, [resumeData]);
 
   return (
-    <ResumeContext.Provider value={{ resumeData, setResumeData, saveResume, loading, loadResume }}>
+    <ResumeContext.Provider
+      value={{
+        resumeData,
+        setResumeData,
+        saveResume,
+        loading,
+        loadResume,
+        selectedTemplate,
+        setSelectedTemplate,
+      }}
+    >
       {children}
     </ResumeContext.Provider>
   );

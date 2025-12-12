@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import Avatar from "@/components/ui/Avatar";
 import CompanyIdChecker from "@/components/auth/CompanyIdChecker";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -27,6 +28,8 @@ import {
   Building,
   MessageCircle,
   Calendar,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { ResumeProvider } from "@/contexts/ResumeContext";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -41,6 +44,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const { user, logout, isLoading } = useAuth();
   const { unreadCount } = useUnreadMessages();
+  const { theme, toggleTheme } = useTheme();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -121,6 +125,11 @@ export default function DashboardLayout({
               name: "Saved Jobs",
               href: "/dashboard/saved-jobs",
               icon: FileText,
+            },
+            {
+              name: "Resume Templates",
+              href: "/dashboard/user/templates",
+              icon: Award,
             },
             {
               name: "Resume Builder",
@@ -222,9 +231,8 @@ export default function DashboardLayout({
                           {section.items.map((item) => {
                             const Icon = item.icon;
                             const active = isActive(item.href);
-                            const isMessagesLink = item.href.includes(
-                              "/messages"
-                            );
+                            const isMessagesLink =
+                              item.href.includes("/messages");
 
                             return (
                               <li key={item.name}>
@@ -312,13 +320,19 @@ export default function DashboardLayout({
               ) : user ? (
                 <>
                   <div className="flex items-center space-x-3 mb-4">
-                    <Avatar 
-                      name={user.userType === "COMPANY" ? user.companyName : user.name} 
-                      size="lg" 
+                    <Avatar
+                      name={
+                        user.userType === "COMPANY"
+                          ? user.companyName
+                          : user.name
+                      }
+                      size="lg"
                     />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-gray-900 text-sm truncate dark:text-white">
-                        {user.userType === "COMPANY" ? user.companyName : user.name || "User"}
+                        {user.userType === "COMPANY"
+                          ? user.companyName
+                          : user.name || "User"}
                       </p>
                       <p className="text-gray-500 text-xs truncate dark:text-gray-400">
                         {user.email}
@@ -392,7 +406,24 @@ export default function DashboardLayout({
                     />
                   </div>
 
-                  {/* Notifications (Assuming NotificationDropdown handles its own dark mode) */}
+                  {/* Dark Mode Toggle */}
+                  <button
+                    onClick={toggleTheme}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors dark:hover:bg-gray-700"
+                    title={
+                      theme === "dark"
+                        ? "Switch to Light Mode"
+                        : "Switch to Dark Mode"
+                    }
+                  >
+                    {theme === "dark" ? (
+                      <Sun className="w-5 h-5 text-yellow-500" />
+                    ) : (
+                      <Moon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                    )}
+                  </button>
+
+                  {/* Notifications */}
                   <NotificationDropdown />
 
                   {/* Profile */}
@@ -403,7 +434,11 @@ export default function DashboardLayout({
                         className="flex items-center space-x-2 hover:bg-gray-100 p-1 rounded-lg transition-colors dark:hover:bg-gray-700"
                       >
                         <Avatar
-                          name={user.userType === "COMPANY" ? user.companyName : user.name}
+                          name={
+                            user.userType === "COMPANY"
+                              ? user.companyName
+                              : user.name
+                          }
                           size="md"
                           className="cursor-pointer"
                         />
@@ -414,7 +449,9 @@ export default function DashboardLayout({
                         <div className="right-0 z-50 absolute bg-white shadow-lg mt-2 py-2 border rounded-md w-48 dark:bg-gray-700 dark:border-gray-600 dark:shadow-xl">
                           <div className="px-4 py-2 border-gray-100 border-b dark:border-gray-600">
                             <p className="font-medium text-gray-900 text-sm dark:text-white">
-                              {user.userType === "COMPANY" ? user.companyName : user.name}
+                              {user.userType === "COMPANY"
+                                ? user.companyName
+                                : user.name}
                             </p>
                             <p className="text-gray-500 text-xs dark:text-gray-400">
                               {user.email}
@@ -454,7 +491,7 @@ export default function DashboardLayout({
             <main className="p-4 sm:p-6">
               <div className="max-w-7xl mx-auto">
                 {/* Assuming Breadcrumb component handles dark mode internally or is generic enough */}
-                <Breadcrumb /> 
+                <Breadcrumb />
                 <CompanyIdChecker>
                   {/* Assuming ResumeProvider does not render any visible elements here */}
                   <ResumeProvider>{children}</ResumeProvider>

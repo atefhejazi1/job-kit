@@ -8,7 +8,7 @@ import { useSocket } from './useSocket';
 export const useUnreadMessages = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const { user, isAuthenticated } = useAuth();
-  const socket = useSocket();
+  const socket = useSocket(isAuthenticated); // Only enable when user is authenticated
   const fetchingRef = useRef(false);
 
   // Fetch initial unread count

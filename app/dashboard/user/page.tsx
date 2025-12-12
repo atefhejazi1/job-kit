@@ -328,12 +328,7 @@ export default function UserDashboard() {
             )}
           </div>
         </div>
-        <div className="mx-auto px-4 py-8 max-w-4xl container dark:bg-gray-900">
-          <h2 className="font-semibold text-gray-900 text-lg dark:text-white">My certificates</h2>
-          <div className="mt-8">
-            <CertificationList certifications={resumeData.certifications} />
-          </div>
-        </div>
+        
       </div>
     </div>
   );

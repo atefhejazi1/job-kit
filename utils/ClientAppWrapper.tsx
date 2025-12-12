@@ -19,16 +19,20 @@ export default function ClientAppWrapper({
         dangerouslySetInnerHTML={{
           __html: `
                         (function() {
-                            function getCookie(name) {
-                                var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-                                return match ? match[2] : null;
-                            }
-                            
-                            var theme = getCookie('theme') || 
-                                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                            
-                            if (theme === 'dark') {
-                                document.documentElement.classList.add('dark');
+                            try {
+                                function getCookie(name) {
+                                    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                                    return match ? match[2] : null;
+                                }
+                                
+                                var theme = getCookie('theme');
+                                if (theme === 'dark') {
+                                    document.documentElement.classList.add('dark');
+                                } else if (theme === 'light') {
+                                    document.documentElement.classList.remove('dark');
+                                }
+                            } catch (e) {
+                                // Fail silently
                             }
                         })();
                     `,
@@ -37,7 +41,10 @@ export default function ClientAppWrapper({
 
       <ThemeClientWrapper>
         <AuthProvider>
-          <div className="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+          <div
+            className="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300"
+            suppressHydrationWarning
+          >
             {children}
           </div>
           <Toaster

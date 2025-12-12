@@ -87,6 +87,8 @@ export interface ResumeContextProps {
   saveResume: () => Promise<void>;
   loading: boolean;
   loadResume: () => Promise<void>;
+  selectedTemplate: import('../types/resume.template.types').TemplateType;
+  setSelectedTemplate: (template: import('../types/resume.template.types').TemplateType) => void;
 }
 
 export interface CertificationItem {
