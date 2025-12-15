@@ -1324,61 +1324,212 @@ For production databases, use managed PostgreSQL services:
 
 ## 🆘 Troubleshooting
 
-### Prisma Client Not Generated
+### Resume Save Issues
 
-```bash
-npm run db:generate
+**Problem**: "500 Internal Server Error" when saving resume
+
+**Solutions**:
+1. Check Prisma migrations are run: `npm run db:migrate`
+2. Verify `userId` is being sent in request headers
+3. Check terminal for detailed error message
+4. Ensure `DATABASE_URL` is correctly configured
+
+**Example Fix**:
+```typescript
+// Make sure to include userId
+const res = await fetch("/api/resume", {
+  method: "POST",
+  headers: { 
+    "x-user-id": userId,
+    "Content-Type": "application/json" 
+  },
+  body: JSON.stringify(resumeData)
+});
 ```
+
+---
+
+### Theme Toggle Not Working
+
+**Problem**: Dark/Light mode toggle not changing theme
+
+**Solutions**:
+1. Hard refresh browser: `Ctrl+Shift+Delete`
+2. Clear localStorage: `localStorage.clear()`
+3. Restart dev server: `npm run dev`
+4. Verify `tailwind.config.ts` has `darkMode: 'class'`
+5. Check `ThemeContext` is wrapped in layout
+
+**Verify Setup**:
+```typescript
+// app/layout.tsx should have:
+<ThemeProvider>
+  <AuthProvider>
+    {children}
+  </AuthProvider>
+</ThemeProvider>
+```
+
+---
+
+### Authentication Issues
+
+**Problem**: "User not found" or login fails
+
+**Solutions**:
+1. Verify email exists in database: Check Prisma Studio `npm run db:studio`
+2. Password must be hashed: bcryptjs handles this
+3. Check JWT token expiration
+4. Clear browser cookies and try again
+
+**Debug Login**:
+```typescript
+// Check response from login endpoint
+const res = await fetch("/api/auth/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, password })
+});
+
+if (!res.ok) {
+  const error = await res.json();
+  console.error("Login error:", error);
+}
+```
+
+---
 
 ### Database Connection Issues
 
-- Verify `DATABASE_URL` and `DIRECT_URL` in `.env.local`
-- Test connection: `psql <DATABASE_URL>`
-- Check PostgreSQL is running
+**Problem**: `PrismaClientInitializationError` or connection timeout
 
-### Migrations Failed
+**Solutions**:
+1. Verify PostgreSQL is running
+2. Check `DATABASE_URL` format: `postgresql://user:password@localhost:5432/dbname`
+3. Test connection: `psql $DATABASE_URL`
+4. Ensure network connectivity (if remote DB)
 
-```bash
-# Reset database (⚠️ deletes all data)
-npx prisma migrate reset
+**Connection String Examples**:
+```env
+# Local
+DATABASE_URL="postgresql://postgres:password@localhost:5432/jobkit_db"
 
-# Or reset and reseed
-npm run db:migrate -- --force-reset
+# Docker
+DATABASE_URL="postgresql://postgres:password@postgres:5432/jobkit_db"
+
+# Cloud (Railway, Supabase)
+DATABASE_URL="postgresql://user:password@host:port/dbname?sslmode=require"
 ```
+
+---
+
+### Prisma Client Not Generated
+
+**Problem**: `Cannot find module '@prisma/client'`
+
+**Solution**:
+```bash
+npm install @prisma/client@5 prisma@5
+npm run db:generate
+```
+
+---
 
 ### Port 3000 Already in Use
 
+**Solution**:
 ```bash
 # Use different port
 npm run dev -- -p 3001
+
+# Or kill process on port 3000 (Windows)
+netstat -ano | findstr :3000
+taskkill /PID <PID> /F
 ```
 
-### Cloudinary Upload Issues
+---
 
-- Verify credentials in `.env.local`
-- Check Cloudinary account is active
-- Ensure upload folder exists in Cloudinary dashboard
+### Cloudinary Upload Fails
 
-### Type Errors in Components
+**Problem**: "Invalid Cloudinary credentials" or upload returns 401
 
-After schema changes:
+**Solutions**:
+1. Verify `.env.local` has:
+   ```env
+   NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="your_cloud_name"
+   CLOUDINARY_API_KEY="your_api_key"
+   CLOUDINARY_API_SECRET="your_api_secret"
+   ```
+2. Check credentials in Cloudinary dashboard
+3. Ensure upload folder exists in Cloudinary
+4. Restart dev server after env changes
 
+---
+
+### Type Errors After Schema Changes
+
+**Problem**: TypeScript compilation errors after Prisma schema update
+
+**Solution**:
 ```bash
 npm run db:generate
 npm run lint
+# If still issues, clear node_modules
+rm -r node_modules
+npm install
+npm run db:generate
 ```
+
+---
+
+## 📚 Additional Resources
+
+### Prisma Documentation
+- [Prisma Client](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference)
+- [Prisma Schema](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference)
+- [Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate)
+
+### Next.js Documentation
+- [API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)
+- [Dynamic Routes](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes)
+- [Middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware)
+
+### External Integrations
+- [Cloudinary Upload Widget](https://cloudinary.com/documentation/upload_widget)
+- [Socket.io Documentation](https://socket.io/docs/v4/)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+
+---
+
+## 🤝 Contributing
+
+When contributing to this project:
+
+1. Create feature branch: `git checkout -b feature/new-feature`
+2. Follow TypeScript best practices
+3. Update database schema if needed: `npm run db:migrate -- --name description`
+4. Test API endpoints thoroughly
+5. Update this README if adding new features
+6. Submit pull request with description
+
+---
 
 ## 📝 License
 
 This project is private and developed for internal use.
 
-## 👥 Author
+## 👥 Authors
 
-Developed by Atef Hejazi , Sameh , Raghad , Hanady
+Developed by:
+- **Atef Hejazi** (@atefhejazi1)
+- **Sameh**
+- **Raghad**
+- **Hanady**
 
 ---
 
-**Last Updated**: November 26, 2025  
-**Prisma Version**: v5.21.0 (latest v5)  
-**Next.js Version**: 16.0.1  
+**Last Updated**: December 15, 2025
+**Prisma Version**: v5.21.0
+**Next.js Version**: 16.0.1
 **Node.js Version**: 18+
+**Status**: Active Development
