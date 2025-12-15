@@ -11,7 +11,6 @@ interface EditToggleButtonProps {
 }
 
 
-// زر تبديل بين وضعي التعديل والمعاينة
 export default function EditToggleButton({
   isEditMode,
   onToggle,

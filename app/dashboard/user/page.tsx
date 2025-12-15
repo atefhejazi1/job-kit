@@ -305,6 +305,7 @@ export default function UserDashboard() {
                 {applications.slice(0, 3).map((app) => (
                   <ApplicationCard
                     key={app.id}
+                    applicationId={app.id}
                     title={app.job.title}
                     company={app.job.company.companyName}
                     location={app.job.company.location}

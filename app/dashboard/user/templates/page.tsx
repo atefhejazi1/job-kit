@@ -151,7 +151,7 @@ export default function TemplatesPage() {
   const { setSelectedTemplate } = useResume();
   const [selectedPreview, setSelectedPreview] = useState<string>("modern");
 
-  const handleTemplateSelect = (templateId: string) => {
+  const handleTemplateSelect = (templateId: any) => {
     setSelectedTemplate(templateId);
     router.push("/dashboard/user/resume-builder");
   };

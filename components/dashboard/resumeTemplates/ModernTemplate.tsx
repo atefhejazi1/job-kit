@@ -206,7 +206,7 @@ export default function ModernTemplate({ data }: ModernTemplateProps) {
                       className="text-sm font-semibold"
                       style={{ color: colors.text }}
                     >
-                      {proj.name}
+                      {proj.title}
                     </h3>
                     <p className="text-xs" style={{ color: colors.secondary }}>
                       {proj.description}

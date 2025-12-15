@@ -183,7 +183,7 @@ export default function ClassicTemplate({ data }: ClassicTemplateProps) {
                   className="font-bold text-sm"
                   style={{ color: colors.text }}
                 >
-                  {proj.name}
+                  {proj.title}
                 </h3>
                 <p className="text-sm" style={{ color: colors.secondary }}>
                   {proj.description}

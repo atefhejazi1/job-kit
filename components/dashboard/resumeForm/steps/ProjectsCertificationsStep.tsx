@@ -44,7 +44,7 @@ export default function ProjectsCertificationsStep() {
           Certifications
         </h3>
         <CertificationSection />
-        <CertificationList />
+        <CertificationList certifications={resumeData.certifications} />
       </div>
     </div>
   );

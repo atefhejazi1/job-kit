@@ -15,11 +15,7 @@ export default function PersonalInfo() {
   );
 
   return (
-    <div
-      // Optional: Add dark mode background to the container if needed,
-      // though typically the inputs themselves are styled.
-    >
-      {/* Dark mode for header text color */}
+    <div>
       <h2 className="mb-3 font-semibold text-xl dark:text-white">
         Personal Info
       </h2>

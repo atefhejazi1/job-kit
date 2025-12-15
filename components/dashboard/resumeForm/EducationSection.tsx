@@ -27,7 +27,14 @@ export default function EducationSection({ onAdd }: Props) {
     }
     onAdd(edu);
     toast.success("Education added successfully");
-    setEdu({ school: "", degree: "", startDate: "", endDate: "", description: "" });
+    setEdu({
+      type:"education",
+      school: "",
+      degree: "",
+      startDate: "",
+      endDate: "",
+      description: "",
+    });
   };
 
   const inputClasses =

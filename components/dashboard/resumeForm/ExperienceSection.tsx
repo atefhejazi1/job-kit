@@ -27,7 +27,7 @@ export default function ExperienceSection({ onAdd }: Props) {
     }
     onAdd(exp);
     toast.success("Experience added successfully");
-    setExp({ company: "", role: "", startDate: "", endDate: "", description: "" });
+    setExp({type: "experience", company: "", role: "", startDate: "", endDate: "", description: "" });
   };
 
   const inputClasses =

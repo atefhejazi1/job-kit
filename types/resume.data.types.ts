@@ -5,10 +5,12 @@ export interface EducationItem {
   startDate: string;
   endDate: string;
   description: string;
+  institution?:any
 }
 
 export interface ExperienceItem {
   type: 'experience';
+  title?:string,
   company: string;
   role: string;
   startDate: string;

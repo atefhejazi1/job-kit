@@ -3,7 +3,14 @@
 import { CertificationItem } from "@/types/resume.data.types";
 import { useResume } from "@/contexts/ResumeContext";
 import { toast } from "react-hot-toast";
-import { Award, Trash2, ExternalLink, Calendar, Key } from "lucide-react";
+import {
+  Award,
+  Trash2,
+  ExternalLink,
+  Calendar,
+  Key,
+  FileText,
+} from "lucide-react";
 
 interface CertificationListProps {
   certifications: CertificationItem[];
@@ -69,10 +76,13 @@ export default function CertificationList({
                       )}
                       {/* Dark mode for Calendar icon color */}
                       <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                      {new Date(cert.issueDate + "-01").toLocaleDateString(undefined, {
-                        month: "short",
-                        year: "numeric",
-                      })}
+                      {new Date(cert.issueDate + "-01").toLocaleDateString(
+                        undefined,
+                        {
+                          month: "short",
+                          year: "numeric",
+                        }
+                      )}
                     </p>
                   )}
                   {cert.credentialId && (
@@ -121,8 +131,6 @@ export default function CertificationList({
             </div>
             <button
               onClick={() => deleteCertification(index)}
-              className="opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-800 transition-opacity cursor-pointer"
-              // Dark mode for Trash icon color and hover state
               className="opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-800 transition-opacity cursor-pointer
               dark:text-red-500 dark:hover:text-red-400"
             >

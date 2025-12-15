@@ -219,7 +219,7 @@ export default function CreativeTemplate({ data }: CreativeTemplateProps) {
                     className="text-sm font-bold mb-1"
                     style={{ color: colors.text }}
                   >
-                    {proj.name}
+                    {proj.title}
                   </h3>
                   <p className="text-xs" style={{ color: colors.secondary }}>
                     {proj.description}

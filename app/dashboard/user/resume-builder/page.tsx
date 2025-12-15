@@ -88,17 +88,17 @@ export default function ResumeBuilderPage() {
 
       // Direct capture without cloning first
       const canvas = await html2canvas(element as HTMLElement, {
-        scale: 1,
+        // scale: 1,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: "#ffffff",
+        // backgroundColor: "#ffffff",
         logging: true,
         width: element.scrollWidth || element.clientWidth,
         height: element.scrollHeight || element.clientHeight,
-        x: 0,
-        y: 0,
-        scrollX: 0,
-        scrollY: 0,
+        // x: 0,
+        // y: 0,
+        // scrollX: 0,
+        // scrollY: 0,
       });
 
       if (!canvas || canvas.width === 0 || canvas.height === 0) {
@@ -144,7 +144,13 @@ export default function ResumeBuilderPage() {
         id: loadingToast,
       });
       setTimeout(() => {
-        toast.info("Opening print dialog as fallback...");
+        setTimeout(() => {
+          toast("Opening print dialog as fallback...", {
+            icon: "ℹ️",
+            style: { background: "#eff6ff", color: "#1d4ed8" },
+          });
+          window.print();
+        }, 2000);
         window.print();
       }, 2000);
     } finally {
@@ -162,7 +168,7 @@ export default function ResumeBuilderPage() {
       <html>
       <head>
         <meta charset="UTF-8">
-        <title>${resumeData?.personalInfo?.name || "Resume"}</title>
+        <title>${resumeData?.name || "Resume"}</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 20px; }
           .resume-preview { max-width: 800px; margin: 0 auto; }
@@ -178,7 +184,7 @@ export default function ResumeBuilderPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${resumeData?.personalInfo?.name || "resume"}.doc`;
+    link.download = `${resumeData?.name || "resume"}.doc`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

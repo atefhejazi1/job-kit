@@ -64,21 +64,16 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
       }
     };
 
-    // هذا الجزء يحتاج إلى تنفيذ منطق تحديد ما إذا كانت الوظيفة مفضلة أو تم التقديم عليها
-    // setBookmarked(checkBookmarkStatus(id, user));
-    // setApplied(checkApplicationStatus(id, user));
-
+   
     fetchJobDetails();
   }, [id, user]);
 
   if (loading) {
     return (
-      // خلفية التحميل
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
         <div className="max-w-5xl mx-auto px-4 py-16">
           <div className="text-center mb-8">
             <div className="relative mb-8">
-              {/* أيقونة التحميل */}
               <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-200 border-t-orange-600 dark:border-slate-700 dark:border-t-orange-500 mx-auto"></div>
               <Briefcase className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-orange-600" />
             </div>
@@ -106,7 +101,6 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
 
   if (error || !job) {
     return (
-      // خلفية الخطأ
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
         <div className="max-w-5xl mx-auto px-4 py-12">
           <Link
@@ -116,7 +110,6 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
             <ArrowLeft className="w-5 h-5" />
             Back to jobs
           </Link>
-          {/* حاوية الخطأ */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl dark:shadow-2xl p-12 text-center">
             <div className="bg-red-100 dark:bg-red-900 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
               <AlertCircle className="w-12 h-12 text-red-600 dark:text-red-400" />

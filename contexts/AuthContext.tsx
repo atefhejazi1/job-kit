@@ -12,6 +12,7 @@ import { User } from "@/types/auth.types";
 
 interface AuthContextType {
   user: User | null;
+  setUser: (user: User | null) => void;
   isLoading: boolean;
   login: (userData: User, accessToken?: string, refreshToken?: string) => void;
   logout: () => Promise<void>;
@@ -156,6 +157,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const value: AuthContextType = {
     user,
+    setUser,
     isLoading,
     login,
     logout,

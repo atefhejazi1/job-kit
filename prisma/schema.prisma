@@ -156,20 +156,19 @@ enum WorkType {
 }
 
 model Resume {
-  id         String @id @default(cuid())
-  userId     String
-  user       User   @relation(fields: [userId], references: [id])
-  name       String
-  email      String
-  phone      String
-  summary    String
-  skills     Json
-  languages  Json
-  education  Json
+  id             String @id @default(cuid())
+  userId         String
+  user           User   @relation(fields: [userId], references: [id])
+  name           String
+  email          String
+  phone          String
+  summary        String
+  skills         Json
+  languages      Json
+  education      Json
   certifications Json?
-  experience Json
-  projects   Json
- 
+  experience     Json
+  projects       Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

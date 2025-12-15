@@ -6,8 +6,7 @@ import Shape from "../ui/shapes/Shape";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const Hero = () => {
-  const { theme } = useTheme(); // نحصل على الوضع الحالي
-
+  const { theme } = useTheme();
   return (
     <div
       className="flex flex-col lg:flex-row items-center gap-12 px-10 py-12 lg:py-20 

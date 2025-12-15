@@ -147,7 +147,7 @@ export default function MinimalTemplate({ data }: MinimalTemplateProps) {
                     className="text-sm font-medium"
                     style={{ color: colors.text }}
                   >
-                    {proj.name}
+                    {proj.title}
                   </span>
                   <span className="text-sm" style={{ color: colors.secondary }}>
                     {" — "}

@@ -1,5 +1,5 @@
 interface AvatarProps {
-  name: string | null;
+  name: string | null | any;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   onClick?: () => void;

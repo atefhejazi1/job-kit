@@ -103,7 +103,7 @@ const jobValidationSchema = Yup.object().shape({
     .test(
       'is-greater',
       'Maximum salary must be greater than minimum salary',
-      function (value) {
+      function (value : any) {
         const { salaryMin } = this.parent;
         // Check only if both min and max are provided
         if (salaryMin !== null && value !== null && value <= salaryMin) {

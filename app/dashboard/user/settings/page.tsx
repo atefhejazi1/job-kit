@@ -116,7 +116,7 @@ export default function UserSettingsPage() {
         if (updateResponse.ok) {
           const updatedData = await updateResponse.json();
           if (setUser && updatedData.user) {
-            const updatedUser = { ...user, avatarUrl: uploadedUrl };
+            const updatedUser: any = { ...user, avatarUrl: uploadedUrl };
             setUser(updatedUser);
             localStorage.setItem("user", JSON.stringify(updatedUser));
           }

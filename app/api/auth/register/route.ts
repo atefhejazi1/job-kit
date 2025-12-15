@@ -92,46 +92,53 @@ export async function POST(request: Request): Promise<NextResponse<AuthResponse 
 
     // Create user with transaction to ensure both user and profile are created
     const result = await prisma.$transaction(async (prisma) => {
-      // Create the user first
-      const user = await prisma.user.create({
-        data: {
-          name: userType === 'COMPANY' ? companyName : `${firstName} ${lastName}`,
-          email,
-          password: hashedPassword,
-          userType,
-        }
-      });
+  const user = await prisma.user.create({
+    data: {
+      name: userType === 'COMPANY' ? companyName : `${firstName} ${lastName}`,
+      email,
+      password: hashedPassword,
+      userType,
+    }
+  });
 
-      // Create the appropriate profile based on user type
-      if (userType === 'COMPANY') {
-        await prisma.company.create({
-          data: {
-            userId: user.id,
-            companyName,
-            industry,
-            companySize,
-            location,
-            website: website || null,
-            description: description || null,
-          }
-        });
-      } else if (userType === 'USER') {
-        await prisma.jobSeeker.create({
-          data: {
-            userId: user.id,
-            firstName,
-            lastName,
-            phone,
-            city,
-            country: country || null,
-            currentPosition: currentPosition || null,
-            experienceLevel: experienceLevel || null,
-          }
-        });
+  let companyId: string | null = null;
+
+  if (userType === 'COMPANY') {
+    const company = await prisma.company.create({
+      data: {
+        userId: user.id,
+        companyName,
+        industry,
+        companySize,
+        location,
+        website: website || null,
+        description: description || null,
       }
-
-      return user;
     });
+    companyId = company.id;
+  }
+
+  if (userType === 'USER') {
+    await prisma.jobSeeker.create({
+      data: {
+        userId: user.id,
+        firstName,
+        lastName,
+        phone,
+        city,
+        country: country || null,
+        currentPosition: currentPosition || null,
+        experienceLevel: experienceLevel || null,
+      }
+    });
+  }
+
+  return {
+    ...user,
+    companyId,
+  };
+});
+
 
     const { password: _, ...userWithoutPassword } = result as UserWithPassword;
 

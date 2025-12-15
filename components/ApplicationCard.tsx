@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface ApplicationCardProps {
-  applicationId: string;
+  applicationId: string
   title: string;
   company?: string;
   location: string;

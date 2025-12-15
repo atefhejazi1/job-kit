@@ -44,6 +44,7 @@ export default function DeleteCVButton() {
         education: [],
         experience: [],
         projects: [],
+        certifications: [],
       });
 
       router.push("/dashboard/user");

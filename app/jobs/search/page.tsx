@@ -46,15 +46,12 @@ export default function SearchPage() {
 
 function SearchPageLoading() {
   return (
-    // الخلفية
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 dark:from-slate-900 dark:via-slate-950 dark:to-black py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="animate-pulse">
-          {/* محاكي Breadcrumb */}
           <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-1/4 mb-8"></div>
           <div className="grid gap-4">
             {[1, 2, 3].map((i) => (
-              // محاكي JobCard
               <div
                 key={i}
                 className="h-32 bg-gray-200 dark:bg-slate-800 rounded-lg"
@@ -164,19 +161,16 @@ function SearchPageContent() {
   const experienceLevels = ["Entry", "Mid", "Senior", "Lead"];
 
   return (
-    // الخلفية الرئيسية
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Breadcrumb - (يفترض أنه يدعم الوضع الداكن داخلياً) */}
+        {/* Breadcrumb */}
         <Breadcrumb />
 
         {/* Header */}
         <div className="mb-8">
-          {/* عنوان */}
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
             Search Jobs
           </h1>
-          {/* وصف */}
           <p className="text-slate-600 dark:text-slate-400">
             Find your perfect job opportunity
           </p>
@@ -185,9 +179,7 @@ function SearchPageContent() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar Filters */}
           <div className="lg:col-span-1">
-            {/* حاوية الفلاتر */}
             <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-xl p-6 sticky top-4">
-              {/* عنوان الفلاتر */}
               <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
                 Filters
               </h2>
@@ -317,7 +309,7 @@ function SearchPageContent() {
                 />
               </div>
 
-              {/* Action Buttons (يفترض أن مكون Button يدعم الوضع الداكن داخلياً) */}
+              {/* Action Buttons  */}
               <div className="flex gap-2">
                 <Button
                   onClick={handleSearch}
@@ -347,19 +339,17 @@ function SearchPageContent() {
               </div>
             )}
 
-            {/* Job Cards (يفترض أن مكون JobCard يدعم الوضع الداكن داخلياً) */}
+            {/* Job Cards */}
             <div className="space-y-4">
               {jobs && jobs.length > 0 ? (
                 jobs.map((job) => <JobCard key={job.id} job={job} />)
               ) : query || Object.values(filters).some((v) => v) ? (
-                // لا يوجد نتائج
                 <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-xl p-12 text-center">
                   <p className="text-slate-600 dark:text-slate-400">
                     No jobs found matching your search.
                   </p>
                 </div>
               ) : (
-                // الحالة الأولية (قبل البحث)
                 <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-xl p-12 text-center">
                   <p className="text-slate-600 dark:text-slate-400">
                     Enter search terms or select filters to find jobs.
@@ -371,7 +361,7 @@ function SearchPageContent() {
             {/* Pagination */}
             {jobs && jobs.length > 0 && totalPages > 1 && (
               <div className="mt-8 flex justify-center gap-2">
-                {/* Previous Button (يفترض أن مكون Button يدعم الوضع الداكن داخلياً) */}
+                {/* Previous Button  */}
                 <Button
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
@@ -383,7 +373,7 @@ function SearchPageContent() {
                 <div className="flex items-center gap-2">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (page) => (
-                      // زر ترقيم الصفحات
+                     
                       <button
                         key={page}
                         onClick={() => setCurrentPage(page)}
@@ -399,7 +389,7 @@ function SearchPageContent() {
                   )}
                 </div>
 
-                {/* Next Button (يفترض أن مكون Button يدعم الوضع الداكن داخلياً) */}
+                {/* Next Button */}
                 <Button
                   onClick={() =>
                     setCurrentPage(Math.min(totalPages, currentPage + 1))

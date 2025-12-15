@@ -59,7 +59,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Create or find existing thread
-    // Use the actual company user ID from the database
     const threadCompanyId = application.job.company.userId;
     const threadApplicantId = application.userId;
     const threadJobId = application.jobId;
