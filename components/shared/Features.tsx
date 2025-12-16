@@ -1,5 +1,6 @@
 import React from "react";
 import { Sparkles, Zap, Shield, Target, Clock, Award } from "lucide-react";
+import Link from "next/link";
 
 const Features = () => {
   const features = [
@@ -110,12 +111,16 @@ const Features = () => {
               to land their dream careers.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="dashboard/user/resume-builder">
               <button className="px-8 py-4 bg-white text-orange-600 rounded-lg font-semibold hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg">
                 Start Building Now
               </button>
+              </Link>
+              <Link href="dashboard/user/templates">
               <button className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-orange-600 transition-all transform hover:scale-105">
                 View Templates
               </button>
+              </Link>
             </div>
           </div>
         </div>

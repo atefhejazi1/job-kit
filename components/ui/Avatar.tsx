@@ -1,5 +1,8 @@
+import React, { useState } from 'react';
+
 interface AvatarProps {
   name: string | null | any;
+  avatarUrl?: string | null; 
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   onClick?: () => void;
@@ -26,12 +29,34 @@ const getAvatarColor = (name: string | null) => {
   return colors[hash % colors.length];
 };
 
-export default function Avatar({ name, size = 'md', className = '', onClick }: AvatarProps) {
+
+export default function Avatar({ name, avatarUrl, size = 'md', className = '', onClick }: AvatarProps) {
+  const [imageLoadError, setImageLoadError] = useState(false);
+
   const sizeClasses = {
     sm: 'h-6 w-6 text-xs',
     md: 'h-8 w-8 text-xs',
     lg: 'h-10 w-10 text-sm'
   };
+
+  
+  if (avatarUrl && !imageLoadError) {
+    return (
+      <img
+        src={avatarUrl}
+        alt={name ? `${name} avatar` : 'User avatar'}
+        className={`
+          ${sizeClasses[size]} 
+          rounded-full object-cover // تأكد من استخدام object-cover للحفاظ على شكل دائري
+          ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}
+          ${className}
+        `}
+        onClick={onClick}
+        title={name || 'User'}
+        onError={() => setImageLoadError(true)} 
+      />
+    );
+  }
 
   return (
     <div

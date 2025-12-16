@@ -47,7 +47,7 @@ export default function UserInfo() {
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 dark:bg-slate-800 dark:border-slate-700">
       <div className="flex items-start space-x-4">
         {/* Avatar */}
-        <Avatar name={user.name} size="lg" className="h-16 w-16 text-lg" />
+        <Avatar name={user.name} avatarUrl={user.company.logo} size="lg" className="h-16 w-16 text-lg" />
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-3 mb-2">

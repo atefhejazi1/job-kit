@@ -3,9 +3,12 @@ import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
+import Logo from "@/public/logo.svg"
 import { User, Building, LogOut, MessageCircle, Search } from "lucide-react";
 import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 import ThemeToggle from "../shared/ThemeToggle";
+import Image from "next/image";
+import ProfileBadge from "../shared/ProfileBadge";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,11 +33,9 @@ const Header = () => {
           {/* LOGO */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center text-white font-bold text-lg sm:text-xl shadow-lg">
-                JK
-              </div>
+             
               <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
-                JobKit
+                <Image src={Logo} alt="Job Kit" width={90} height={90}/>
               </span>
             </Link>
           </div>
@@ -96,25 +97,7 @@ const Header = () => {
               <div className="flex items-center space-x-2 xl:space-x-3">
                 <ThemeToggle />
 
-                <div className="flex items-center space-x-2 px-3 py-1.5 xl:px-4 xl:py-2 bg-orange-50 dark:bg-gray-800 border border-orange-200 dark:border-gray-600 rounded-lg">
-                  <div className="w-7 h-7 xl:w-8 xl:h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-xs xl:text-sm font-bold flex-shrink-0">
-                    {user?.userType === "COMPANY"
-                      ? user?.companyName?.charAt(0)?.toUpperCase() || "C"
-                      : user?.name?.charAt(0)?.toUpperCase() || "U"}
-                  </div>
-
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-xs xl:text-sm font-semibold text-gray-800 dark:text-white truncate max-w-[120px] xl:max-w-[150px]">
-                      {user?.userType === "COMPANY"
-                        ? user?.companyName
-                        : user?.name}
-                    </span>
-                    <span className="text-[10px] xl:text-xs text-orange-600 dark:text-orange-400 font-medium">
-                      {user?.userType === "COMPANY" ? "Company" : "Job Seeker"}
-                    </span>
-                  </div>
-                </div>
-
+                {ProfileBadge()}
                 <button
                   onClick={handleLogout}
                   className="flex items-center space-x-1 xl:space-x-2 px-3 py-1.5 xl:px-4 xl:py-2 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-800 rounded-lg transition"
@@ -186,7 +169,7 @@ const Header = () => {
                 <>
                   <Link
                     href={getDashboardLink()}
-                    className="block py-2.5 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800 rounded-lg transition"
+                    className="block py-2.5 sm:py-3 px-3 sm:px-4 text-sm sm:text-base dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800 rounded-lg transition"
                     onClick={() => setIsOpen(false)}
                   >
                     Dashboard

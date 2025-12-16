@@ -140,16 +140,6 @@ export default function ApplicationsPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <ProtectedRoute>
-        {/* Dark mode loading state */}
-        <div className="p-8 dark:text-white dark:bg-gray-900 min-h-screen">
-          Loading your applications...
-        </div>
-      </ProtectedRoute>
-    );
-  }
 
   if (allApps.length === 0) {
     return (

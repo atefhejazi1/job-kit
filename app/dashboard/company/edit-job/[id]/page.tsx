@@ -199,22 +199,24 @@ const EditJobPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading job data...</p>
+          <p className="text-gray-600 dark:text-gray-300">
+            Loading job data...
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-primary to-orange-600 px-6 py-8">
+        <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
+          <div className="bg-linear-to-r from-primary to-orange-600 dark:from-primary dark:to-orange-700 px-6 py-8">
             <h1 className="text-3xl font-bold text-white">Edit Job Posting</h1>
-            <p className="mt-2 text-orange-100">
+            <p className="mt-2 text-orange-100 dark:text-orange-200">
               Update your job posting details
             </p>
           </div>
@@ -229,23 +231,23 @@ const EditJobPage = () => {
               {({ values, errors, touched, isSubmitting }) => (
                 <Form className="space-y-8">
                   {/* Basic Information */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                  <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
                       Basic Information
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Job Title *
                         </label>
                         <Field
                           name="title"
                           type="text"
-                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100 ${
                             errors.title && touched.title
-                              ? "border-red-300"
-                              : "border-gray-300"
+                              ? "border-red-300 dark:border-red-500"
+                              : "border-gray-300 dark:border-gray-700"
                           }`}
                           placeholder="e.g., Senior Frontend Developer"
                         />
@@ -257,16 +259,16 @@ const EditJobPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Location *
                         </label>
                         <Field
                           name="location"
                           type="text"
-                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100 ${
                             errors.location && touched.location
-                              ? "border-red-300"
-                              : "border-gray-300"
+                              ? "border-red-300 dark:border-red-500"
+                              : "border-gray-300 dark:border-gray-700"
                           }`}
                           placeholder="e.g., New York, NY"
                         />
@@ -279,17 +281,17 @@ const EditJobPage = () => {
                     </div>
 
                     <div className="mt-6">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                         Job Description *
                       </label>
                       <Field
                         as="textarea"
                         name="description"
                         rows={6}
-                        className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                        className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100 ${
                           errors.description && touched.description
-                            ? "border-red-300"
-                            : "border-gray-300"
+                            ? "border-red-300 dark:border-red-500"
+                            : "border-gray-300 dark:border-gray-700"
                         }`}
                         placeholder="Describe the role, responsibilities, and what you're looking for..."
                       />
@@ -302,20 +304,20 @@ const EditJobPage = () => {
                   </div>
 
                   {/* Work Details */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                  <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
                       Work Details
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Work Type *
                         </label>
                         <Field
                           as="select"
                           name="workType"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
                         >
                           <option value="FULL_TIME">Full Time</option>
                           <option value="PART_TIME">Part Time</option>
@@ -332,13 +334,13 @@ const EditJobPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Experience Level *
                         </label>
                         <Field
                           as="select"
                           name="experienceLevel"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
                         >
                           <option value="Entry Level">Entry Level</option>
                           <option value="Mid Level">Mid Level</option>
@@ -376,20 +378,20 @@ const EditJobPage = () => {
                   </div>
 
                   {/* Salary Information */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                  <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
                       Salary Information
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Minimum Salary
                         </label>
                         <Field
                           name="salaryMin"
                           type="number"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
                           placeholder="50000"
                           min="0"
                           value={values.salaryMin ?? ""}
@@ -402,16 +404,16 @@ const EditJobPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Maximum Salary
                         </label>
                         <Field
                           name="salaryMax"
                           type="number"
-                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors ${
+                          className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100 ${
                             errors.salaryMax && touched.salaryMax
-                              ? "border-red-300"
-                              : "border-gray-300"
+                              ? "border-red-300 dark:border-red-500"
+                              : "border-gray-300 dark:border-gray-700"
                           }`}
                           placeholder="80000"
                           min="0"
@@ -425,13 +427,13 @@ const EditJobPage = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Currency
                         </label>
                         <Field
                           as="select"
                           name="currency"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
                         >
                           <option value="USD">USD ($)</option>
                           <option value="EUR">EUR (€)</option>
@@ -449,15 +451,15 @@ const EditJobPage = () => {
                   </div>
 
                   {/* Requirements */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                  <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
                       Job Requirements
                     </h2>
 
                     <FieldArray name="requirements">
                       {({ push, remove }) => (
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-3">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-3">
                             Requirements *
                           </label>
                           {values.requirements.map((_, index) => (
@@ -465,7 +467,7 @@ const EditJobPage = () => {
                               <Field
                                 name={`requirements.${index}`}
                                 type="text"
-                                className="flex-1 px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
                                 placeholder="e.g., 3+ years of React experience"
                               />
                               {values.requirements.length > 1 && (
@@ -473,7 +475,7 @@ const EditJobPage = () => {
                                   type="button"
                                   variant="outline"
                                   onClick={() => remove(index)}
-                                  className="px-4 py-2 text-red-600 border-red-300 hover:bg-red-50"
+                                  className="px-4 py-2 text-red-600 border-red-300 dark:border-red-500 hover:bg-red-50 dark:hover:bg-red-900 dark:text-white"
                                 >
                                   Remove
                                 </Button>
@@ -484,7 +486,7 @@ const EditJobPage = () => {
                             type="button"
                             variant="outline"
                             onClick={() => push("")}
-                            className="mt-2"
+                            className="mt-2 hover:bg-primary dark:text-white "
                           >
                             Add Requirement
                           </Button>
@@ -499,15 +501,15 @@ const EditJobPage = () => {
                   </div>
 
                   {/* Skills */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                  <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
                       Required Skills
                     </h2>
 
                     <FieldArray name="skills">
                       {({ push, remove }) => (
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-3">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-3">
                             Skills *
                           </label>
                           {values.skills.map((_, index) => (
@@ -515,7 +517,7 @@ const EditJobPage = () => {
                               <Field
                                 name={`skills.${index}`}
                                 type="text"
-                                className="flex-1 px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
                                 placeholder="e.g., JavaScript, React, Node.js"
                               />
                               {values.skills.length > 1 && (
@@ -523,7 +525,7 @@ const EditJobPage = () => {
                                   type="button"
                                   variant="outline"
                                   onClick={() => remove(index)}
-                                  className="px-4 py-2 text-red-600 border-red-300 hover:bg-red-50"
+                                  className="px-4 py-2 text-red-600 border-red-300 dark:border-red-500 hover:bg-red-50 dark:hover:bg-red-900"
                                 >
                                   Remove
                                 </Button>
@@ -534,14 +536,14 @@ const EditJobPage = () => {
                             type="button"
                             variant="outline"
                             onClick={() => push("")}
-                            className="mt-2"
+                            className="mt-2 hover:bg-primary dark:text-white "
                           >
                             Add Skill
                           </Button>
                           <ErrorMessage
                             name="skills"
                             component="p"
-                            className="text-red-500 text-sm mt-1"
+                            className="text-red-500 text-sm mt-1 "
                           />
                         </div>
                       )}
@@ -549,15 +551,15 @@ const EditJobPage = () => {
                   </div>
 
                   {/* Benefits */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                  <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
                       Benefits & Perks
                     </h2>
 
                     <FieldArray name="benefits">
                       {({ push, remove }) => (
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-3">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-3">
                             Benefits *
                           </label>
                           {values.benefits.map((_, index) => (
@@ -565,7 +567,7 @@ const EditJobPage = () => {
                               <Field
                                 name={`benefits.${index}`}
                                 type="text"
-                                className="flex-1 px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-white dark:bg-gray-800 dark:text-gray-100"
                                 placeholder="e.g., Health insurance, Flexible hours"
                               />
                               {values.benefits.length > 1 && (
@@ -573,7 +575,7 @@ const EditJobPage = () => {
                                   type="button"
                                   variant="outline"
                                   onClick={() => remove(index)}
-                                  className="px-4 py-2 text-red-600 border-red-300 hover:bg-red-50"
+                                  className="px-4 py-2 text-red-600 border-red-300 dark:border-red-500 hover:bg-red-50 dark:hover:bg-red-900 "
                                 >
                                   Remove
                                 </Button>
@@ -584,7 +586,7 @@ const EditJobPage = () => {
                             type="button"
                             variant="outline"
                             onClick={() => push("")}
-                            className="mt-2"
+                            className="mt-2 hover:bg-primary dark:text-white "
                           >
                             Add Benefit
                           </Button>
@@ -599,12 +601,12 @@ const EditJobPage = () => {
                   </div>
 
                   {/* Submit Buttons */}
-                  <div className="flex gap-4 pt-6 border-t border-gray-200">
+                  <div className="flex gap-4 pt-6 border-t border-gray-200 ">
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => router.push("/dashboard/company/all-jobs")}
-                      className="flex-1"
+                      className="flex-1 dark:text-white"
                     >
                       Cancel
                     </Button>

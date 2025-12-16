@@ -48,12 +48,12 @@ const Footer = () => {
             </h2>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="hover:text-primary text-gray-700 dark:text-gray-400 transition-colors">
+                <a href="/terms" className="hover:text-primary text-gray-700 dark:text-gray-400 transition-colors">
                   Terms of Service
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary text-gray-700 dark:text-gray-400 transition-colors">
+                <a href="/privacy" className="hover:text-primary text-gray-700 dark:text-gray-400 transition-colors">
                   Privacy Policy
                 </a>
               </li>
@@ -72,7 +72,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary text-gray-700 dark:text-gray-400 transition-colors">
+                <a href="/about" className="hover:text-primary text-gray-700 dark:text-gray-400 transition-colors">
                   About Us
                 </a>
               </li>
@@ -92,12 +92,12 @@ const Footer = () => {
             <ul className="space-y-2 text-sm">
               <li>
                 <a href="#" className="hover:text-primary text-gray-700 dark:text-gray-400 transition-colors">
-                  (+234) 8089466435
+                  (+970) 595541852
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-primary text-gray-700 dark:text-gray-400 transition-colors">
-                  agencycr@gmail.com
+                  samehdheir1@gmail.com
                 </a>
               </li>
             </ul>

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import Avatar from "@/components/ui/Avatar";
+import Logo from "@/public/logo.svg";
 import CompanyIdChecker from "@/components/auth/CompanyIdChecker";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useUnreadMessages } from "@/hooks/useUnreadMessages";
@@ -33,6 +34,7 @@ import {
 } from "lucide-react";
 import { ResumeProvider } from "@/contexts/ResumeContext";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import Image from "next/image";
 
 export default function DashboardLayout({
   children,
@@ -202,6 +204,7 @@ export default function DashboardLayout({
             <div className="flex justify-between items-center px-6 border-gray-200 border-b h-16 shrink-0 dark:border-gray-700">
               <div className="flex items-center space-x-2 rtl:space-x-reverse">
                 <Briefcase className="w-8 h-8 text-primary" />
+                {/* <Image src={Logo} alt="Job Kit" width={60} height={40} /> */}
                 <span className="font-bold text-secondary text-xl dark:text-white">
                   JobKit
                 </span>
@@ -326,6 +329,7 @@ export default function DashboardLayout({
                           ? user.companyName
                           : user.name
                       }
+                      avatarUrl={user.avatarUrl}
                       size="lg"
                     />
                     <div className="flex-1 min-w-0">
@@ -433,15 +437,25 @@ export default function DashboardLayout({
                         onClick={() => setProfileDropdown(!profileDropdown)}
                         className="flex items-center space-x-2 hover:bg-gray-100 p-1 rounded-lg transition-colors dark:hover:bg-gray-700"
                       >
-                        <Avatar
-                          name={
-                            user.userType === "COMPANY"
-                              ? user.companyName
-                              : user.name
-                          }
-                          size="md"
-                          className="cursor-pointer"
-                        />
+                        {user.userType === "COMPANY" ? (
+                          <Avatar
+                            name={
+                              user.userType === "COMPANY"
+                                ? user.companyName
+                                : user.name
+                            }
+                            avatarUrl={user.company?.logo}
+                            size="md"
+                            className="cursor-pointer"
+                          />
+                        ) : (
+                          <Avatar
+                            name={user.name}
+                            avatarUrl={user.avatarUrl}
+                            size="md"
+                            className="cursor-pointer"
+                          />
+                        )}
                       </button>
 
                       {/* Profile Dropdown */}
