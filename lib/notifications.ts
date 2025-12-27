@@ -5,7 +5,6 @@ import {
   BulkCreateNotificationInput,
   ApplicationNotificationData,
   InterviewNotificationData,
-  MessageNotificationData,
 } from "@/types/notification.types";
 
 // Helper class for creating notifications
@@ -298,65 +297,65 @@ class NotificationService {
   // ============= MESSAGE NOTIFICATIONS =============
 
   // Notify about new message
-  async notifyNewMessage(data: {
-    recipientUserId: string;
-    senderName: string;
-    senderId: string;
-    messagePreview: string;
-    threadId: string;
-    messageId: string;
-    jobId?: string;
-    jobTitle?: string;
-  }) {
-    return this.create({
-      userId: data.recipientUserId,
-      type: NotificationType.NEW_MESSAGE,
-      title: `New message from ${data.senderName}`,
-      message: data.messagePreview.length > 100
-        ? data.messagePreview.substring(0, 100) + "..."
-        : data.messagePreview,
-      data: {
-        threadId: data.threadId,
-        messageId: data.messageId,
-        senderName: data.senderName,
-        senderId: data.senderId,
-        preview: data.messagePreview,
-        jobId: data.jobId,
-        jobTitle: data.jobTitle,
-      } as MessageNotificationData,
-      actionUrl: `/dashboard/messages?thread=${data.threadId}`,
-    });
-  }
+  // async notifyNewMessage(data: {
+  //   recipientUserId: string;
+  //   senderName: string;
+  //   senderId: string;
+  //   messagePreview: string;
+  //   threadId: string;
+  //   messageId: string;
+  //   jobId?: string;
+  //   jobTitle?: string;
+  // }) {
+  //   return this.create({
+  //     userId: data.recipientUserId,
+  //     type: NotificationType.NEW_MESSAGE,
+  //     title: `New message from ${data.senderName}`,
+  //     message: data.messagePreview.length > 100
+  //       ? data.messagePreview.substring(0, 100) + "..."
+  //       : data.messagePreview,
+  //     data: {
+  //       threadId: data.threadId,
+  //       messageId: data.messageId,
+  //       senderName: data.senderName,
+  //       senderId: data.senderId,
+  //       preview: data.messagePreview,
+  //       jobId: data.jobId,
+  //       jobTitle: data.jobTitle,
+  //     } as MessageNotificationData,
+  //     actionUrl: `/dashboard/messages?thread=${data.threadId}`,
+  //   });
+  // }
 
   // ============= SYSTEM NOTIFICATIONS =============
 
   // Send system announcement to all users
-  async notifySystemAnnouncement(data: {
-    title: string;
-    message: string;
-    userIds?: string[]; // If not provided, send to all users
-    priority?: "low" | "medium" | "high";
-  }) {
-    let targetUserIds = data.userIds;
+  // async notifySystemAnnouncement(data: {
+  //   title: string;
+  //   message: string;
+  //   userIds?: string[]; // If not provided, send to all users
+  //   priority?: "low" | "medium" | "high";
+  // }) {
+  //   let targetUserIds = data.userIds;
 
-    if (!targetUserIds) {
-      const users = await prisma.user.findMany({
-        select: { id: true },
-      });
-      targetUserIds = users.map((u) => u.id);
-    }
+  //   if (!targetUserIds) {
+  //     const users = await prisma.user.findMany({
+  //       select: { id: true },
+  //     });
+  //     targetUserIds = users.map((u) => u.id);
+  //   }
 
-    return this.createBulk({
-      userIds: targetUserIds,
-      type: NotificationType.SYSTEM_ANNOUNCEMENT,
-      title: data.title,
-      message: data.message,
-      data: {
-        priority: data.priority || "medium",
-        category: "announcement",
-      },
-    });
-  }
+  //   return this.createBulk({
+  //     userIds: targetUserIds,
+  //     type: NotificationType.SYSTEM_ANNOUNCEMENT,
+  //     title: data.title,
+  //     message: data.message,
+  //     data: {
+  //       priority: data.priority || "medium",
+  //       category: "announcement",
+  //     },
+  //   });
+  // }
 }
 
 // Export singleton instance

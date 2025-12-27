@@ -6,8 +6,7 @@ import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 import { Plus, Minus, X, DollarSign, Calendar, MapPin, Briefcase } from 'lucide-react';
-import Button from '@/components/ui/Button'; // Assuming you have this Button component
-import { WorkType } from '@/types/job.types'; // Assuming this interface is correct
+import { WorkType } from '@/types/job.types'; 
 import { useAuth } from '@/contexts/AuthContext';
 import { createApiHeaders } from '@/lib/api-utils';
 
@@ -31,7 +30,7 @@ const baseInputStyle = 'w-full px-4 py-3 border rounded-lg focus:outline-none fo
 const errorInputStyle = 'border-red-500 focus:border-red-500 dark:border-red-500';
 const defaultInputStyle = 'border-gray-300 focus:border-primary';
 
-// Custom Field Component with Error Handling (for better reusability and UX)
+// Custom Field Component with Error Handling
 const FormField = ({ name, label, type = 'text', as = 'input', rows, placeholder, min, ...props }: any) => (
   <div className="flex flex-col">
     <label htmlFor={name} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

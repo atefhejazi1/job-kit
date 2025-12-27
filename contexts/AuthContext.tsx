@@ -35,7 +35,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const refreshAuth = useCallback(async (): Promise<boolean> => {
     try {
       const res = await fetch("/api/auth/me", {
-        credentials: "include", // Include cookies
+        credentials: "include", 
       });
 
       if (res.ok) {

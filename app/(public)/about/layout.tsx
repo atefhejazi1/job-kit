@@ -8,9 +8,7 @@ export default function AboutLayout({
 }) {
   return (
     <>
-      <Header />
       {children}
-      <Footer />
     </>
   );
 }

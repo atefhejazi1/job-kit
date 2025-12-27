@@ -32,7 +32,7 @@ export default function ClientAppWrapper({
                                     document.documentElement.classList.remove('dark');
                                 }
                             } catch (e) {
-                                // Fail silently
+                                console.error('Error applying theme from cookie', e);
                             }
                         })();
                     `,

@@ -27,7 +27,8 @@ export async function authFetch(
           headers.set('x-company-id', userData.companyId);
         }
       } catch {
-        // Invalid user data
+        console.log('Invalid user data');
+        
       }
     }
   }

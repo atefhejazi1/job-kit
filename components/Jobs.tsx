@@ -3,10 +3,7 @@
 import React from "react";
 import JobsList from "./JobsList";
 
-/**
- * Jobs Component - Main component to display jobs on landing page
- * This component fetches and displays the latest jobs from dashboard
- */
+
 const Jobs = () => {
   return (
     <JobsList
